@@ -4,7 +4,7 @@
 > [fgcz/prolfqua](https://github.com/fgcz/prolfqua).** It exists only to
 > be pushed to Bioconductor and differs from fgcz/prolfqua only in the
 > version number (Bioconductor numbering) and the R requirement. The
-> package ships three vignettes; all tutorials, the full documentation
+> package ships eight vignettes; all tutorials, the full documentation
 > (<https://fgcz.github.io/prolfqua/>), releases and issue tracking are
 > at [fgcz/prolfqua](https://github.com/fgcz/prolfqua). Make code
 > changes in fgcz/prolfqua; they are merged into this repository from

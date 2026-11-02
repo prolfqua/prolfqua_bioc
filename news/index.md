@@ -1,6 +1,6 @@
 # Changelog
 
-## prolfqua 0.99.6 (Bioconductor)
+## prolfqua 0.99.7 (Bioconductor)
 
 - Corresponds to prolfqua 1.9.0 on GitHub, which addresses the review in
   [BiocContributions](https://github.com/Bioconductor/BiocContributions/issues/171)
@@ -72,10 +72,14 @@ Changes for the Bioconductor review
   [`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md)
   method on one small simulated dataset, with one summary line per
   method; it renders in a few seconds.
-- The package now ships three vignettes (`prolfqua`, `Comparing2Groups`,
-  `ModellingMethods`). The other tutorials are website-only articles at
-  <https://fgcz.github.io/prolfqua/articles/>, under the same URLs as
-  before, which keeps the package build short.
+- The package ships eight vignettes, numbered in reading order:
+  `prolfqua`, `CreatingConfigurations`, `Comparing2Groups`,
+  `ModellingMethods`, `TwoFactorDesigns`, `ContrastsFromFactors`,
+  `ModelBasedImputation` and `QualityControlAndSampleSizeEstimation`;
+  together they build in about 25 seconds. Three more articles
+  (`ComparingMethods`, `SimulateData`, `LowLevelAPI`) are on the website
+  only, <https://fgcz.github.io/prolfqua/articles/>; all keep their
+  URLs.
 - The vignettes and articles use
   [`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md)
   throughout. `Comparing2Groups` and “Simulate Peptide level Data” fit
