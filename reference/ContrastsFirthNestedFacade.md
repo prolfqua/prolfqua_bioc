@@ -1,15 +1,5 @@
 # Firth logistic missingness contrast analysis facade for nested input
 
-Firth logistic missingness contrast analysis facade for nested input
-
-Firth logistic missingness contrast analysis facade for nested input
-
-## Value
-
-An R6 class generator.
-
-## Details
-
 Encapsulates the pipeline: encode missingness -\>
 [`build_model_glm_peptide`](https://fgcz.github.io/prolfqua/reference/build_model_glm_peptide.md)
 -\>
@@ -19,6 +9,10 @@ Takes nested (peptide-level) LFQData and returns protein-level
 fold-change estimates. For protein-level (aggregated) input use
 [`ContrastsFirthFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsFirthFacade.md)
 instead.
+
+## Value
+
+An R6 class generator.
 
 ## See also
 
@@ -112,37 +106,37 @@ Other modelling:
 
 ## Super classes
 
-[`prolfqua::ContrastsInterface`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.md)
+[`ContrastsInterface`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.md)
 -\>
-[`prolfqua::ContrastsFacadeBase`](https://fgcz.github.io/prolfqua/reference/ContrastsFacadeBase.md)
+[`ContrastsFacadeBase`](https://fgcz.github.io/prolfqua/reference/ContrastsFacadeBase.md)
 -\> `ContrastsFirthNestedFacade`
 
 ## Methods
 
 ### Public methods
 
-- [`ContrastsFirthNestedFacade$new()`](#method-ContrastsFirthNestedFacade-new)
+- [`ContrastsFirthNestedFacade$new()`](#method-ContrastsFirthNestedFacade-initialize)
 
 - [`ContrastsFirthNestedFacade$clone()`](#method-ContrastsFirthNestedFacade-clone)
 
 Inherited methods
 
-- [`prolfqua::ContrastsInterface$column_description()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-column_description)
-- [`prolfqua::ContrastsInterface$contrast_summary_table()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-contrast_summary_table)
-- [`prolfqua::ContrastsInterface$extra_artifacts()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-extra_artifacts)
-- [`prolfqua::ContrastsInterface$filter_significant()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-filter_significant)
-- [`prolfqua::ContrastsInterface$get_contrast_sides()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_contrast_sides)
-- [`prolfqua::ContrastsInterface$get_ora()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_ora)
-- [`prolfqua::ContrastsInterface$get_rank()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_rank)
-- [`prolfqua::ContrastsFacadeBase$get_Plotter()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_Plotter)
-- [`prolfqua::ContrastsFacadeBase$get_config()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_config)
-- [`prolfqua::ContrastsFacadeBase$get_contrasts()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_contrasts)
-- [`prolfqua::ContrastsFacadeBase$get_missing()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_missing)
-- [`prolfqua::ContrastsFacadeBase$to_wide()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-to_wide)
+- [`ContrastsInterface$column_description()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-column_description)
+- [`ContrastsInterface$contrast_summary_table()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-contrast_summary_table)
+- [`ContrastsInterface$extra_artifacts()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-extra_artifacts)
+- [`ContrastsInterface$filter_significant()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-filter_significant)
+- [`ContrastsInterface$get_contrast_sides()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_contrast_sides)
+- [`ContrastsInterface$get_ora()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_ora)
+- [`ContrastsInterface$get_rank()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_rank)
+- [`ContrastsFacadeBase$get_Plotter()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_Plotter)
+- [`ContrastsFacadeBase$get_config()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_config)
+- [`ContrastsFacadeBase$get_contrasts()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_contrasts)
+- [`ContrastsFacadeBase$get_missing()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_missing)
+- [`ContrastsFacadeBase$to_wide()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-to_wide)
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `ContrastsFirthNestedFacade$new()`
 
 initialize
 
@@ -170,7 +164,7 @@ initialize
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `ContrastsFirthNestedFacade$clone()`
 
 The objects of this class are cloneable with this method.
 
@@ -227,18 +221,18 @@ fa$to_wide()
 #>  4 BEJI92~91…      -9.06e- 1            0.325          0.720           -9.96e- 1
 #>  5 CtOJ9t~28…       3.92e- 1            0.641          0.855            4.69e- 1
 #>  6 DoWup2~29…      -9.11e- 1            0.225          0.720           -1.22e+ 0
-#>  7 DuwH7n~34…       3.33e-16            1              1                3.82e-16
+#>  7 DuwH7n~34…       2.50e-16            1              1                2.87e-16
 #>  8 HC8K98~49…       9.24e- 1            0.356          0.720            9.44e- 1
 #>  9 HvIpHG~40…       2.06e+ 0            0.214          0.720            1.28e+ 0
 #> 10 I1Jk2Z~08…      -7.13e- 1            0.119          0.720           -1.57e+ 0
 #> 11 JfvT8X~27…       5.77e- 1            0.269          0.720            1.11e+ 0
 #> 12 R2i6w7~02…       2.08e+ 0            0.221          0.720            1.26e+ 0
 #> 13 SGIVBl~95…       1.23e+ 0            0.448          0.720            7.74e- 1
-#> 14 0EfVhX~59…       1.07e-15            1              1                5.08e-16
+#> 14 0EfVhX~59…       4.27e-16            1              1                2.03e-16
 #> 15 7cbcrd~83…      -1.35e+ 0            0.468          0.720           -7.58e- 1
 #> 16 CGzoYe~28…      -8.47e- 1            0.538          0.769           -6.40e- 1
 #> 17 Fl4JiV~75…       1.35e+ 0            0.468          0.720            7.58e- 1
-#> 18 JV3Z7t~29…       1.07e-15            1              1                5.08e-16
+#> 18 JV3Z7t~29…       4.27e-16            1              1                2.03e-16
 #> 19 JcKVfU~08…      -1.35e+ 0            0.468          0.720           -7.58e- 1
-#> 20 r2J0Eh~26…      -5.35e-17            1              1               -2.54e-17
+#> 20 r2J0Eh~26…      -3.58e-16            1              1               -1.70e-16
 ```

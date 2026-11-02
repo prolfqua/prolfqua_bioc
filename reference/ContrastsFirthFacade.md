@@ -1,15 +1,5 @@
 # Firth logistic missingness contrast analysis facade
 
-Firth logistic missingness contrast analysis facade
-
-Firth logistic missingness contrast analysis facade
-
-## Value
-
-An R6 class generator.
-
-## Details
-
 Encapsulates the pipeline: encode missingness -\>
 [`build_model_glm_protein`](https://fgcz.github.io/prolfqua/reference/build_model_glm_protein.md)
 -\>
@@ -18,6 +8,10 @@ Encapsulates the pipeline: encode missingness -\>
 Requires aggregated (protein-level) LFQData. For nested peptide-level
 input use
 [`ContrastsFirthNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsFirthNestedFacade.md).
+
+## Value
+
+An R6 class generator.
 
 ## See also
 
@@ -111,37 +105,37 @@ Other modelling:
 
 ## Super classes
 
-[`prolfqua::ContrastsInterface`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.md)
+[`ContrastsInterface`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.md)
 -\>
-[`prolfqua::ContrastsFacadeBase`](https://fgcz.github.io/prolfqua/reference/ContrastsFacadeBase.md)
+[`ContrastsFacadeBase`](https://fgcz.github.io/prolfqua/reference/ContrastsFacadeBase.md)
 -\> `ContrastsFirthFacade`
 
 ## Methods
 
 ### Public methods
 
-- [`ContrastsFirthFacade$new()`](#method-ContrastsFirthFacade-new)
+- [`ContrastsFirthFacade$new()`](#method-ContrastsFirthFacade-initialize)
 
 - [`ContrastsFirthFacade$clone()`](#method-ContrastsFirthFacade-clone)
 
 Inherited methods
 
-- [`prolfqua::ContrastsInterface$column_description()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-column_description)
-- [`prolfqua::ContrastsInterface$contrast_summary_table()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-contrast_summary_table)
-- [`prolfqua::ContrastsInterface$extra_artifacts()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-extra_artifacts)
-- [`prolfqua::ContrastsInterface$filter_significant()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-filter_significant)
-- [`prolfqua::ContrastsInterface$get_contrast_sides()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_contrast_sides)
-- [`prolfqua::ContrastsInterface$get_ora()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_ora)
-- [`prolfqua::ContrastsInterface$get_rank()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_rank)
-- [`prolfqua::ContrastsFacadeBase$get_Plotter()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_Plotter)
-- [`prolfqua::ContrastsFacadeBase$get_config()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_config)
-- [`prolfqua::ContrastsFacadeBase$get_contrasts()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_contrasts)
-- [`prolfqua::ContrastsFacadeBase$get_missing()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_missing)
-- [`prolfqua::ContrastsFacadeBase$to_wide()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-to_wide)
+- [`ContrastsInterface$column_description()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-column_description)
+- [`ContrastsInterface$contrast_summary_table()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-contrast_summary_table)
+- [`ContrastsInterface$extra_artifacts()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-extra_artifacts)
+- [`ContrastsInterface$filter_significant()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-filter_significant)
+- [`ContrastsInterface$get_contrast_sides()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_contrast_sides)
+- [`ContrastsInterface$get_ora()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_ora)
+- [`ContrastsInterface$get_rank()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_rank)
+- [`ContrastsFacadeBase$get_Plotter()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_Plotter)
+- [`ContrastsFacadeBase$get_config()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_config)
+- [`ContrastsFacadeBase$get_contrasts()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_contrasts)
+- [`ContrastsFacadeBase$get_missing()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_missing)
+- [`ContrastsFacadeBase$to_wide()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-to_wide)
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `ContrastsFirthFacade$new()`
 
 initialize
 
@@ -169,7 +163,7 @@ initialize
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `ContrastsFirthFacade$clone()`
 
 The objects of this class are cloneable with this method.
 
@@ -205,9 +199,9 @@ head(fa$get_contrasts())
 #> # Groups:   contrast [1]
 #>   modelName estimate_type protein_Id  contrast  sigma    df      diff   FDR
 #>   <chr>     <chr>         <chr>       <chr>     <dbl> <int>     <dbl> <dbl>
-#> 1 firth     observed      0EfVhX~5954 A_vs_Ctrl     1     9  1.07e-15 1    
+#> 1 firth     observed      0EfVhX~5954 A_vs_Ctrl     1     9  4.27e-16 1    
 #> 2 firth     observed      0m5WN4~1448 A_vs_Ctrl     1     9  8.47e- 1 0.978
-#> 3 firth     observed      7cbcrd~8305 A_vs_Ctrl     1     9  1.07e-15 1    
+#> 3 firth     observed      7cbcrd~8305 A_vs_Ctrl     1     9  4.27e-16 1    
 #> 4 firth     observed      9VUkAq~4562 A_vs_Ctrl     1     9 -1.35e+ 0 0.978
 #> 5 firth     observed      At886V~3296 A_vs_Ctrl     1     9 -8.47e- 1 0.978
 #> 6 firth     observed      BEJI92~9143 A_vs_Ctrl     1     9 -1.35e+ 0 0.978
@@ -218,24 +212,24 @@ fa$to_wide()
 #> # A tibble: 20 × 5
 #>    protein_Id diff.A_vs_Ctrl p.value.A_vs_Ctrl FDR.A_vs_Ctrl statistic.A_vs_Ctrl
 #>    <chr>               <dbl>             <dbl>         <dbl>               <dbl>
-#>  1 0EfVhX~59…       1.07e-15             1             1                5.08e-16
+#>  1 0EfVhX~59…       4.27e-16             1             1                2.03e-16
 #>  2 0m5WN4~14…       8.47e- 1             0.538         0.978            6.40e- 1
-#>  3 7cbcrd~83…       1.07e-15             1             1                5.08e-16
+#>  3 7cbcrd~83…       4.27e-16             1             1                2.03e-16
 #>  4 9VUkAq~45…      -1.35e+ 0             0.468         0.978           -7.58e- 1
 #>  5 At886V~32…      -8.47e- 1             0.538         0.978           -6.40e- 1
 #>  6 BEJI92~91…      -1.35e+ 0             0.468         0.978           -7.58e- 1
-#>  7 CGzoYe~28…      -4.13e-16             1             1               -1.96e-16
+#>  7 CGzoYe~28…       2.16e-15             1.000         1                1.02e-15
 #>  8 CtOJ9t~28…       1.35e+ 0             0.468         0.978            7.58e- 1
 #>  9 DoWup2~29…       2.20e+ 0             0.238         0.978            1.26e+ 0
 #> 10 DuwH7n~34…       8.47e- 1             0.538         0.978            6.40e- 1
-#> 11 Fl4JiV~75…      -2.85e-17             1             1               -2.26e-17
+#> 11 Fl4JiV~75…       3.22e-16             1             1                2.54e-16
 #> 12 HC8K98~49…       8.47e- 1             0.538         0.978            6.40e- 1
-#> 13 HvIpHG~40…       1.07e-15             1             1                5.08e-16
+#> 13 HvIpHG~40…       4.27e-16             1             1                2.03e-16
 #> 14 I1Jk2Z~08…      -8.47e- 1             0.538         0.978           -6.40e- 1
-#> 15 JV3Z7t~29…       1.07e-15             1             1                5.08e-16
+#> 15 JV3Z7t~29…       4.27e-16             1             1                2.03e-16
 #> 16 JcKVfU~08…      -1.35e+ 0             0.468         0.978           -7.58e- 1
 #> 17 JfvT8X~27…      -2.20e+ 0             0.238         0.978           -1.26e+ 0
-#> 18 R2i6w7~02…       6.65e-17             1             1                5.26e-17
-#> 19 SGIVBl~95…       1.07e-15             1             1                5.08e-16
-#> 20 r2J0Eh~26…      -4.13e-16             1             1               -1.96e-16
+#> 18 R2i6w7~02…      -1.11e-17             1             1               -8.81e-18
+#> 19 SGIVBl~95…       4.27e-16             1             1                2.03e-16
+#> 20 r2J0Eh~26…       2.16e-15             1.000         1                1.02e-15
 ```

@@ -2,8 +2,6 @@
 
 Decorate LFQData with Methods for transforming Intensities
 
-Decorate LFQData with Methods for transforming Intensities
-
 ## Value
 
 An R6 class generator.
@@ -18,7 +16,7 @@ An R6 class generator.
 
 ### Public methods
 
-- [`LFQDataTransformer$new()`](#method-LFQDataTransformer-new)
+- [`LFQDataTransformer$new()`](#method-LFQDataTransformer-initialize)
 
 - [`LFQDataTransformer$log2()`](#method-LFQDataTransformer-log2)
 
@@ -38,7 +36,7 @@ An R6 class generator.
 
 ------------------------------------------------------------------------
 
-### Method [`new()`](https://rdrr.io/r/methods/new.html)
+### `LFQDataTransformer$new()`
 
 initialize
 
@@ -54,7 +52,7 @@ initialize
 
 ------------------------------------------------------------------------
 
-### Method [`log2()`](https://rdrr.io/r/base/Log.html)
+### `LFQDataTransformer$log2()`
 
 log2 transform data
 
@@ -75,7 +73,7 @@ LFQDataTransformer
 
 ------------------------------------------------------------------------
 
-### Method `get_scales()`
+### `LFQDataTransformer$get_scales()`
 
 get mean and variance and standard deviation in each sample
 
@@ -89,7 +87,7 @@ list with means and mads
 
 ------------------------------------------------------------------------
 
-### Method `robscale()`
+### `LFQDataTransformer$robscale()`
 
 robust scale data
 
@@ -117,7 +115,7 @@ LFQDataTransformer (self)
 
 ------------------------------------------------------------------------
 
-### Method `robscale_subset()`
+### `LFQDataTransformer$robscale_subset()`
 
 log2 transform and robust scale data based on subset
 
@@ -151,7 +149,7 @@ LFQDataTransformer (self)
 
 ------------------------------------------------------------------------
 
-### Method `center_to_reference()`
+### `LFQDataTransformer$center_to_reference()`
 
 center data to a reference subset
 
@@ -171,7 +169,7 @@ LFQDataTransformer (self)
 
 ------------------------------------------------------------------------
 
-### Method `intensity_array()`
+### `LFQDataTransformer$intensity_array()`
 
 Transforms intensities
 
@@ -196,7 +194,7 @@ LFQDataTransformer (self)
 
 ------------------------------------------------------------------------
 
-### Method `intensity_matrix()`
+### `LFQDataTransformer$intensity_matrix()`
 
 pass a function which works with matrices, e.g., vsn::justvsn
 
@@ -221,7 +219,7 @@ LFQDataTransformer (self)
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `LFQDataTransformer$clone()`
 
 The objects of this class are cloneable with this method.
 
@@ -321,15 +319,15 @@ if(require("vsn")){
 #> Joining with `by = join_by(sampleName, isotopeLabel, protein_Id, peptide_Id)`
 #> $medians
 #>     A_V1     A_V2     A_V3     A_V4     B_V1     B_V2     B_V3     B_V4 
-#> 5.057603 5.050276 5.042556 5.053200 5.097080 5.119346 5.079693 5.090355 
+#> 5.025273 5.017730 5.009915 5.020819 5.065660 5.088389 5.047866 5.058756 
 #>  Ctrl_V1  Ctrl_V2  Ctrl_V3  Ctrl_V4 
-#> 5.089038 5.057453 5.079671 5.062745 
+#> 5.057453 5.025104 5.047861 5.030570 
 #> 
 #> $mads
 #>      A_V1      A_V2      A_V3      A_V4      B_V1      B_V2      B_V3      B_V4 
-#> 0.2370482 0.2559391 0.2406615 0.2473880 0.2620343 0.2563651 0.2238271 0.2357968 
+#> 0.2422295 0.2617130 0.2462122 0.2529458 0.2674556 0.2615211 0.2292155 0.2409643 
 #>   Ctrl_V1   Ctrl_V2   Ctrl_V3   Ctrl_V4 
-#> 0.2646918 0.2331200 0.2431564 0.2435988 
+#> 0.2720430 0.2392264 0.2492306 0.2486641 
 #> 
 if(require("preprocessCore")){
 quant <- function(y){

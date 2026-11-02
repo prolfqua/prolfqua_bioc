@@ -1,15 +1,5 @@
 # Firth-penalized detection-count facade for nested input
 
-Firth-penalized detection-count facade for nested input
-
-Firth-penalized detection-count facade for nested input
-
-## Value
-
-An R6 class generator.
-
-## Details
-
 Same pipeline as
 [`ContrastsBinomialNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsBinomialNestedFacade.md):
 child-feature detection is collapsed into detected and undetected counts
@@ -21,39 +11,43 @@ which gives finite log odds ratios under complete separation, as
 [`ContrastsFirthNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsFirthNestedFacade.md)
 does. Unlike `firth_nested`, child identity is not modelled.
 
+## Value
+
+An R6 class generator.
+
 ## Super classes
 
-[`prolfqua::ContrastsInterface`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.md)
+[`ContrastsInterface`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.md)
 -\>
-[`prolfqua::ContrastsFacadeBase`](https://fgcz.github.io/prolfqua/reference/ContrastsFacadeBase.md)
+[`ContrastsFacadeBase`](https://fgcz.github.io/prolfqua/reference/ContrastsFacadeBase.md)
 -\> `ContrastsBinomialFirthNestedFacade`
 
 ## Methods
 
 ### Public methods
 
-- [`ContrastsBinomialFirthNestedFacade$new()`](#method-ContrastsBinomialFirthNestedFacade-new)
+- [`ContrastsBinomialFirthNestedFacade$new()`](#method-ContrastsBinomialFirthNestedFacade-initialize)
 
 - [`ContrastsBinomialFirthNestedFacade$clone()`](#method-ContrastsBinomialFirthNestedFacade-clone)
 
 Inherited methods
 
-- [`prolfqua::ContrastsInterface$column_description()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-column_description)
-- [`prolfqua::ContrastsInterface$contrast_summary_table()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-contrast_summary_table)
-- [`prolfqua::ContrastsInterface$extra_artifacts()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-extra_artifacts)
-- [`prolfqua::ContrastsInterface$filter_significant()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-filter_significant)
-- [`prolfqua::ContrastsInterface$get_contrast_sides()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_contrast_sides)
-- [`prolfqua::ContrastsInterface$get_ora()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_ora)
-- [`prolfqua::ContrastsInterface$get_rank()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_rank)
-- [`prolfqua::ContrastsFacadeBase$get_Plotter()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_Plotter)
-- [`prolfqua::ContrastsFacadeBase$get_config()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_config)
-- [`prolfqua::ContrastsFacadeBase$get_contrasts()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_contrasts)
-- [`prolfqua::ContrastsFacadeBase$get_missing()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_missing)
-- [`prolfqua::ContrastsFacadeBase$to_wide()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-to_wide)
+- [`ContrastsInterface$column_description()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-column_description)
+- [`ContrastsInterface$contrast_summary_table()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-contrast_summary_table)
+- [`ContrastsInterface$extra_artifacts()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-extra_artifacts)
+- [`ContrastsInterface$filter_significant()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-filter_significant)
+- [`ContrastsInterface$get_contrast_sides()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_contrast_sides)
+- [`ContrastsInterface$get_ora()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_ora)
+- [`ContrastsInterface$get_rank()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_rank)
+- [`ContrastsFacadeBase$get_Plotter()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_Plotter)
+- [`ContrastsFacadeBase$get_config()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_config)
+- [`ContrastsFacadeBase$get_contrasts()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_contrasts)
+- [`ContrastsFacadeBase$get_missing()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_missing)
+- [`ContrastsFacadeBase$to_wide()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-to_wide)
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `ContrastsBinomialFirthNestedFacade$new()`
 
 Fit the Firth-penalized nested detection-count model and its contrasts.
 
@@ -93,7 +87,7 @@ Fit the Firth-penalized nested detection-count model and its contrasts.
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `ContrastsBinomialFirthNestedFacade$clone()`
 
 The objects of this class are cloneable with this method.
 
@@ -125,14 +119,14 @@ head(facade$get_contrasts())
 #> contrasts_linfct
 #> Joining with `by = join_by(protein_Id, contrast)`
 #> # A tibble: 6 × 16
-#>   modelName             estimate_type protein_Id  contrast    diff avgAbd
-#>   <chr>                 <chr>         <chr>       <chr>      <dbl>  <dbl>
-#> 1 binomial_firth_nested observed      0GRprF~7339 A_vs_Ctrl -0.847  0.424
-#> 2 binomial_firth_nested observed      4JK499~3111 A_vs_Ctrl  0.504 -0.704
-#> 3 binomial_firth_nested observed      7IZdVV~6818 A_vs_Ctrl -0.573  1.32 
-#> 4 binomial_firth_nested observed      AZPG26~9461 A_vs_Ctrl  0      2.20 
-#> 5 binomial_firth_nested observed      AoNKbb~3497 A_vs_Ctrl -1.18   2.63 
-#> 6 binomial_firth_nested observed      CibL2O~2149 A_vs_Ctrl -1.44  -0.718
+#>   modelName             estimate_type protein_Id  contrast       diff avgAbd
+#>   <chr>                 <chr>         <chr>       <chr>         <dbl>  <dbl>
+#> 1 binomial_firth_nested observed      0GRprF~7339 A_vs_Ctrl -8.47e- 1  0.424
+#> 2 binomial_firth_nested observed      4JK499~3111 A_vs_Ctrl  5.04e- 1 -0.704
+#> 3 binomial_firth_nested observed      7IZdVV~6818 A_vs_Ctrl -5.73e- 1  1.32 
+#> 4 binomial_firth_nested observed      AZPG26~9461 A_vs_Ctrl  1.21e-16  2.20 
+#> 5 binomial_firth_nested observed      AoNKbb~3497 A_vs_Ctrl -1.18e+ 0  2.63 
+#> 6 binomial_firth_nested observed      CibL2O~2149 A_vs_Ctrl -1.44e+ 0 -0.718
 #> # ℹ 10 more variables: std.error.unmoderated <dbl>, df.unmoderated <int>,
 #> #   std.error <dbl>, statistic <dbl>, df <dbl>, p.value <dbl>, conf.low <dbl>,
 #> #   conf.high <dbl>, sigma <dbl>, FDR <dbl>

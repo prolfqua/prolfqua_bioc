@@ -1,15 +1,5 @@
 # Quasibinomial detection-count facade for nested input
 
-Quasibinomial detection-count facade for nested input
-
-Quasibinomial detection-count facade for nested input
-
-## Value
-
-An R6 class generator.
-
-## Details
-
 Completes and encodes child-feature detection using the same preparation
 as
 [`ContrastsFirthNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsFirthNestedFacade.md),
@@ -25,39 +15,43 @@ moderation uses
 [`ContrastsModerated`](https://fgcz.github.io/prolfqua/reference/ContrastsModerated.md);
 by default posterior dispersion is bounded below by one.
 
+## Value
+
+An R6 class generator.
+
 ## Super classes
 
-[`prolfqua::ContrastsInterface`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.md)
+[`ContrastsInterface`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.md)
 -\>
-[`prolfqua::ContrastsFacadeBase`](https://fgcz.github.io/prolfqua/reference/ContrastsFacadeBase.md)
+[`ContrastsFacadeBase`](https://fgcz.github.io/prolfqua/reference/ContrastsFacadeBase.md)
 -\> `ContrastsBinomialNestedFacade`
 
 ## Methods
 
 ### Public methods
 
-- [`ContrastsBinomialNestedFacade$new()`](#method-ContrastsBinomialNestedFacade-new)
+- [`ContrastsBinomialNestedFacade$new()`](#method-ContrastsBinomialNestedFacade-initialize)
 
 - [`ContrastsBinomialNestedFacade$clone()`](#method-ContrastsBinomialNestedFacade-clone)
 
 Inherited methods
 
-- [`prolfqua::ContrastsInterface$column_description()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-column_description)
-- [`prolfqua::ContrastsInterface$contrast_summary_table()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-contrast_summary_table)
-- [`prolfqua::ContrastsInterface$extra_artifacts()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-extra_artifacts)
-- [`prolfqua::ContrastsInterface$filter_significant()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-filter_significant)
-- [`prolfqua::ContrastsInterface$get_contrast_sides()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_contrast_sides)
-- [`prolfqua::ContrastsInterface$get_ora()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_ora)
-- [`prolfqua::ContrastsInterface$get_rank()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_rank)
-- [`prolfqua::ContrastsFacadeBase$get_Plotter()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_Plotter)
-- [`prolfqua::ContrastsFacadeBase$get_config()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_config)
-- [`prolfqua::ContrastsFacadeBase$get_contrasts()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_contrasts)
-- [`prolfqua::ContrastsFacadeBase$get_missing()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_missing)
-- [`prolfqua::ContrastsFacadeBase$to_wide()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-to_wide)
+- [`ContrastsInterface$column_description()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-column_description)
+- [`ContrastsInterface$contrast_summary_table()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-contrast_summary_table)
+- [`ContrastsInterface$extra_artifacts()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-extra_artifacts)
+- [`ContrastsInterface$filter_significant()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-filter_significant)
+- [`ContrastsInterface$get_contrast_sides()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_contrast_sides)
+- [`ContrastsInterface$get_ora()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_ora)
+- [`ContrastsInterface$get_rank()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_rank)
+- [`ContrastsFacadeBase$get_Plotter()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_Plotter)
+- [`ContrastsFacadeBase$get_config()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_config)
+- [`ContrastsFacadeBase$get_contrasts()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_contrasts)
+- [`ContrastsFacadeBase$get_missing()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_missing)
+- [`ContrastsFacadeBase$to_wide()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-to_wide)
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `ContrastsBinomialNestedFacade$new()`
 
 Fit the nested detection-count model and its contrasts.
 
@@ -102,7 +96,7 @@ Fit the nested detection-count model and its contrasts.
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `ContrastsBinomialNestedFacade$clone()`
 
 The objects of this class are cloneable with this method.
 
@@ -139,7 +133,7 @@ head(facade$get_contrasts())
 #> 1 binomial_nested observed      0GRprF~7339 A_vs_Ctrl -8.87e- 1  0.444
 #> 2 binomial_nested observed      4JK499~3111 A_vs_Ctrl  5.18e- 1 -0.722
 #> 3 binomial_nested observed      7IZdVV~6818 A_vs_Ctrl -5.85e- 1  1.34 
-#> 4 binomial_nested observed      AZPG26~9461 A_vs_Ctrl  9.53e-16  2.40 
+#> 4 binomial_nested observed      AZPG26~9461 A_vs_Ctrl  8.46e-16  2.40 
 #> 5 binomial_nested observed      AoNKbb~3497 A_vs_Ctrl -1.34e+ 0  2.77 
 #> 6 binomial_nested observed      CibL2O~2149 A_vs_Ctrl -1.47e+ 0 -0.733
 #> # ℹ 10 more variables: std.error.unmoderated <dbl>, df.unmoderated <int>,
