@@ -59,7 +59,7 @@ contrasts.
 
 ![build_contrast_analysis() is a factory: the method key selects the
 model, and every model rolls out with the same
-interface.](prolfqua_factory.png)
+interface.](../reference/figures/prolfqua_factory.png)
 
 build_contrast_analysis() is a factory: the method key selects the
 model, and every model rolls out with the same interface.
@@ -223,7 +223,7 @@ sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] prolfqua_0.99.7  BiocStyle_2.40.0
+#> [1] prolfqua_0.99.8  BiocStyle_2.40.0
 #> 
 #> loaded via a namespace (and not attached):
 #>   [1] Rdpack_2.6.6           gridExtra_2.3.1        rlang_1.3.0           

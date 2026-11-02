@@ -11,6 +11,13 @@ Plots and a discussion of the methods are in the article [Comparing
 modelling methods on one
 dataset](https://fgcz.github.io/prolfqua/articles/ComparingMethods.html).
 
+![build_contrast_analysis() is a factory: the method key selects the
+model, and every model rolls out with the same
+interface.](../reference/figures/prolfqua_factory.png)
+
+build_contrast_analysis() is a factory: the method key selects the
+model, and every model rolls out with the same interface.
+
 ## Data
 
 We simulate peptide intensities for 20 proteins in three groups and
@@ -133,8 +140,8 @@ knitr::kable(one, digits = 3)
 
 | method                |   diff | p.value |   FDR |
 |:----------------------|-------:|--------:|------:|
-| binomial_firth_nested |  0.000 |     NaN |   NaN |
-| binomial_nested       |  0.000 |     NaN |   NaN |
+| binomial_firth_nested |  0.000 |   1.000 | 1.000 |
+| binomial_nested       |  0.000 |   1.000 | 1.000 |
 | deqms                 | -0.469 |   0.000 | 0.000 |
 | deqms_voom            | -0.469 |   0.000 | 0.000 |
 | firth                 |  0.000 |   1.000 | 1.000 |
@@ -179,7 +186,7 @@ sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] prolfqua_0.99.7  BiocStyle_2.40.0
+#> [1] prolfqua_0.99.8  BiocStyle_2.40.0
 #> 
 #> loaded via a namespace (and not attached):
 #>   [1] Rdpack_2.6.6           gridExtra_2.3.1        rlang_1.3.0           
