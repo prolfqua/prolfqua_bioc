@@ -1,0 +1,120 @@
+# visualize intensity distributions
+
+visualize intensity distributions
+
+visualize intensity distributions
+
+## Usage
+
+``` r
+plot_intensity_distribution_violin(
+  pdata,
+  sample_name,
+  response,
+  is_transformed = FALSE
+)
+
+plot_intensity_distribution_density(
+  pdata,
+  sample_name,
+  response,
+  is_transformed = FALSE,
+  legend = NA,
+  max_legend_samples = 16
+)
+```
+
+## Arguments
+
+- pdata:
+
+  data.frame
+
+- sample_name:
+
+  character — sample column name
+
+- response:
+
+  character — intensity column name
+
+- is_transformed:
+
+  logical — is intensity log-transformed?
+
+- legend:
+
+  show legend. If \`NA\`, hide automatically when the number of samples
+  is larger than \`max_legend_samples\`.
+
+- max_legend_samples:
+
+  maximum number of samples for automatic legend display.
+
+## See also
+
+Other plotting:
+[`ContrastsPlotter`](https://fgcz.github.io/prolfqua/reference/ContrastsPlotter.md),
+[`INTERNAL_FUNCTIONS_BY_FAMILY`](https://fgcz.github.io/prolfqua/reference/INTERNAL_FUNCTIONS_BY_FAMILY.md),
+[`missigness_histogram()`](https://fgcz.github.io/prolfqua/reference/missigness_histogram.md),
+[`missingness_per_condition()`](https://fgcz.github.io/prolfqua/reference/missingness_per_condition.md),
+[`missingness_per_condition_cumsum()`](https://fgcz.github.io/prolfqua/reference/missingness_per_condition_cumsum.md),
+[`plot_estimate()`](https://fgcz.github.io/prolfqua/reference/plot_estimate.md),
+[`plot_heatmap()`](https://fgcz.github.io/prolfqua/reference/plot_heatmap.md),
+[`plot_heatmap_cor()`](https://fgcz.github.io/prolfqua/reference/plot_heatmap_cor.md),
+[`plot_hierarchies_boxplot_df()`](https://fgcz.github.io/prolfqua/reference/plot_hierarchies_boxplot_df.md),
+[`plot_hierarchies_line()`](https://fgcz.github.io/prolfqua/reference/plot_hierarchies_line.md),
+[`plot_na_heatmap()`](https://fgcz.github.io/prolfqua/reference/plot_NA_heatmap.md),
+[`plot_pca()`](https://fgcz.github.io/prolfqua/reference/plot_pca.md),
+[`plot_raster()`](https://fgcz.github.io/prolfqua/reference/plot_raster.md),
+[`plot_sample_correlation()`](https://fgcz.github.io/prolfqua/reference/plot_sample_correlation.md),
+[`upset_interaction_missing_stats()`](https://fgcz.github.io/prolfqua/reference/UpSet_interaction_missing_stats.md),
+[`upset_missing_stats()`](https://fgcz.github.io/prolfqua/reference/UpSet_missing_stats.md)
+
+Other plotting:
+[`ContrastsPlotter`](https://fgcz.github.io/prolfqua/reference/ContrastsPlotter.md),
+[`INTERNAL_FUNCTIONS_BY_FAMILY`](https://fgcz.github.io/prolfqua/reference/INTERNAL_FUNCTIONS_BY_FAMILY.md),
+[`missigness_histogram()`](https://fgcz.github.io/prolfqua/reference/missigness_histogram.md),
+[`missingness_per_condition()`](https://fgcz.github.io/prolfqua/reference/missingness_per_condition.md),
+[`missingness_per_condition_cumsum()`](https://fgcz.github.io/prolfqua/reference/missingness_per_condition_cumsum.md),
+[`plot_estimate()`](https://fgcz.github.io/prolfqua/reference/plot_estimate.md),
+[`plot_heatmap()`](https://fgcz.github.io/prolfqua/reference/plot_heatmap.md),
+[`plot_heatmap_cor()`](https://fgcz.github.io/prolfqua/reference/plot_heatmap_cor.md),
+[`plot_hierarchies_boxplot_df()`](https://fgcz.github.io/prolfqua/reference/plot_hierarchies_boxplot_df.md),
+[`plot_hierarchies_line()`](https://fgcz.github.io/prolfqua/reference/plot_hierarchies_line.md),
+[`plot_na_heatmap()`](https://fgcz.github.io/prolfqua/reference/plot_NA_heatmap.md),
+[`plot_pca()`](https://fgcz.github.io/prolfqua/reference/plot_pca.md),
+[`plot_raster()`](https://fgcz.github.io/prolfqua/reference/plot_raster.md),
+[`plot_sample_correlation()`](https://fgcz.github.io/prolfqua/reference/plot_sample_correlation.md),
+[`upset_interaction_missing_stats()`](https://fgcz.github.io/prolfqua/reference/UpSet_interaction_missing_stats.md),
+[`upset_missing_stats()`](https://fgcz.github.io/prolfqua/reference/UpSet_missing_stats.md)
+
+## Examples
+
+``` r
+istar <- sim_lfq_data_peptide_config()
+#> creating sampleName from file_name column
+#> completing cases
+#> completing cases done
+#> setup done
+lfq <- LFQData$new(istar$data, istar$config)
+plot_intensity_distribution_violin(
+  lfq$data_long(), lfq$sample_name(), lfq$response(), lfq$is_transformed())
+#> Warning: Removed 36 rows containing non-finite outside the scale range
+#> (`stat_ydensity()`).
+#> Warning: Removed 36 rows containing non-finite outside the scale range
+#> (`stat_summary()`).
+
+
+istar <- sim_lfq_data_peptide_config()
+#> creating sampleName from file_name column
+#> completing cases
+#> completing cases done
+#> setup done
+lfq <- LFQData$new(istar$data, istar$config)
+plot_intensity_distribution_density(
+  lfq$data_long(), lfq$sample_name(), lfq$response(), lfq$is_transformed())
+#> Warning: Removed 36 rows containing non-finite outside the scale range
+#> (`stat_density()`).
+
+```

@@ -1,0 +1,297 @@
+# ROPECA contrast analysis facade for nested input
+
+ROPECA contrast analysis facade for nested input
+
+ROPECA contrast analysis facade for nested input
+
+## Value
+
+An R6 class generator.
+
+## Details
+
+Encapsulates the pipeline:
+[`strategy_lm`](https://fgcz.github.io/prolfqua/reference/strategy.md)
+-\>
+[`build_model`](https://fgcz.github.io/prolfqua/reference/build_model.md)
+-\>
+[`Contrasts`](https://fgcz.github.io/prolfqua/reference/Contrasts.md)
+-\>
+[`ContrastsROPECA`](https://fgcz.github.io/prolfqua/reference/ContrastsROPECA.md).
+
+ROPECA fits per-peptide linear models and aggregates peptide-level
+p-values to the protein level. Input must be nested LFQData (peptide
+subject_id strictly below the protein hierarchy).
+
+## See also
+
+Other modelling:
+[`AnovaExtractor`](https://fgcz.github.io/prolfqua/reference/AnovaExtractor.md),
+[`Contrasts`](https://fgcz.github.io/prolfqua/reference/Contrasts.md),
+[`ContrastsDEqMSFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsDEqMSFacade.md),
+[`ContrastsDEqMSVoomFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsDEqMSVoomFacade.md),
+[`ContrastsFacadeBase`](https://fgcz.github.io/prolfqua/reference/ContrastsFacadeBase.md),
+[`ContrastsFirth`](https://fgcz.github.io/prolfqua/reference/ContrastsFirth.md),
+[`ContrastsFirthFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsFirthFacade.md),
+[`ContrastsFirthNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsFirthNestedFacade.md),
+[`ContrastsHurdleFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsHurdleFacade.md),
+[`ContrastsHurdleNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsHurdleNestedFacade.md),
+[`ContrastsLMFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLMFacade.md),
+[`ContrastsLMImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLMImputeFacade.md),
+[`ContrastsLimma`](https://fgcz.github.io/prolfqua/reference/ContrastsLimma.md),
+[`ContrastsLimmaFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaFacade.md),
+[`ContrastsLimmaImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaImputeFacade.md),
+[`ContrastsLimmaVoomFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaVoomFacade.md),
+[`ContrastsLimmaVoomImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaVoomImputeFacade.md),
+[`ContrastsLimpaFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimpaFacade.md),
+[`ContrastsLimpaNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimpaNestedFacade.md),
+[`ContrastsLmerNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLmerNestedFacade.md),
+[`ContrastsModerated`](https://fgcz.github.io/prolfqua/reference/ContrastsModerated.md),
+[`ContrastsModeratedDEqMS`](https://fgcz.github.io/prolfqua/reference/ContrastsModeratedDEqMS.md),
+[`ContrastsPlotter`](https://fgcz.github.io/prolfqua/reference/ContrastsPlotter.md),
+[`ContrastsRLMFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsRLMFacade.md),
+[`ContrastsROPECA`](https://fgcz.github.io/prolfqua/reference/ContrastsROPECA.md),
+[`ContrastsRfitFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsRfitFacade.md),
+[`ContrastsRfitImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsRfitImputeFacade.md),
+[`ContrastsTable`](https://fgcz.github.io/prolfqua/reference/ContrastsTable.md),
+[`INTERNAL_FUNCTIONS_BY_FAMILY`](https://fgcz.github.io/prolfqua/reference/INTERNAL_FUNCTIONS_BY_FAMILY.md),
+[`LR_test()`](https://fgcz.github.io/prolfqua/reference/LR_test.md),
+[`Model`](https://fgcz.github.io/prolfqua/reference/Model.md),
+[`ModelFirth`](https://fgcz.github.io/prolfqua/reference/ModelFirth.md),
+[`ModelLimma`](https://fgcz.github.io/prolfqua/reference/ModelLimma.md),
+[`StrategyLM`](https://fgcz.github.io/prolfqua/reference/StrategyLM.md),
+[`StrategyLimma`](https://fgcz.github.io/prolfqua/reference/StrategyLimma.md),
+[`StrategyLimpa`](https://fgcz.github.io/prolfqua/reference/StrategyLimpa.md),
+[`StrategyLmer`](https://fgcz.github.io/prolfqua/reference/StrategyLmer.md),
+[`StrategyLogistf`](https://fgcz.github.io/prolfqua/reference/StrategyLogistf.md),
+[`StrategyRLM`](https://fgcz.github.io/prolfqua/reference/StrategyRLM.md),
+[`StrategyRfit`](https://fgcz.github.io/prolfqua/reference/StrategyRfit.md),
+[`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md),
+[`build_model()`](https://fgcz.github.io/prolfqua/reference/build_model.md),
+[`build_model_glm_peptide()`](https://fgcz.github.io/prolfqua/reference/build_model_glm_peptide.md),
+[`build_model_glm_protein()`](https://fgcz.github.io/prolfqua/reference/build_model_glm_protein.md),
+[`build_model_impute()`](https://fgcz.github.io/prolfqua/reference/build_model_impute.md),
+[`build_model_limma()`](https://fgcz.github.io/prolfqua/reference/build_model_limma.md),
+[`build_model_limma_impute()`](https://fgcz.github.io/prolfqua/reference/build_model_limma_impute.md),
+[`build_model_limma_voom()`](https://fgcz.github.io/prolfqua/reference/build_model_limma_voom.md),
+[`build_model_limma_voom_impute()`](https://fgcz.github.io/prolfqua/reference/build_model_limma_voom_impute.md),
+[`build_model_limpa()`](https://fgcz.github.io/prolfqua/reference/build_model_limpa.md),
+[`build_model_logistf()`](https://fgcz.github.io/prolfqua/reference/build_model_logistf.md),
+[`compute_borrowed_variance()`](https://fgcz.github.io/prolfqua/reference/compute_borrowed_variance.md),
+[`compute_borrowed_variance_limma()`](https://fgcz.github.io/prolfqua/reference/compute_borrowed_variance_limma.md),
+[`compute_contrast()`](https://fgcz.github.io/prolfqua/reference/compute_contrast.md),
+[`compute_lmer_contrast()`](https://fgcz.github.io/prolfqua/reference/compute_lmer_contrast.md),
+[`df.residual.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/df.residual.rfit_prolfqua.md),
+[`get_anova_df()`](https://fgcz.github.io/prolfqua/reference/get_anova_df.md),
+[`get_complete_model_fit()`](https://fgcz.github.io/prolfqua/reference/get_complete_model_fit.md),
+[`get_p_values_pbeta()`](https://fgcz.github.io/prolfqua/reference/get_p_values_pbeta.md),
+[`group_label()`](https://fgcz.github.io/prolfqua/reference/group_label.md),
+[`impute_from_model()`](https://fgcz.github.io/prolfqua/reference/impute_from_model.md),
+[`impute_refit_singular()`](https://fgcz.github.io/prolfqua/reference/impute_refit_singular.md),
+[`linfct_from_model()`](https://fgcz.github.io/prolfqua/reference/linfct_from_model.md),
+[`linfct_matrix_contrasts()`](https://fgcz.github.io/prolfqua/reference/linfct_matrix_contrasts.md),
+[`list_facades()`](https://fgcz.github.io/prolfqua/reference/list_facades.md),
+[`lookup_facade()`](https://fgcz.github.io/prolfqua/reference/lookup_facade.md),
+[`merge_contrasts_results()`](https://fgcz.github.io/prolfqua/reference/merge_contrasts_results.md),
+[`model_analyse()`](https://fgcz.github.io/prolfqua/reference/model_analyse.md),
+[`model_summary()`](https://fgcz.github.io/prolfqua/reference/model_summary.md),
+[`moderated_p_deqms()`](https://fgcz.github.io/prolfqua/reference/moderated_p_deqms.md),
+[`moderated_p_deqms_long()`](https://fgcz.github.io/prolfqua/reference/moderated_p_deqms_long.md),
+[`moderated_p_limma()`](https://fgcz.github.io/prolfqua/reference/moderated_p_limma.md),
+[`new_imputed_model()`](https://fgcz.github.io/prolfqua/reference/new_imputed_model.md),
+[`pivot_model_contrasts_to_wide()`](https://fgcz.github.io/prolfqua/reference/pivot_model_contrasts_to_wide.md),
+[`register_facade()`](https://fgcz.github.io/prolfqua/reference/register_facade.md),
+[`sigma.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/sigma.rfit_prolfqua.md),
+[`sim_build_models_lm()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_lm.md),
+[`sim_build_models_lmer()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_lmer.md),
+[`sim_build_models_logistf()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_logistf.md),
+[`sim_make_model_lm()`](https://fgcz.github.io/prolfqua/reference/sim_make_model_lm.md),
+[`sim_make_model_lmer()`](https://fgcz.github.io/prolfqua/reference/sim_make_model_lmer.md),
+[`strategy_limma()`](https://fgcz.github.io/prolfqua/reference/strategy_limma.md),
+[`strategy_limpa()`](https://fgcz.github.io/prolfqua/reference/strategy_limpa.md),
+[`strategy_logistf()`](https://fgcz.github.io/prolfqua/reference/strategy.md),
+[`summary_ROPECA_median_p_scaled()`](https://fgcz.github.io/prolfqua/reference/summary_ROPECA_median_p_scaled.md),
+[`vcov.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/vcov.rfit_prolfqua.md)
+
+## Super classes
+
+[`prolfqua::ContrastsInterface`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.md)
+-\>
+[`prolfqua::ContrastsFacadeBase`](https://fgcz.github.io/prolfqua/reference/ContrastsFacadeBase.md)
+-\> `ContrastsROPECANestedFacade`
+
+## Methods
+
+### Public methods
+
+- [`ContrastsROPECANestedFacade$new()`](#method-ContrastsROPECANestedFacade-new)
+
+- [`ContrastsROPECANestedFacade$get_contrasts()`](#method-ContrastsROPECANestedFacade-get_contrasts)
+
+- [`ContrastsROPECANestedFacade$get_Plotter()`](#method-ContrastsROPECANestedFacade-get_Plotter)
+
+- [`ContrastsROPECANestedFacade$to_wide()`](#method-ContrastsROPECANestedFacade-to_wide)
+
+- [`ContrastsROPECANestedFacade$clone()`](#method-ContrastsROPECANestedFacade-clone)
+
+Inherited methods
+
+- [`prolfqua::ContrastsInterface$column_description()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-column_description)
+- [`prolfqua::ContrastsInterface$contrast_summary_table()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-contrast_summary_table)
+- [`prolfqua::ContrastsInterface$extra_artifacts()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-extra_artifacts)
+- [`prolfqua::ContrastsInterface$filter_significant()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-filter_significant)
+- [`prolfqua::ContrastsInterface$get_contrast_sides()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_contrast_sides)
+- [`prolfqua::ContrastsInterface$get_ora()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_ora)
+- [`prolfqua::ContrastsInterface$get_rank()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_rank)
+- [`prolfqua::ContrastsFacadeBase$get_config()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_config)
+- [`prolfqua::ContrastsFacadeBase$get_missing()`](https://fgcz.github.io/prolfqua/html/ContrastsFacadeBase.html#method-ContrastsFacadeBase-get_missing)
+
+------------------------------------------------------------------------
+
+### Method `new()`
+
+initialize
+
+#### Usage
+
+    ContrastsROPECANestedFacade$new(lfqdata, modelstr, contrasts, ...)
+
+#### Arguments
+
+- `lfqdata`:
+
+  nested LFQData (peptide-level)
+
+- `modelstr`:
+
+  model formula string (e.g. "~ group\_")
+
+- `contrasts`:
+
+  named character vector of contrasts
+
+- `...`:
+
+  passed to
+  [`strategy_lm`](https://fgcz.github.io/prolfqua/reference/strategy.md)
+
+------------------------------------------------------------------------
+
+### Method `get_contrasts()`
+
+Get contrast results with standardized column names.
+
+ROPECA's `beta.based.significance` is mapped to `p.value` and
+`FDR.beta.based.significance` to `FDR`.
+
+Columns not directly produced by ROPECA are derived heuristically:
+
+- `std.error = diff / statistic` (algebraic: t = estimate / SE)
+
+- `sigma = mad.estimate` (MAD of peptide fold changes)
+
+- `df = n_not_na` (number of contributing peptides)
+
+- `conf.low/conf.high` via `diff +/- qt(0.975, df) * |std.error|`
+
+#### Usage
+
+    ContrastsROPECANestedFacade$get_contrasts()
+
+------------------------------------------------------------------------
+
+### Method `get_Plotter()`
+
+get ContrastsPlotter (uses standardized column names)
+
+#### Usage
+
+    ContrastsROPECANestedFacade$get_Plotter(fc_threshold = 2, fdr_threshold = 0.1)
+
+#### Arguments
+
+- `fc_threshold`:
+
+  fold change threshold
+
+- `fdr_threshold`:
+
+  FDR threshold
+
+------------------------------------------------------------------------
+
+### Method `to_wide()`
+
+convert results to wide format
+
+#### Usage
+
+    ContrastsROPECANestedFacade$to_wide(columns = c("p.value", "FDR", "statistic"))
+
+#### Arguments
+
+- `columns`:
+
+  value columns to pivot, default `c("p.value", "FDR", "statistic")`
+
+------------------------------------------------------------------------
+
+### Method `clone()`
+
+The objects of this class are cloneable with this method.
+
+#### Usage
+
+    ContrastsROPECANestedFacade$clone(deep = FALSE)
+
+#### Arguments
+
+- `deep`:
+
+  Whether to make a deep clone.
+
+## Examples
+
+``` r
+istar <- sim_lfq_data_peptide_config()
+#> creating sampleName from file_name column
+#> completing cases
+#> completing cases done
+#> setup done
+lfqdata <- LFQData$new(istar$data, istar$config)
+lfqdata <- lfqdata$get_Transformer()$log2()$lfq
+#> Column added : log2_abundance
+contrasts <- c("A_vs_Ctrl" = "group_A - group_Ctrl")
+fa <- ContrastsROPECANestedFacade$new(lfqdata, "~ group_", contrasts)
+head(fa$get_contrasts())
+#> determine linear functions:
+#> get_contrasts -> contrasts_linfct
+#> contrasts_linfct
+#> Joining with `by = join_by(protein_Id, peptide_Id, contrast)`
+#> # A tibble: 6 × 14
+#> # Groups:   contrast [1]
+#>   modelName   estimate_type protein_Id contrast avgAbd    diff     FDR statistic
+#>   <chr>       <chr>         <chr>      <chr>     <dbl>   <dbl>   <dbl>     <dbl>
+#> 1 ropeca_nes… observed      0EfVhX~00… A_vs_Ct…   4.27 -0.0742 5.28e-2     -1.75
+#> 2 ropeca_nes… observed      7cbcrd~57… A_vs_Ct…   4.51  0.741  9.91e-5      8.79
+#> 3 ropeca_nes… observed      9VUkAq~47… A_vs_Ct…   4.47 -0.598  6.91e-6    -12.7 
+#> 4 ropeca_nes… observed      BEJI92~52… A_vs_Ct…   4.23  0.277  1.87e-3      3.94
+#> 5 ropeca_nes… observed      CGzoYe~21… A_vs_Ct…   4.76 -0.310  3.74e-5     -9.26
+#> 6 ropeca_nes… observed      DoWup2~58… A_vs_Ct…   4.43  0.295  1.38e-6     14.7 
+#> # ℹ 6 more variables: std.error <dbl>, df <int>, p.value <dbl>, conf.low <dbl>,
+#> #   conf.high <dbl>, sigma <dbl>
+fa$to_wide()
+#> # A tibble: 10 × 5
+#>    protein_Id diff.A_vs_Ctrl p.value.A_vs_Ctrl FDR.A_vs_Ctrl statistic.A_vs_Ctrl
+#>    <chr>               <dbl>             <dbl>         <dbl>               <dbl>
+#>  1 0EfVhX~00…        -0.0742       0.0423         0.0528                   -1.75
+#>  2 7cbcrd~57…         0.741        0.0000496      0.0000991                 8.79
+#>  3 9VUkAq~47…        -0.598        0.00000138     0.00000691              -12.7 
+#>  4 BEJI92~52…         0.277        0.00112        0.00187                   3.94
+#>  5 CGzoYe~21…        -0.310        0.0000150      0.0000374                -9.26
+#>  6 DoWup2~58…         0.295        0.000000138    0.00000138               14.7 
+#>  7 Fl4JiV~86…         0.0700       0.740          0.823                     2.08
+#>  8 HvIpHG~90…        -0.384        0.00000389     0.0000130                -7.28
+#>  9 JcKVfU~96…        -0.0634       0.00218        0.00312                  -1.87
+#> 10 SGIVBl~57…        -0.122        0.993          0.993                    -3.88
+```

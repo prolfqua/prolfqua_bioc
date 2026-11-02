@@ -1,0 +1,79 @@
+# Plot peptide intensities of protein as a function of the sample and factor
+
+Plot peptide intensities of protein as a function of the sample and
+factor
+
+## Usage
+
+``` r
+plot_hierarchies_line(res, protein_name, lfqdata, show.legend = FALSE)
+```
+
+## Arguments
+
+- res:
+
+  data.frame
+
+- protein_name:
+
+  title of plot
+
+- lfqdata:
+
+  LFQData object
+
+- show.legend:
+
+  logical, show legend in plot
+
+## See also
+
+Other aggregation:
+[`INTERNAL_FUNCTIONS_BY_FAMILY`](https://fgcz.github.io/prolfqua/reference/INTERNAL_FUNCTIONS_BY_FAMILY.md),
+[`aggregate_intensity_top_n()`](https://fgcz.github.io/prolfqua/reference/aggregate_intensity_top_n.md),
+[`estimate_intensity()`](https://fgcz.github.io/prolfqua/reference/estimate_intensity.md),
+[`plot_estimate()`](https://fgcz.github.io/prolfqua/reference/plot_estimate.md)
+
+Other plotting:
+[`ContrastsPlotter`](https://fgcz.github.io/prolfqua/reference/ContrastsPlotter.md),
+[`INTERNAL_FUNCTIONS_BY_FAMILY`](https://fgcz.github.io/prolfqua/reference/INTERNAL_FUNCTIONS_BY_FAMILY.md),
+[`missigness_histogram()`](https://fgcz.github.io/prolfqua/reference/missigness_histogram.md),
+[`missingness_per_condition()`](https://fgcz.github.io/prolfqua/reference/missingness_per_condition.md),
+[`missingness_per_condition_cumsum()`](https://fgcz.github.io/prolfqua/reference/missingness_per_condition_cumsum.md),
+[`plot_estimate()`](https://fgcz.github.io/prolfqua/reference/plot_estimate.md),
+[`plot_heatmap()`](https://fgcz.github.io/prolfqua/reference/plot_heatmap.md),
+[`plot_heatmap_cor()`](https://fgcz.github.io/prolfqua/reference/plot_heatmap_cor.md),
+[`plot_hierarchies_boxplot_df()`](https://fgcz.github.io/prolfqua/reference/plot_hierarchies_boxplot_df.md),
+[`plot_intensity_distribution_violin()`](https://fgcz.github.io/prolfqua/reference/plot_intensity_distribution_violin.md),
+[`plot_na_heatmap()`](https://fgcz.github.io/prolfqua/reference/plot_NA_heatmap.md),
+[`plot_pca()`](https://fgcz.github.io/prolfqua/reference/plot_pca.md),
+[`plot_raster()`](https://fgcz.github.io/prolfqua/reference/plot_raster.md),
+[`plot_sample_correlation()`](https://fgcz.github.io/prolfqua/reference/plot_sample_correlation.md),
+[`upset_interaction_missing_stats()`](https://fgcz.github.io/prolfqua/reference/UpSet_interaction_missing_stats.md),
+[`upset_missing_stats()`](https://fgcz.github.io/prolfqua/reference/UpSet_missing_stats.md)
+
+## Examples
+
+``` r
+
+istar <- sim_lfq_data_peptide_config()
+#> creating sampleName from file_name column
+#> completing cases
+#> completing cases done
+#> setup done
+config <- istar$config
+analysis <- istar$data
+
+xnested <- analysis |>
+  dplyr::group_by(across(all_of(config$hierarchy_keys_depth()))) |>
+  tidyr::nest()
+
+lfq <- LFQData$new(analysis, config)
+prolfqua::plot_hierarchies_line(xnested$data[[1]], xnested$protein_Id[[1]], lfq)
+#> Warning: Removed 7 rows containing missing values or values outside the scale range
+#> (`geom_point()`).
+#> Warning: Removed 4 rows containing missing values or values outside the scale range
+#> (`geom_line()`).
+
+```

@@ -1,0 +1,48 @@
+# Extracts uniprot ID
+
+Extracts uniprot ID
+
+## Usage
+
+``` r
+get_uniprot_id_from_fasta_header(df, idcolumn = "protein_Id")
+```
+
+## Arguments
+
+- df:
+
+  data.frame
+
+- idcolumn:
+
+  character, column name to extract uniprot IDs from
+
+## Value
+
+data.frame
+
+## See also
+
+Other utilities:
+[`INTERNAL_FUNCTIONS_BY_FAMILY`](https://fgcz.github.io/prolfqua/reference/INTERNAL_FUNCTIONS_BY_FAMILY.md),
+[`is_contaminant()`](https://fgcz.github.io/prolfqua/reference/is_contaminant.md),
+[`is_decoy()`](https://fgcz.github.io/prolfqua/reference/is_decoy.md),
+[`matrix_to_tibble()`](https://fgcz.github.io/prolfqua/reference/matrix_to_tibble.md),
+[`multigroup_volcano()`](https://fgcz.github.io/prolfqua/reference/multigroup_volcano.md),
+[`pairs_smooth()`](https://fgcz.github.io/prolfqua/reference/pairs_smooth.md),
+[`panel_cor()`](https://fgcz.github.io/prolfqua/reference/panel_cor.md),
+[`table_facade()`](https://fgcz.github.io/prolfqua/reference/table_facade.md)
+
+## Examples
+
+``` r
+df <- data.frame(
+  protein_Id = c("sp|P12345|PROT1_HUMAN", "sp|Q67890|PROT2_HUMAN",
+                 "tr|A0A0A0|PROT3_HUMAN", "NOFASTA_ID"),
+  value = 1:4
+)
+result <- get_uniprot_id_from_fasta_header(df, idcolumn = "protein_Id")
+stopifnot("UniprotID" %in% colnames(result))
+stopifnot(sum(!is.na(result$UniprotID)) == 3)
+```

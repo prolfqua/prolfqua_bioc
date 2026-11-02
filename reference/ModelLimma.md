@@ -1,0 +1,338 @@
+# R6 class representing a limma modelling result
+
+R6 class representing a limma modelling result
+
+R6 class representing a limma modelling result
+
+## Value
+
+An R6 class generator.
+
+## Details
+
+Same API as
+[`Model`](https://fgcz.github.io/prolfqua/reference/Model.md):
+`get_anova()`, `get_coefficients()`, `coef_histogram()`,
+`coef_volcano()`, `anova_histogram()`.
+
+## See also
+
+Other modelling:
+[`AnovaExtractor`](https://fgcz.github.io/prolfqua/reference/AnovaExtractor.md),
+[`Contrasts`](https://fgcz.github.io/prolfqua/reference/Contrasts.md),
+[`ContrastsDEqMSFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsDEqMSFacade.md),
+[`ContrastsDEqMSVoomFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsDEqMSVoomFacade.md),
+[`ContrastsFacadeBase`](https://fgcz.github.io/prolfqua/reference/ContrastsFacadeBase.md),
+[`ContrastsFirth`](https://fgcz.github.io/prolfqua/reference/ContrastsFirth.md),
+[`ContrastsFirthFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsFirthFacade.md),
+[`ContrastsFirthNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsFirthNestedFacade.md),
+[`ContrastsHurdleFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsHurdleFacade.md),
+[`ContrastsHurdleNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsHurdleNestedFacade.md),
+[`ContrastsLMFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLMFacade.md),
+[`ContrastsLMImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLMImputeFacade.md),
+[`ContrastsLimma`](https://fgcz.github.io/prolfqua/reference/ContrastsLimma.md),
+[`ContrastsLimmaFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaFacade.md),
+[`ContrastsLimmaImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaImputeFacade.md),
+[`ContrastsLimmaVoomFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaVoomFacade.md),
+[`ContrastsLimmaVoomImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaVoomImputeFacade.md),
+[`ContrastsLimpaFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimpaFacade.md),
+[`ContrastsLimpaNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimpaNestedFacade.md),
+[`ContrastsLmerNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLmerNestedFacade.md),
+[`ContrastsModerated`](https://fgcz.github.io/prolfqua/reference/ContrastsModerated.md),
+[`ContrastsModeratedDEqMS`](https://fgcz.github.io/prolfqua/reference/ContrastsModeratedDEqMS.md),
+[`ContrastsPlotter`](https://fgcz.github.io/prolfqua/reference/ContrastsPlotter.md),
+[`ContrastsRLMFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsRLMFacade.md),
+[`ContrastsROPECA`](https://fgcz.github.io/prolfqua/reference/ContrastsROPECA.md),
+[`ContrastsROPECANestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsROPECANestedFacade.md),
+[`ContrastsRfitFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsRfitFacade.md),
+[`ContrastsRfitImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsRfitImputeFacade.md),
+[`ContrastsTable`](https://fgcz.github.io/prolfqua/reference/ContrastsTable.md),
+[`INTERNAL_FUNCTIONS_BY_FAMILY`](https://fgcz.github.io/prolfqua/reference/INTERNAL_FUNCTIONS_BY_FAMILY.md),
+[`LR_test()`](https://fgcz.github.io/prolfqua/reference/LR_test.md),
+[`Model`](https://fgcz.github.io/prolfqua/reference/Model.md),
+[`ModelFirth`](https://fgcz.github.io/prolfqua/reference/ModelFirth.md),
+[`StrategyLM`](https://fgcz.github.io/prolfqua/reference/StrategyLM.md),
+[`StrategyLimma`](https://fgcz.github.io/prolfqua/reference/StrategyLimma.md),
+[`StrategyLimpa`](https://fgcz.github.io/prolfqua/reference/StrategyLimpa.md),
+[`StrategyLmer`](https://fgcz.github.io/prolfqua/reference/StrategyLmer.md),
+[`StrategyLogistf`](https://fgcz.github.io/prolfqua/reference/StrategyLogistf.md),
+[`StrategyRLM`](https://fgcz.github.io/prolfqua/reference/StrategyRLM.md),
+[`StrategyRfit`](https://fgcz.github.io/prolfqua/reference/StrategyRfit.md),
+[`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md),
+[`build_model()`](https://fgcz.github.io/prolfqua/reference/build_model.md),
+[`build_model_glm_peptide()`](https://fgcz.github.io/prolfqua/reference/build_model_glm_peptide.md),
+[`build_model_glm_protein()`](https://fgcz.github.io/prolfqua/reference/build_model_glm_protein.md),
+[`build_model_impute()`](https://fgcz.github.io/prolfqua/reference/build_model_impute.md),
+[`build_model_limma()`](https://fgcz.github.io/prolfqua/reference/build_model_limma.md),
+[`build_model_limma_impute()`](https://fgcz.github.io/prolfqua/reference/build_model_limma_impute.md),
+[`build_model_limma_voom()`](https://fgcz.github.io/prolfqua/reference/build_model_limma_voom.md),
+[`build_model_limma_voom_impute()`](https://fgcz.github.io/prolfqua/reference/build_model_limma_voom_impute.md),
+[`build_model_limpa()`](https://fgcz.github.io/prolfqua/reference/build_model_limpa.md),
+[`build_model_logistf()`](https://fgcz.github.io/prolfqua/reference/build_model_logistf.md),
+[`compute_borrowed_variance()`](https://fgcz.github.io/prolfqua/reference/compute_borrowed_variance.md),
+[`compute_borrowed_variance_limma()`](https://fgcz.github.io/prolfqua/reference/compute_borrowed_variance_limma.md),
+[`compute_contrast()`](https://fgcz.github.io/prolfqua/reference/compute_contrast.md),
+[`compute_lmer_contrast()`](https://fgcz.github.io/prolfqua/reference/compute_lmer_contrast.md),
+[`df.residual.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/df.residual.rfit_prolfqua.md),
+[`get_anova_df()`](https://fgcz.github.io/prolfqua/reference/get_anova_df.md),
+[`get_complete_model_fit()`](https://fgcz.github.io/prolfqua/reference/get_complete_model_fit.md),
+[`get_p_values_pbeta()`](https://fgcz.github.io/prolfqua/reference/get_p_values_pbeta.md),
+[`group_label()`](https://fgcz.github.io/prolfqua/reference/group_label.md),
+[`impute_from_model()`](https://fgcz.github.io/prolfqua/reference/impute_from_model.md),
+[`impute_refit_singular()`](https://fgcz.github.io/prolfqua/reference/impute_refit_singular.md),
+[`linfct_from_model()`](https://fgcz.github.io/prolfqua/reference/linfct_from_model.md),
+[`linfct_matrix_contrasts()`](https://fgcz.github.io/prolfqua/reference/linfct_matrix_contrasts.md),
+[`list_facades()`](https://fgcz.github.io/prolfqua/reference/list_facades.md),
+[`lookup_facade()`](https://fgcz.github.io/prolfqua/reference/lookup_facade.md),
+[`merge_contrasts_results()`](https://fgcz.github.io/prolfqua/reference/merge_contrasts_results.md),
+[`model_analyse()`](https://fgcz.github.io/prolfqua/reference/model_analyse.md),
+[`model_summary()`](https://fgcz.github.io/prolfqua/reference/model_summary.md),
+[`moderated_p_deqms()`](https://fgcz.github.io/prolfqua/reference/moderated_p_deqms.md),
+[`moderated_p_deqms_long()`](https://fgcz.github.io/prolfqua/reference/moderated_p_deqms_long.md),
+[`moderated_p_limma()`](https://fgcz.github.io/prolfqua/reference/moderated_p_limma.md),
+[`new_imputed_model()`](https://fgcz.github.io/prolfqua/reference/new_imputed_model.md),
+[`pivot_model_contrasts_to_wide()`](https://fgcz.github.io/prolfqua/reference/pivot_model_contrasts_to_wide.md),
+[`register_facade()`](https://fgcz.github.io/prolfqua/reference/register_facade.md),
+[`sigma.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/sigma.rfit_prolfqua.md),
+[`sim_build_models_lm()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_lm.md),
+[`sim_build_models_lmer()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_lmer.md),
+[`sim_build_models_logistf()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_logistf.md),
+[`sim_make_model_lm()`](https://fgcz.github.io/prolfqua/reference/sim_make_model_lm.md),
+[`sim_make_model_lmer()`](https://fgcz.github.io/prolfqua/reference/sim_make_model_lmer.md),
+[`strategy_limma()`](https://fgcz.github.io/prolfqua/reference/strategy_limma.md),
+[`strategy_limpa()`](https://fgcz.github.io/prolfqua/reference/strategy_limpa.md),
+[`strategy_logistf()`](https://fgcz.github.io/prolfqua/reference/strategy.md),
+[`summary_ROPECA_median_p_scaled()`](https://fgcz.github.io/prolfqua/reference/summary_ROPECA_median_p_scaled.md),
+[`vcov.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/vcov.rfit_prolfqua.md)
+
+## Super class
+
+[`prolfqua::ModelInterface`](https://fgcz.github.io/prolfqua/reference/ModelInterface.md)
+-\> `ModelLimma`
+
+## Public fields
+
+- `fit`:
+
+  limma MArrayLM object from lmFit
+
+- `subject_id`:
+
+  protein ID column name(s)
+
+- `model_name`:
+
+  model name
+
+- `rowdata`:
+
+  protein ID mapping from to_wide()\$rowdata
+
+- `trend`:
+
+  passed to eBayes
+
+- `robust`:
+
+  passed to eBayes
+
+- `dummy_model`:
+
+  one fitted lm for linfct extraction
+
+- `p.adjust`:
+
+  function to adjust p-values
+
+- `imputed_proteins`:
+
+  character vector of protein ids (matching
+  `rownames(fit$coefficients)`) that were rescued via LOD imputation.
+  `ContrastsLimma$get_contrasts()` reads this to tag refit rows with a
+  `"_imputed"` modelName suffix so the rescue is visible downstream.
+  Empty for builders that do not impute.
+
+## Methods
+
+### Public methods
+
+- [`ModelLimma$new()`](#method-ModelLimma-new)
+
+- [`ModelLimma$get_coefficients()`](#method-ModelLimma-get_coefficients)
+
+- [`ModelLimma$get_anova()`](#method-ModelLimma-get_anova)
+
+- [`ModelLimma$clone()`](#method-ModelLimma-clone)
+
+Inherited methods
+
+- [`prolfqua::ModelInterface$anova_histogram()`](https://fgcz.github.io/prolfqua/html/ModelInterface.html#method-ModelInterface-anova_histogram)
+- [`prolfqua::ModelInterface$coef_histogram()`](https://fgcz.github.io/prolfqua/html/ModelInterface.html#method-ModelInterface-coef_histogram)
+- [`prolfqua::ModelInterface$coef_pairs()`](https://fgcz.github.io/prolfqua/html/ModelInterface.html#method-ModelInterface-coef_pairs)
+- [`prolfqua::ModelInterface$coef_volcano()`](https://fgcz.github.io/prolfqua/html/ModelInterface.html#method-ModelInterface-coef_volcano)
+
+------------------------------------------------------------------------
+
+### Method [`new()`](https://rdrr.io/r/methods/new.html)
+
+initialize ModelLimma
+
+#### Usage
+
+    ModelLimma$new(
+      fit,
+      subject_id,
+      model_name,
+      rowdata,
+      trend = FALSE,
+      robust = FALSE,
+      dummy_model = NULL,
+      p.adjust = prolfqua::adjust_p_values,
+      imputed_proteins = character(0)
+    )
+
+#### Arguments
+
+- `fit`:
+
+  limma MArrayLM from lmFit
+
+- `subject_id`:
+
+  protein ID column name(s)
+
+- `model_name`:
+
+  model name
+
+- `rowdata`:
+
+  protein ID mapping
+
+- `trend`:
+
+  passed to eBayes
+
+- `robust`:
+
+  passed to eBayes
+
+- `dummy_model`:
+
+  one fitted lm for linfct extraction
+
+- `p.adjust`:
+
+  function to adjust p-values
+
+- `imputed_proteins`:
+
+  character vector of LOD-rescued protein ids
+
+------------------------------------------------------------------------
+
+### Method `get_coefficients()`
+
+return model coefficient table in long format
+
+#### Usage
+
+    ModelLimma$get_coefficients()
+
+#### Returns
+
+data.frame
+
+------------------------------------------------------------------------
+
+### Method `get_anova()`
+
+return anova table (F-test per protein across all non-intercept
+coefficients)
+
+#### Usage
+
+    ModelLimma$get_anova()
+
+#### Returns
+
+data.frame
+
+------------------------------------------------------------------------
+
+### Method `clone()`
+
+The objects of this class are cloneable with this method.
+
+#### Usage
+
+    ModelLimma$clone(deep = FALSE)
+
+#### Arguments
+
+- `deep`:
+
+  Whether to make a deep clone.
+
+## Examples
+
+``` r
+istar <- sim_lfq_data_protein_config(Nprot = 50)
+#> creating sampleName from file_name column
+#> completing cases
+#> completing cases done
+#> setup done
+lProt <- LFQData$new(istar$data, istar$config)
+lProt$rename_response("transformedIntensity")
+strat <- strategy_limma("transformedIntensity ~ group_")
+mod <- build_model_limma(lProt, strat)
+#> Warning: Partial NA coefficients for 1 probe(s)
+
+coeffs <- mod$get_coefficients()
+head(coeffs)
+#> # A tibble: 6 × 6
+#>   protein_Id  factor      Estimate Std..Error t.value  Pr...t..
+#>   <chr>       <chr>          <dbl>      <dbl>   <dbl>     <dbl>
+#> 1 0EfVhX~7161 (Intercept)     20.3      0.482    42.1 5.89e-143
+#> 2 0m5WN4~3543 (Intercept)     20.5      0.482    42.6 1.17e-144
+#> 3 76k03k~9735 (Intercept)     20.2      0.481    41.9 3.21e-142
+#> 4 7QuTub~5556 (Intercept)     22.8      0.482    47.4 7.08e-159
+#> 5 7cbcrd~0495 (Intercept)     17.2      0.681    25.2 3.32e- 82
+#> 6 7soopj~3451 (Intercept)     26.3      0.481    54.7 3.79e-179
+anova_tbl <- mod$get_anova()
+head(anova_tbl)
+#> # A tibble: 6 × 5
+#>   protein_Id  F.value  p.value factor                  FDR
+#>   <chr>         <dbl>    <dbl> <chr>                 <dbl>
+#> 1 0EfVhX~7161    9.95 4.81e- 5 group_B+group_Ctrl 2.14e- 4
+#> 2 0m5WN4~3543   26.8  2.57e-12 group_B+group_Ctrl 1.80e-11
+#> 3 76k03k~9735    1.57 2.09e- 1 group_B+group_Ctrl 5.38e- 1
+#> 4 7QuTub~5556    1.40 2.46e- 1 group_B+group_Ctrl 5.48e- 1
+#> 5 7cbcrd~0495    6.12 2.22e- 3 group_B+group_Ctrl 8.35e- 3
+#> 6 7soopj~3451    1.51 2.21e- 1 group_B+group_Ctrl 5.41e- 1
+mod$coef_histogram()
+#> $plot
+#> Warning: Removed 1 row containing non-finite outside the scale range (`stat_bin()`).
+
+#> 
+#> $name
+#> [1] "Coef_Histogram_limma.pdf"
+#> 
+mod$coef_volcano()
+#> $plot
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_point()`).
+
+#> 
+#> $name
+#> [1] "Coef_VolcanoPlot_limma.pdf"
+#> 
+mod$anova_histogram()
+#> $plot
+#> Warning: Removed 1 row containing non-finite outside the scale range (`stat_bin()`).
+
+#> 
+#> $name
+#> [1] "Anova_p.values_limma.pdf"
+#> 
+```

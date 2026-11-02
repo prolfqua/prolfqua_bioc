@@ -1,0 +1,104 @@
+# plot volcano given multiple contrasts
+
+plot volcano given multiple contrasts
+
+## Usage
+
+``` r
+multigroup_volcano(
+  .data,
+  effect = "fc",
+  significance = "p.adjust",
+  contrast = "condition",
+  colour = "colour",
+  xintercept = c(-2, 2),
+  yintercept = 0.05,
+  label = NULL,
+  size = 1,
+  segment.size = 0.3,
+  segment.alpha = 0.3,
+  scales = "fixed",
+  max_nr_significant_text = 20
+)
+```
+
+## Arguments
+
+- .data:
+
+  data in long format
+
+- effect:
+
+  column containing effect sizes
+
+- significance:
+
+  column containing p-values, q.values etc
+
+- contrast:
+
+  column with contrast
+
+- colour:
+
+  colouring of points
+
+- xintercept:
+
+  fc thresholds
+
+- yintercept:
+
+  significance threshold
+
+- label:
+
+  column containing labels
+
+- size:
+
+  controls size of text
+
+- segment.size:
+
+  controls size of lines
+
+- segment.alpha:
+
+  controls visibility of lines
+
+- scales:
+
+  parameter to ggplot2::facet_wrap
+
+- max_nr_significant_text:
+
+  maximum number of significant labels to display
+
+## See also
+
+Other utilities:
+[`INTERNAL_FUNCTIONS_BY_FAMILY`](https://fgcz.github.io/prolfqua/reference/INTERNAL_FUNCTIONS_BY_FAMILY.md),
+[`get_uniprot_id_from_fasta_header()`](https://fgcz.github.io/prolfqua/reference/get_uniprot_id_from_fasta_header.md),
+[`is_contaminant()`](https://fgcz.github.io/prolfqua/reference/is_contaminant.md),
+[`is_decoy()`](https://fgcz.github.io/prolfqua/reference/is_decoy.md),
+[`matrix_to_tibble()`](https://fgcz.github.io/prolfqua/reference/matrix_to_tibble.md),
+[`pairs_smooth()`](https://fgcz.github.io/prolfqua/reference/pairs_smooth.md),
+[`panel_cor()`](https://fgcz.github.io/prolfqua/reference/panel_cor.md),
+[`table_facade()`](https://fgcz.github.io/prolfqua/reference/table_facade.md)
+
+## Examples
+
+``` r
+
+show <- data.frame(logFC = rnorm(100, 0, 1), adj.P.Val = runif(100, 0, 1),
+  Condition = sample(c("a","b")), colour = "forward", Name = paste0("n", 1:100))
+prolfqua::multigroup_volcano( show,
+effect="logFC",
+significance = "adj.P.Val",
+contrast="Condition",
+colour=NULL,
+label="Name",
+max_nr_significant_text = 300)
+```

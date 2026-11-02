@@ -1,0 +1,558 @@
+# Changelog
+
+## prolfqua 0.99.6 (Bioconductor)
+
+- Corresponds to prolfqua 1.9.0 on GitHub, which addresses the review in
+  [BiocContributions](https://github.com/Bioconductor/BiocContributions/issues/171)
+  [\#171](https://github.com/fgcz/prolfqua/issues/171); the changes are
+  listed below.
+- Requires R \>= 4.6.
+
+## prolfqua 1.9.0
+
+Changes for the Bioconductor review
+([BiocContributions](https://github.com/Bioconductor/BiocContributions/issues/171)
+[\#171](https://github.com/fgcz/prolfqua/issues/171)).
+
+### New features
+
+- New method `binomial_firth_nested`
+  (`ContrastsBinomialFirthNestedFacade`,
+  [`strategy_binomial_firth()`](https://fgcz.github.io/prolfqua/reference/strategy_binomial_firth.md)):
+  the `binomial_nested` detection-count model with Firth’s bias
+  reduction in place of the fixed pseudo-count. Like `binomial_nested`,
+  it sums peptide detections per protein and sample, so its dispersion
+  and degrees of freedom come from the samples; unlike `firth_nested`,
+  its p-values therefore do not grow more significant with the number of
+  peptides. Log odds ratios stay finite for proteins detected in one
+  group only.
+- New method `hurdle_nested` (`ContrastsHurdleNestedFacade`): a hurdle
+  model from peptide-level input in one call,
+  `build_contrast_analysis(method = "hurdle_nested")`. It aggregates to
+  protein level with median polish, fits `lm_impute` to the protein
+  intensities and `binomial_firth_nested` to the peptide detection, and
+  combines them with `ContrastsHurdleFacade`. Being in the registry, it
+  is also available to prolfquapp as a model.
+- `ContrastsHurdleFacade$new(intensity, detection)` combines a fitted
+  intensity facade (`lm`, `lm_impute`, …) with a fitted `firth_nested`,
+  `binomial_nested` or `binomial_firth_nested` detection facade, as
+  msqrob2’s hurdle model does: `p.value` is Fisher’s combination of the
+  two component p-values, and `FDR` its BH adjustment within contrast.
+  Proteins only one component estimates keep that component’s p-value;
+  fully detected proteins keep their intensity p-value. The component
+  p-values, the detection log odds ratio and the combined statistic are
+  extra columns. No model is fitted.
+
+### Bug fixes
+
+- `citation("prolfqua")` works again: `inst/CITATION` contained a
+  non-ASCII dash that
+  [`utils::readCitationFile()`](https://rdrr.io/r/utils/citation.html)
+  could not read.
+
+### Documentation
+
+- New introductory vignette
+  [`vignette("prolfqua")`](https://fgcz.github.io/prolfqua/articles/prolfqua.md):
+  the prolfqua hex logo, links to all tutorials on the package website,
+  an introduction centred on
+  [`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md)
+  with a figure of it as a factory rolling out all modelling methods,
+  installation with BiocManager, and a quick start using `lm_impute`.
+- [`?build_contrast_analysis`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md)
+  describes the function as the factory of the modelling methods and
+  lists all 20 built-in methods by family, including
+  `binomial_firth_nested` and `hurdle_nested`, which were missing.
+- The package description names
+  [`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md)
+  and the modelling methods it offers.
+- New vignette
+  [`vignette("ModellingMethods")`](https://fgcz.github.io/prolfqua/articles/ModellingMethods.md):
+  runs every
+  [`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md)
+  method on one small simulated dataset, with one summary line per
+  method; it renders in a few seconds.
+- The package now ships three vignettes (`prolfqua`, `Comparing2Groups`,
+  `ModellingMethods`). The other tutorials are website-only articles at
+  <https://fgcz.github.io/prolfqua/articles/>, under the same URLs as
+  before, which keeps the package build short.
+- The vignettes and articles use
+  [`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md)
+  throughout. `Comparing2Groups` and “Simulate Peptide level Data” fit
+  their contrasts with `lm_impute` (proteins) and `lm` (peptides) in one
+  call instead of building models and contrasts by hand.
+- The articles “Limma Backend”, “DEqMS-style Count-Dependent Variance
+  Moderation”, “Modelling dataset with two Factors” and “Using limpa
+  Directly” are removed: `ModellingMethods` and the articles “Comparing
+  modelling methods on one dataset” and “Two-factor designs” cover their
+  methods through
+  [`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md).
+- The imputation article is rewritten and renamed “Filling the gaps:
+  model-based imputation for heatmaps and PCA”: why heatmaps and PCA
+  need a complete matrix, why proteins missing in a whole group matter
+  (below the LOD or switched off), how
+  [`impute_from_model()`](https://fgcz.github.io/prolfqua/reference/impute_from_model.md)
+  fills the matrix from the `lm_impute` models and the LOD, heatmaps and
+  PCA before and after imputation, and the caveats. It moved to
+  `articles/ModelBasedImputation.html`; the old
+  `TestingMissingInference.html` link redirects there.
+- Articles renamed so that file names say what they cover:
+  `ContrastFacades` is now `ComparingMethods` (“Comparing modelling
+  methods on one dataset”), `ContrastFacade2Factor` is
+  `TwoFactorDesigns` (“Two-factor designs”), `Contrasts_from_factors` is
+  `ContrastsFromFactors`. `CreatingConfigurations` is titled “Importing
+  your data: AnalysisConfiguration”. The old URLs redirect to the new
+  ones.
+- New article “Under the hood: strategy, model and contrasts”: the `lm`
+  method built step by step
+  ([`strategy_lm()`](https://fgcz.github.io/prolfqua/reference/strategy.md),
+  [`build_model()`](https://fgcz.github.io/prolfqua/reference/build_model.md),
+  `Contrasts`, `ContrastsModerated`), giving the same result as
+  [`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md),
+  with model inspection, unmoderated contrasts and
+  [`register_facade()`](https://fgcz.github.io/prolfqua/reference/register_facade.md).
+- `Comparing2Groups` describes the simulated data it actually uses (the
+  text still referred to MaxQuant Ionstar data) and no longer looks up
+  protein IDs that do not exist in it. Both vignettes use BiocStyle.
+- The vignettes cite the published article (Wolski et al., J. Proteome
+  Res. 2023, 22(4), 1092-1104, <doi:10.1021/acs.jproteome.2c00441>)
+  instead of the 2022 bioRxiv preprint. `citation("prolfqua")` lists the
+  journal, volume, issue and pages in their own fields, and the README
+  BibTeX no longer swaps volume and issue.
+- [`?prolfqua`](https://fgcz.github.io/prolfqua/reference/prolfqua-package.md)
+  opens a package overview page.
+- Typos fixed across the help pages, vignettes and README.
+
+### Behaviour changes
+
+- [`script_copy_helper_vec()`](https://fgcz.github.io/prolfqua/reference/script_copy_helper_vec.md)
+  gains an `overwrite` argument (default `TRUE`, as before).
+- `summary_ROPECA_median_p.scaled()` is renamed to
+  [`summary_ROPECA_median_p_scaled()`](https://fgcz.github.io/prolfqua/reference/summary_ROPECA_median_p_scaled.md)
+  (Bioconductor function names must not contain `.`). There is no alias.
+
+### Removed
+
+- Datasets `data_spectronautDIA250_A`, `data_skylinePRMSample_A` and
+  `data_skylineSRM_HL_A`; their examples use simulated data now.
+  `data_IonstarProtein_subsetNorm` and `data_SAINTe_output` move to
+  prolfquasaint, `data_benchmarkExample` and
+  `data_test_confusion_matrix_scores` to prolfquabenchmark
+  (`prolfqua_data(<name>, package = <package>)`). The unused
+  ExperimentHub manifest `inst/extdata/metadata.csv` is gone.
+  `inst/script/README.md` documents the four datasets that remain.
+- The `lm_missing` method (`ContrastsLMMissingFacade`) and
+  `ContrastsMissing` (group-mean substitution with a pooled-variance
+  t-test). `MissingHelpers` keeps `get_stats()` and `get_lod()`; its
+  imputation and contrast methods and the `weighted` argument are gone.
+  All of it lives on in the new package
+  [prolfquatakeoutmissing](https://github.com/prolfqua/prolfquatakeoutmissing):
+  loading it registers `method = "lm_missing"` again. In prolfqua, use
+  `lm_impute`, which refits the proteins plain `lm` cannot estimate with
+  LOD-imputed values.
+
+## prolfqua 1.8.0
+
+This release removes about 3,600 lines (20%) of dead or duplicated code
+from `R/`. Everything removed had no callers in prolfqua or in the
+downstream packages (prolfquapp, prophosqua, prolfquappPTMreaders,
+prolfquasaint, prolfquabenchmark, ptm-pipeline).
+
+### Bug fixes
+
+- [`filter_proteins_by_peptide_count()`](https://fgcz.github.io/prolfqua/reference/filter_proteins_by_peptide_count.md)
+  and
+  [`nr_B_in_A()`](https://fgcz.github.io/prolfqua/reference/nr_B_in_A.md)
+  are back, internal: the `filtered()` method of the saved
+  `data_ionstar` dataset calls the filter, so its removal broke every
+  caller of that dataset, prolfquapp’s QC vignette among them.
+  `nr_B_in_A(pdata, level_a, level_b)` only counts the children of each
+  parent; the filter, `LFQData$filter_proteins_by_peptide_count()` and
+  [`nr_features_experiment()`](https://fgcz.github.io/prolfqua/reference/nr_features_experiment.md)
+  count through it instead of each repeating the count.
+- [`sigma()`](https://rdrr.io/r/stats/sigma.html) for
+  [`MASS::rlm`](https://rdrr.io/pkg/MASS/man/rlm.html) fits took the
+  square root twice. The `rlm` method’s contrast `sigma` and all
+  moderated statistics derived from it (`std.error`, `statistic`, `df`,
+  `p.value`, `FDR`, confidence intervals) change; fold changes do not.
+  On simulated data the moderated df drops from about 8,000 to about 25.
+- `moderated_p_limma(variance_floor = )` with `robust = FALSE` returned
+  NA moderated p-values for rows above the floor, because the scalar
+  prior df was padded with NA when the floored rows were set to `Inf`.
+  This is the default path of the `binomial_nested` facade
+  (`binomial_bound = TRUE`). Rows above the floor now keep the estimated
+  prior df.
+- [`merge_contrasts_results()`](https://fgcz.github.io/prolfqua/reference/merge_contrasts_results.md):
+  when both inputs share a model name, `modelName` is now
+  `<name>_prefer` / `<name>_add` instead of NA for every row.
+- [`setup_analysis()`](https://fgcz.github.io/prolfqua/reference/setup_analysis.md)
+  no longer fails when `sample_name` and `file_name` are the same
+  column.
+
+### Behaviour changes
+
+- `options(prolfqua.vectorize)` is removed; contrasts always use the
+  per-row path, which was already the default. Setting the option has no
+  effect.
+- `ContrastsFirth`: proteins whose contrast fails are reported with the
+  [`contrasts_linfct()`](https://fgcz.github.io/prolfqua/reference/contrasts_linfct.md)
+  warning listing the dropped protein IDs, instead of a message.
+- `ContrastsInterface` provides default `get_Plotter()` and `to_wide()`
+  methods, so subclasses no longer need to implement them.
+- [`estimate_intensity()`](https://fgcz.github.io/prolfqua/reference/estimate_intensity.md)
+  takes `method = "medpolish"` or `"rlm"` instead of a function in
+  `.func`.
+- A facade’s `config` field is filled on the first `get_config()` call;
+  use `get_config()` rather than reading `$config`.
+- [`center_to_reference_cfg()`](https://fgcz.github.io/prolfqua/reference/center_to_reference_cfg.md)
+  always returns a median-centred copy (`summary` and `copy` removed).
+  [`scale_with_subset()`](https://fgcz.github.io/prolfqua/reference/scale_with_subset.md)
+  gains `colname` and loses the unused `get_scales`.
+- [`plot_stat_violin_median()`](https://fgcz.github.io/prolfqua/reference/plot_stat_violin_median.md)
+  checks `stat` with
+  [`match.arg()`](https://rdrr.io/r/base/match.arg.html), so the default
+  `stat` now works (it used “CV” only when given explicitly).
+- [`get_p_values_pbeta()`](https://fgcz.github.io/prolfqua/reference/get_p_values_pbeta.md)
+  returns NA for an NA `n.obs` instead of stopping.
+- [`script_copy_helper_vec()`](https://fgcz.github.io/prolfqua/reference/script_copy_helper_vec.md)
+  reports the source path it actually copies from and warns once for a
+  missing file;
+  [`find_package_file()`](https://fgcz.github.io/prolfqua/reference/find_package_file.md)
+  returns `NULL` invisibly when the file is not found.
+
+### Removed
+
+- Exported functions: `contrasts_fisher_exact()`,
+  `contrasts_linfct_firth()`, `effective_contaminant_pattern()`,
+  `effective_decoy_pattern()`, `filter_difference()`,
+  `hierarchy_counts_sample()`, `is_singular_lm()`,
+  `lfq_power_t_test_quantiles()`, `linfct_all_possible_contrasts()`,
+  `linfct_factors_contrasts()`, `medpolish_estimate()`,
+  `medpolish_estimate_df()`, `medpolish_estimate_dfconfig()`,
+  `moderated_p_limma_long()`, `names_to_matrix()`,
+  [`nr_B_in_A()`](https://fgcz.github.io/prolfqua/reference/nr_B_in_A.md),
+  `plot_hierarchies_add_quantline()`, `plot_hierarchies_line_df()`,
+  `plot_lmer_peptide_predictions()`, `remove_na_rows()`,
+  `rlm_estimate()`, `rlm_estimate_dfconfig()`, `scatter_plotly()`,
+  `summarize_stats_all()`, `tidy_to_wide()`, and the function forms of
+  [`filter_proteins_by_peptide_count()`](https://fgcz.github.io/prolfqua/reference/filter_proteins_by_peptide_count.md)
+  and `remove_small_intensities()` (the `LFQData` methods of the same
+  names are unchanged). `unregister_facade()` is no longer exported.
+- Replacements where one exists: sample sizes via
+  `LFQDataStats$power_t_test_quantiles()` or
+  [`lfq_power_t_test_quantiles_V2()`](https://fgcz.github.io/prolfqua/reference/lfq_power_t_test_quantiles_V2.md);
+  `summarize_stats(x, factor_key = NULL)` for `summarize_stats_all(x)`;
+  the Summariser method `$hierarchy_counts_sample()`.
+- Datasets `data_checksummarizerobust` and `data_correlatedPeptideList`.
+- R6 methods: `LFQData$filter_difference()`, `$omit_na()`,
+  `$contaminant_proportion()`; `LFQDataPlotter$write()`,
+  `$write_pltly()`; `Model$write_anova_figures()`,
+  `$write_coef_figures()` and the same on `ModelFirth`;
+  `ContrastsPlotter$score_plotly()`, `$histogram_estimate()` (use
+  `$histogram_diff()`); `AnalysisConfiguration$id_required()`.
+- Unused fields and arguments:
+  - strategies: `report_columns` (argument and field of all
+    `strategy_*()` and `Strategy*` classes), `is_mixed`,
+    `$model_fun(get_formula = )` (use `$formula`),
+    `strategy_logistf(test = )`
+  - models and contrasts: `ModelLimma$design`, `$formula` and the
+    matching `$new()` arguments; `Model$anova_df`,
+    `ModelFirth$anova_df`; `AnovaExtractor$col_fdr`;
+    `Contrasts$protein_annot`; `ContrastsMissing$global`, `$present`,
+    `$minsd`
+  - plotting: `ContrastsPlotter` `prefix` and `protein_annot` fields and
+    `$new(protein_annot = )`; `LFQDataPlotter` `file_paths_pdf`,
+    `file_paths_html`
+  - other: `AnalysisConfiguration$hierarchy_keys(rev = )`;
+    `setup_analysis(cc = , from_factors = )`;
+    `plot_hierarchies_line(separate = )`;
+    `transform_work_intensity(intensity_new_name = )`;
+    `compute_pooled(method = )` and `poolvar(method = )` with the “V2”
+    pooled variance; `sim_make_model_lmer(singular = )`; internal facade
+    fields `ContrastsLMMissingFacade$missing_contrast`, `$merged`,
+    `ContrastsLimpaNestedFacade$.lfqdata_nested`
+- [`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md)
+  no longer honours an undocumented `builder` field on facade registry
+  entries.
+
+### Internal
+
+- Facades, strategies, aggregators and model classes now share base
+  classes (`ContrastsFacadeBase$.setup()`, `StrategyBase`,
+  `AggregatorBase`, plotting methods on `ModelInterface`); the four
+  `build_model_limma*()` builders share one core. Class vectors of
+  strategies and aggregators gain `StrategyBase` / `AggregatorBase`.
+
+## prolfqua 1.7.1
+
+- `MissingHelpers$get_lod()` no longer returns NA for data without
+  groups seen once. It falls back to the partly observed groups with the
+  fewest observations, and to the lowest group mean when every group is
+  complete or empty.
+  [`build_model_impute()`](https://fgcz.github.io/prolfqua/reference/build_model_impute.md)
+  therefore refits a protein missing a whole group in nearly complete
+  data, where the NA LOD made the refit fail silently and left the
+  protein unfitted.
+
+- New
+  [`impute_from_model()`](https://fgcz.github.io/prolfqua/reference/impute_from_model.md)
+  fills the missing response cells of an `LFQData` with predictions from
+  its per-protein `lm` models (from
+  [`build_model()`](https://fgcz.github.io/prolfqua/reference/build_model.md)
+  or
+  [`build_model_impute()`](https://fgcz.github.io/prolfqua/reference/build_model_impute.md)),
+  leaving observed values unchanged, and reports per protein how many
+  cells were observed and imputed and by which route (`complete`,
+  `fitted`, `lod_refit` or `none`). Additive designs such as
+  `~ group_ + pair` are supported; a model that is not lm-based is an
+  error.
+
+## prolfqua 1.7.0
+
+- A mixed-model analysis (`lmer_nested`) no longer aborts partway
+  through when a single protein has no estimable contrast. Such a
+  protein is now dropped with a warning naming it, like a rank-deficient
+  one, instead of failing the whole run with `subscript out of bounds`
+  from
+  [`lmerTest::contest()`](https://rdrr.io/pkg/lmerTest/man/contest.html).
+
+- A `ContrastConfiguration` built with `pvalue_col = NA_character_` now
+  stores `""` instead. HDF5 has no character NA, so a configuration
+  serialized into an AnnData artifact came back with `pvalue_col` set to
+  the literal string `"NA"` and `has_pvalue()` reported a p-value column
+  that no backend had produced. Backends without a p-value, such as
+  SAINTexpress, are now read back correctly.
+
+- The peptide count in simulated data is now called `nrPeptides`,
+  matching the name every reader in the ecosystem produces. It was the
+  only place the column was called `nr_peptides`, which meant code
+  written against simulated data did not work on real data – and vice
+  versa – and downstream packages carried aliases between the two
+  spellings. The `nr_peptides` *option* (minimum peptides per protein)
+  is unchanged; only the data column is renamed.
+
+- New
+  [`list_to_ContrastConfiguration()`](https://fgcz.github.io/prolfqua/reference/list_to_ContrastConfiguration.md)
+  rebuilds a `ContrastConfiguration` from the plain list produced by
+  [`R6_extract_values()`](https://fgcz.github.io/prolfqua/reference/R6_extract_values.md),
+  so a serialized column-role mapping (e.g. from `SummarizedExperiment`
+  metadata or an AnnData `uns` entry) can be restored with its methods,
+  such as `has_pvalue()`, intact.
+
+- Moderated t/Wald contrast tables now report the posterior contrast
+  standard error in `std.error`, while `std.error.unmoderated` and
+  `df.unmoderated` preserve the pre-moderation test inputs for
+  downstream comparisons. Moderated confidence intervals now use the
+  contrast scale rather than the residual-variance scale; this corrects
+  intervals that were too wide when the raw contrast scale factor was
+  below one and too narrow when it was above one. The separate
+  infinite-prior-df fallback is unchanged and remains a distinct
+  follow-up decision.
+
+- [`main_effect_contrasts()`](https://fgcz.github.io/prolfqua/reference/main_effect_contrasts.md)
+  now emits averaging contrasts with a top-level `LHS - RHS`, making its
+  output directly valid for the stricter contrast parser.
+
+- Added the `binomial_nested` facade for nested LFQ data. It reuses the
+  Firth backend’s completed peptide-detection representation, fits
+  protein-by-sample detected/undetected peptide counts with a
+  quasibinomial GLM, and reports moderated protein-level log odds-ratio
+  contrasts. A symmetric pseudo-count stabilizes separated fits, and
+  posterior dispersion is bounded below by one by default
+  (`binomial_bound = FALSE` disables the bound).
+
+- **Variance moderation now uses
+  [`limma::squeezeVar()`](https://rdrr.io/pkg/limma/man/squeezeVar.html)
+  directly.**
+  [`moderated_p_limma()`](https://fgcz.github.io/prolfqua/reference/moderated_p_limma.md)
+  — and therefore every moderated Wald-test facade (`lm`, `rlm`, `rfit`,
+  `lm_impute`, `lm_missing`, `rfit_impute`, `lmer_nested`) and the DEqMS
+  small-group fallback — now calls
+  [`limma::squeezeVar()`](https://rdrr.io/pkg/limma/man/squeezeVar.html)
+  instead of the vendored `squeezeVarRob()` fork (limma is already a
+  dependency). Modern limma estimates the empirical-Bayes prior robustly
+  on the fractional / low residual degrees of freedom these estimators
+  produce, without the `min_df` workaround prolfqua inherited from
+  MSqRob. This slightly changes moderated p-values, FDR and confidence
+  bounds; on the IonStar spike-in benchmark AUC is unchanged, FDR
+  calibration is maintained, and ≥99.7% of significance calls are
+  identical. See the `SqueezeVar_comparison` vignette in
+  `prolfquabenchmark`. (`ropeca_nested` is unaffected — it aggregates
+  raw peptide-level p-values and never used variance moderation. A
+  contrast with fewer than three features now returns unmoderated
+  results, matching limma, where the empirical-Bayes prior is
+  undefined.)
+
+- **Fixed the scale used to moderate `rlm` contrasts.**
+  `StrategyRLM$sigma()` now returns the robust scale
+  [`MASS::rlm`](https://rdrr.io/pkg/MASS/man/rlm.html) builds its
+  standard errors from (`fit$s`) instead of
+  [`stats::sigma()`](https://rdrr.io/r/stats/sigma.html) (the
+  ordinary-residual scale). Because the two differ,
+  `ContrastsModerated`’s `sigma / sqrt(var.post)` rescaling was leaving
+  a spurious per-protein factor in moderated `rlm` statistics, p-values,
+  FDR and confidence bounds. Only the `rlm` facade’s moderated output is
+  affected — `lm` and `rfit` were already coherent, and `rlm`’s
+  unmoderated statistics (`diff`, `std.error`) were always correct.
+
+- **Removed the exported `squeezeVarRob()`** and its internal helpers
+  (`fitFDist_LG`, `fitFDistRobustly_LG`); the whole vendored
+  `squeezeVarRob.R` file is gone. Use
+  [`limma::squeezeVar()`](https://rdrr.io/pkg/limma/man/squeezeVar.html)
+  instead. DEqMS moderation now calls
+  [`limma::trigammaInverse()`](https://rdrr.io/pkg/limma/man/trigammainverse.html)
+  (identical to the copy that was removed). This is a breaking change
+  only for code that called `prolfqua::squeezeVarRob()` directly — the
+  ecosystem does not. Also dropped the now-unused `statmod` from
+  `Imports`.
+
+- User-facing errors at prolfqua’s public entry points now carry typed
+  condition classes (all inheriting from `prolfqua_error`), so callers
+  and tests can catch failures by class instead of matching message
+  text. Covered:
+  [`setup_analysis()`](https://fgcz.github.io/prolfqua/reference/setup_analysis.md),
+  [`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md),
+  the `LFQData$set_data()` / `set_config_value()` mutators,
+  `LFQData$get_Aggregator()`, the aggregators’ “must aggregate a
+  multi-level hierarchy” / “aggregate first” checks,
+  `LFQDataTransformer$center_to_reference()`, and
+  `ContrastsSimpleImpute$get_contrasts()`. `LFQData$set_data()` and
+  `set_config_value()` additionally now reject data that no longer
+  contains the columns required by the current configuration, instead of
+  accepting invalid state silently.
+
+- Abundance-density plots now carry per-sample Plotly highlight keys,
+  allowing interactive reports to fade non-hovered sample curves while
+  preserving the existing ggplot output.
+
+- **Breaking — contrast schema.** The `modelName` column of
+  `get_contrasts()` output is now the selected facade key (`lm`, `rlm`,
+  `rfit`, `lm_impute`, `lm_missing`, `limma`, `limma_impute`,
+  `limma_voom`, `limma_voom_impute`, `limpa`, `deqms`, `deqms_voom`,
+  `firth`, `lmer_nested`, `ropeca_nested`, `firth_nested`,
+  `limpa_nested`) instead of the testing-schema label
+  (`WaldTest_moderated`, `*_DEqMS`, `*_imputed`, …). Rescue/imputation
+  state moved to a new `estimate_type` column with values `observed`,
+  `lod_imputed`, or `missing_fallback`. The redundant `facade` column
+  was removed (its role is now played by `modelName`). The
+  moderated-Wald-test wording belongs in methods text, not per-row
+  labels. Downstream code that filtered on
+  `modelName == "WaldTest_moderated"` (or the `_imputed`/`_DEqMS`
+  variants) or read the `facade` column must migrate to the facade key
+  and `estimate_type`.
+
+- [`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md)
+  and the exported `FACADE_REGISTRY` now derive method dispatch and the
+  available-method list from a single seeded registry
+  ([`list_facades()`](https://fgcz.github.io/prolfqua/reference/list_facades.md)),
+  removing three hand-maintained copies that could drift. New exported
+  base class `ContrastsFacadeBase` holds the shared facade plumbing; the
+  19 built-in facades are now thin subclasses.
+
+- `ContrastsPlotter` colours volcano/MA/score plots by `estimate_type`
+  when present (and the colour column was left at its default), using
+  black for observed estimates, green for LOD-imputed estimates, and
+  blue for group-mean fallback estimates.
+
+- Correctness fixes: `AggregateTopN` now validates `func` via
+  `match.arg` (an invalid value errors instead of silently meaning
+  `mean`); `Model$get_anova()` drops degenerate rows by `is.na(factor)`
+  rather than a never-matching `"NULL"` string;
+  [`sim_lfq_data()`](https://fgcz.github.io/prolfqua/reference/sim_lfq_data.md)
+  now honours its `mean_prot` argument;
+  `LFQDataTransformer`/`LFQDataSummariser` deep-clone their input like
+  the other decorators (no more mutating the caller’s object);
+  `ContrastsFirth$get_linfct()` returns the linfct-annotated model
+  copies instead of mutating the shared model;
+  `contrasts_fisher_exact()` pre-allocates `nrow(x)` results;
+  `ContrastsMissing` now actually validates its output schema.
+
+- Fixed the vectorized contrast path
+  (`options(prolfqua.vectorize = TRUE)`) to match the default loop path
+  on rank-deficient (aliased) model fits: a contrast whose weights fall
+  on non-estimable coefficients now returns `NA` instead of a spurious
+  fold-change of 0 with a `NaN` p-value. The invalid-row guard now
+  counts nonzero weights rather than summing signed weights, so
+  contrasts with canceling `+1`/`-1` weights on missing coefficients are
+  correctly flagged. The default (non-vectorized) path was never
+  affected.
+
+- The vectorized contrast path now assigns stable `contrast_1`,
+  `contrast_2`, … labels to unnamed contrasts, matching the documented
+  naming behavior instead of leaking an expression into the result row
+  names.
+
+- [`get_contrast()`](https://fgcz.github.io/prolfqua/reference/get_contrast.md)
+  now derives `group_1`/`group_2` from the contrast’s left/right side
+  expressions, fixing mislabeled per-group columns for averaging
+  contrasts such as `(group_A + group_B)/2 - group_Ctrl` (previously it
+  used the first two group tokens). Simple `A - B` contrasts are
+  unaffected. A contrast that is not a difference `LHS - RHS` now errors
+  with a clear message instead of silently extracting the first two
+  group tokens. Nested contrasts that reference an earlier contrast by
+  name (e.g. `Interaction = "AvsB_gv_X - AvsB_gv_Z"`) remain supported
+  in the `ContrastsMissing` / `lm_missing` path.
+
+- [`setup_analysis()`](https://fgcz.github.io/prolfqua/reference/setup_analysis.md)
+  now stops with an informative error (listing the offending keys) when
+  a hierarchy-key/sample combination has more than one observation,
+  instead of silently returning a different-schema count table that
+  crashed downstream. Pass `debug = TRUE` to recover the old behaviour
+  and return the count table for inspection.
+
+- Removed the unused `impute_with_zcomp()`, `estimate_lod_global()`, and
+  `function_lod_quantile()` exports (and the `zCompositions`
+  dependency). For missing-value imputation use
+  `AggregateLimpa$new(lfqdata, impute_only = TRUE)$aggregate()`.
+
+- Hardened
+  [`plot_pca()`](https://fgcz.github.io/prolfqua/reference/plot_pca.md):
+  errors early on duplicated sample names, an all-missing matrix, or too
+  few samples instead of returning `NULL` (which broke `pca_plotly()`);
+  joins scores to annotation with an explicit `by`; makes
+  `prcomp(center = TRUE, scale. = FALSE)` explicit.
+
+- Hardened abundance heatmaps for sparse significant-feature subsets:
+  when row or column distances are non-finite because of missing values,
+  [`plot_heatmap()`](https://fgcz.github.io/prolfqua/reference/plot_heatmap.md)
+  now falls back to the input order instead of returning a
+  `ComplexHeatmap` object that fails during drawing.
+
+- Abundance heatmaps now retain every partially observed feature that
+  can be meaningfully row z-scored by default, while automatically
+  removing constant, single-observation, and all-missing rows.
+  Significant-feature reports no longer hide bait-only results or
+  require a dataset-specific missing-value threshold, and sparse
+  matrices render safely even when clustering distances are unavailable.
+
+- `LFQDataPlotter$heatmap()` now shows only the `top_n` most variable
+  features (default 1000), ranked by the prolfqua per-feature statistic
+  (CV for untransformed data, sd for transformed, via `LFQDataStats`).
+  Row clustering uses
+  [`stats::hclust`](https://rdrr.io/r/stats/hclust.html), which errors
+  above 65536 features, so peptide-list / entrapment searches with tens
+  of thousands of degenerate protein groups no longer crash the QC
+  heatmap. Pass `top_n = NULL` (or `Inf`) to keep every feature.
+
+- `StrategyLogistf` now uses Wald confidence intervals instead of
+  profiling every coefficient, preventing `firth_nested` analyses from
+  stalling for days on proteins with hundreds or thousands of peptides.
+
+## prolfqua 1.6.1
+
+- Added a `check-bioc` Makefile target and a Bioconductor Docker check
+  image.
+- Updated BiocCheck-related documentation and vignette metadata.
+- `ContrastsPlotter$volcano()` and
+  [`volcano_plotly()`](https://fgcz.github.io/prolfqua/reference/volcano_Plotly.md)
+  no longer cap positive FDR/p-value scores at `1e-4` by default.
+- Renamed `LFQData$to_wide()` to `data_wide()` and removed deprecated
+  compatibility wrappers.
+- Split `nr_obs_experiment()` into
+  [`nr_children_experiment()`](https://fgcz.github.io/prolfqua/reference/nr_children_experiment.md)
+  and
+  [`nr_features_experiment()`](https://fgcz.github.io/prolfqua/reference/nr_features_experiment.md).
+- Made `LFQData` data/config internals private and moved callers to
+  accessor methods.
+- Refactored transformer and aggregation helpers around current
+  `LFQData` APIs.

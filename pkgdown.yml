@@ -1,0 +1,19 @@
+pandoc: 3.1.3
+pkgdown: 2.2.1
+pkgdown_sha: ~
+articles:
+  Comparing2Groups: Comparing2Groups.html
+  articles/ComparingMethods: ComparingMethods.html
+  articles/ContrastsFromFactors: ContrastsFromFactors.html
+  articles/CreatingConfigurations: CreatingConfigurations.html
+  articles/LowLevelAPI: LowLevelAPI.html
+  articles/ModelBasedImputation: ModelBasedImputation.html
+  ModellingMethods: ModellingMethods.html
+  prolfqua: prolfqua.html
+  articles/QualityControlAndSampleSizeEstimation: QualityControlAndSampleSizeEstimation.html
+  articles/SimulateData: SimulateData.html
+  articles/TwoFactorDesigns: TwoFactorDesigns.html
+last_built: 2026-11-02T10:10Z
+urls:
+  reference: https://fgcz.github.io/prolfqua/reference
+  article: https://fgcz.github.io/prolfqua/articles

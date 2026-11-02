@@ -1,0 +1,575 @@
+# plot contrasts
+
+plot contrasts
+
+plot contrasts
+
+## Value
+
+An R6 class generator.
+
+## See also
+
+Other modelling:
+[`AnovaExtractor`](https://fgcz.github.io/prolfqua/reference/AnovaExtractor.md),
+[`Contrasts`](https://fgcz.github.io/prolfqua/reference/Contrasts.md),
+[`ContrastsDEqMSFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsDEqMSFacade.md),
+[`ContrastsDEqMSVoomFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsDEqMSVoomFacade.md),
+[`ContrastsFacadeBase`](https://fgcz.github.io/prolfqua/reference/ContrastsFacadeBase.md),
+[`ContrastsFirth`](https://fgcz.github.io/prolfqua/reference/ContrastsFirth.md),
+[`ContrastsFirthFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsFirthFacade.md),
+[`ContrastsFirthNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsFirthNestedFacade.md),
+[`ContrastsHurdleFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsHurdleFacade.md),
+[`ContrastsHurdleNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsHurdleNestedFacade.md),
+[`ContrastsLMFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLMFacade.md),
+[`ContrastsLMImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLMImputeFacade.md),
+[`ContrastsLimma`](https://fgcz.github.io/prolfqua/reference/ContrastsLimma.md),
+[`ContrastsLimmaFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaFacade.md),
+[`ContrastsLimmaImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaImputeFacade.md),
+[`ContrastsLimmaVoomFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaVoomFacade.md),
+[`ContrastsLimmaVoomImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaVoomImputeFacade.md),
+[`ContrastsLimpaFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimpaFacade.md),
+[`ContrastsLimpaNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimpaNestedFacade.md),
+[`ContrastsLmerNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLmerNestedFacade.md),
+[`ContrastsModerated`](https://fgcz.github.io/prolfqua/reference/ContrastsModerated.md),
+[`ContrastsModeratedDEqMS`](https://fgcz.github.io/prolfqua/reference/ContrastsModeratedDEqMS.md),
+[`ContrastsRLMFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsRLMFacade.md),
+[`ContrastsROPECA`](https://fgcz.github.io/prolfqua/reference/ContrastsROPECA.md),
+[`ContrastsROPECANestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsROPECANestedFacade.md),
+[`ContrastsRfitFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsRfitFacade.md),
+[`ContrastsRfitImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsRfitImputeFacade.md),
+[`ContrastsTable`](https://fgcz.github.io/prolfqua/reference/ContrastsTable.md),
+[`INTERNAL_FUNCTIONS_BY_FAMILY`](https://fgcz.github.io/prolfqua/reference/INTERNAL_FUNCTIONS_BY_FAMILY.md),
+[`LR_test()`](https://fgcz.github.io/prolfqua/reference/LR_test.md),
+[`Model`](https://fgcz.github.io/prolfqua/reference/Model.md),
+[`ModelFirth`](https://fgcz.github.io/prolfqua/reference/ModelFirth.md),
+[`ModelLimma`](https://fgcz.github.io/prolfqua/reference/ModelLimma.md),
+[`StrategyLM`](https://fgcz.github.io/prolfqua/reference/StrategyLM.md),
+[`StrategyLimma`](https://fgcz.github.io/prolfqua/reference/StrategyLimma.md),
+[`StrategyLimpa`](https://fgcz.github.io/prolfqua/reference/StrategyLimpa.md),
+[`StrategyLmer`](https://fgcz.github.io/prolfqua/reference/StrategyLmer.md),
+[`StrategyLogistf`](https://fgcz.github.io/prolfqua/reference/StrategyLogistf.md),
+[`StrategyRLM`](https://fgcz.github.io/prolfqua/reference/StrategyRLM.md),
+[`StrategyRfit`](https://fgcz.github.io/prolfqua/reference/StrategyRfit.md),
+[`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md),
+[`build_model()`](https://fgcz.github.io/prolfqua/reference/build_model.md),
+[`build_model_glm_peptide()`](https://fgcz.github.io/prolfqua/reference/build_model_glm_peptide.md),
+[`build_model_glm_protein()`](https://fgcz.github.io/prolfqua/reference/build_model_glm_protein.md),
+[`build_model_impute()`](https://fgcz.github.io/prolfqua/reference/build_model_impute.md),
+[`build_model_limma()`](https://fgcz.github.io/prolfqua/reference/build_model_limma.md),
+[`build_model_limma_impute()`](https://fgcz.github.io/prolfqua/reference/build_model_limma_impute.md),
+[`build_model_limma_voom()`](https://fgcz.github.io/prolfqua/reference/build_model_limma_voom.md),
+[`build_model_limma_voom_impute()`](https://fgcz.github.io/prolfqua/reference/build_model_limma_voom_impute.md),
+[`build_model_limpa()`](https://fgcz.github.io/prolfqua/reference/build_model_limpa.md),
+[`build_model_logistf()`](https://fgcz.github.io/prolfqua/reference/build_model_logistf.md),
+[`compute_borrowed_variance()`](https://fgcz.github.io/prolfqua/reference/compute_borrowed_variance.md),
+[`compute_borrowed_variance_limma()`](https://fgcz.github.io/prolfqua/reference/compute_borrowed_variance_limma.md),
+[`compute_contrast()`](https://fgcz.github.io/prolfqua/reference/compute_contrast.md),
+[`compute_lmer_contrast()`](https://fgcz.github.io/prolfqua/reference/compute_lmer_contrast.md),
+[`df.residual.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/df.residual.rfit_prolfqua.md),
+[`get_anova_df()`](https://fgcz.github.io/prolfqua/reference/get_anova_df.md),
+[`get_complete_model_fit()`](https://fgcz.github.io/prolfqua/reference/get_complete_model_fit.md),
+[`get_p_values_pbeta()`](https://fgcz.github.io/prolfqua/reference/get_p_values_pbeta.md),
+[`group_label()`](https://fgcz.github.io/prolfqua/reference/group_label.md),
+[`impute_from_model()`](https://fgcz.github.io/prolfqua/reference/impute_from_model.md),
+[`impute_refit_singular()`](https://fgcz.github.io/prolfqua/reference/impute_refit_singular.md),
+[`linfct_from_model()`](https://fgcz.github.io/prolfqua/reference/linfct_from_model.md),
+[`linfct_matrix_contrasts()`](https://fgcz.github.io/prolfqua/reference/linfct_matrix_contrasts.md),
+[`list_facades()`](https://fgcz.github.io/prolfqua/reference/list_facades.md),
+[`lookup_facade()`](https://fgcz.github.io/prolfqua/reference/lookup_facade.md),
+[`merge_contrasts_results()`](https://fgcz.github.io/prolfqua/reference/merge_contrasts_results.md),
+[`model_analyse()`](https://fgcz.github.io/prolfqua/reference/model_analyse.md),
+[`model_summary()`](https://fgcz.github.io/prolfqua/reference/model_summary.md),
+[`moderated_p_deqms()`](https://fgcz.github.io/prolfqua/reference/moderated_p_deqms.md),
+[`moderated_p_deqms_long()`](https://fgcz.github.io/prolfqua/reference/moderated_p_deqms_long.md),
+[`moderated_p_limma()`](https://fgcz.github.io/prolfqua/reference/moderated_p_limma.md),
+[`new_imputed_model()`](https://fgcz.github.io/prolfqua/reference/new_imputed_model.md),
+[`pivot_model_contrasts_to_wide()`](https://fgcz.github.io/prolfqua/reference/pivot_model_contrasts_to_wide.md),
+[`register_facade()`](https://fgcz.github.io/prolfqua/reference/register_facade.md),
+[`sigma.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/sigma.rfit_prolfqua.md),
+[`sim_build_models_lm()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_lm.md),
+[`sim_build_models_lmer()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_lmer.md),
+[`sim_build_models_logistf()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_logistf.md),
+[`sim_make_model_lm()`](https://fgcz.github.io/prolfqua/reference/sim_make_model_lm.md),
+[`sim_make_model_lmer()`](https://fgcz.github.io/prolfqua/reference/sim_make_model_lmer.md),
+[`strategy_limma()`](https://fgcz.github.io/prolfqua/reference/strategy_limma.md),
+[`strategy_limpa()`](https://fgcz.github.io/prolfqua/reference/strategy_limpa.md),
+[`strategy_logistf()`](https://fgcz.github.io/prolfqua/reference/strategy.md),
+[`summary_ROPECA_median_p_scaled()`](https://fgcz.github.io/prolfqua/reference/summary_ROPECA_median_p_scaled.md),
+[`vcov.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/vcov.rfit_prolfqua.md)
+
+Other plotting:
+[`INTERNAL_FUNCTIONS_BY_FAMILY`](https://fgcz.github.io/prolfqua/reference/INTERNAL_FUNCTIONS_BY_FAMILY.md),
+[`missigness_histogram()`](https://fgcz.github.io/prolfqua/reference/missigness_histogram.md),
+[`missingness_per_condition()`](https://fgcz.github.io/prolfqua/reference/missingness_per_condition.md),
+[`missingness_per_condition_cumsum()`](https://fgcz.github.io/prolfqua/reference/missingness_per_condition_cumsum.md),
+[`plot_estimate()`](https://fgcz.github.io/prolfqua/reference/plot_estimate.md),
+[`plot_heatmap()`](https://fgcz.github.io/prolfqua/reference/plot_heatmap.md),
+[`plot_heatmap_cor()`](https://fgcz.github.io/prolfqua/reference/plot_heatmap_cor.md),
+[`plot_hierarchies_boxplot_df()`](https://fgcz.github.io/prolfqua/reference/plot_hierarchies_boxplot_df.md),
+[`plot_hierarchies_line()`](https://fgcz.github.io/prolfqua/reference/plot_hierarchies_line.md),
+[`plot_intensity_distribution_violin()`](https://fgcz.github.io/prolfqua/reference/plot_intensity_distribution_violin.md),
+[`plot_na_heatmap()`](https://fgcz.github.io/prolfqua/reference/plot_NA_heatmap.md),
+[`plot_pca()`](https://fgcz.github.io/prolfqua/reference/plot_pca.md),
+[`plot_raster()`](https://fgcz.github.io/prolfqua/reference/plot_raster.md),
+[`plot_sample_correlation()`](https://fgcz.github.io/prolfqua/reference/plot_sample_correlation.md),
+[`upset_interaction_missing_stats()`](https://fgcz.github.io/prolfqua/reference/UpSet_interaction_missing_stats.md),
+[`upset_missing_stats()`](https://fgcz.github.io/prolfqua/reference/UpSet_missing_stats.md)
+
+## Public fields
+
+- `model_name`:
+
+  of column with model name
+
+- `subject_id`:
+
+  hierarchy key columns
+
+- `diff`:
+
+  column with fold change differences
+
+- `contrast`:
+
+  column with contrasts names, default "contrast"
+
+- `group`:
+
+  crosstalk group name for linked brushing, default "BB"
+
+- `volcano_spec`:
+
+  volcano plot specification
+
+- `score_spec`:
+
+  score plot specification
+
+- `histogram_spec`:
+
+  plot specification
+
+- `fcthresh`:
+
+  fold change threshold
+
+- `avg.abundance`:
+
+  name of column containing avg abundance values.
+
+## Methods
+
+### Public methods
+
+- [`ContrastsPlotter$new()`](#method-ContrastsPlotter-new)
+
+- [`ContrastsPlotter$histogram()`](#method-ContrastsPlotter-histogram)
+
+- [`ContrastsPlotter$histogram_diff()`](#method-ContrastsPlotter-histogram_diff)
+
+- [`ContrastsPlotter$volcano()`](#method-ContrastsPlotter-volcano)
+
+- [`ContrastsPlotter$volcano_plotly()`](#method-ContrastsPlotter-volcano_plotly)
+
+- [`ContrastsPlotter$ma_plot()`](#method-ContrastsPlotter-ma_plot)
+
+- [`ContrastsPlotter$ma_plotly()`](#method-ContrastsPlotter-ma_plotly)
+
+- [`ContrastsPlotter$score_plot()`](#method-ContrastsPlotter-score_plot)
+
+- [`ContrastsPlotter$barplot_threshold()`](#method-ContrastsPlotter-barplot_threshold)
+
+- [`ContrastsPlotter$clone()`](#method-ContrastsPlotter-clone)
+
+------------------------------------------------------------------------
+
+### Method `new()`
+
+create ContrastsPlotter
+
+#### Usage
+
+    ContrastsPlotter$new(
+      contrast_df,
+      subject_id,
+      volcano = list(list(score = "FDR", thresh = 0.1)),
+      histogram = list(list(score = "p.value", xlim = c(0, 1, 0.05)), list(score = "FDR",
+        xlim = c(0, 1, 0.05))),
+      score = list(list(score = "statistic", thresh = NULL)),
+      fcthresh = 1,
+      modelName = "modelName",
+      diff = "diff",
+      contrast = "contrast",
+      avg.abundance = "avgAbd",
+      group = "BB"
+    )
+
+#### Arguments
+
+- `contrast_df`:
+
+  frame with contrast data
+
+- `subject_id`:
+
+  columns containing subject Identifier
+
+- `volcano`:
+
+  which score to plot and which ablines to add.
+
+- `histogram`:
+
+  which scores to plot and which range (x) should be shown.
+
+- `score`:
+
+  score parameters
+
+- `fcthresh`:
+
+  default 1 (log2 FC threshold)
+
+- `modelName`:
+
+  name of the colour column. Defaults to `"modelName"`; when left at the
+  default and the contrast carries an `estimate_type` column, that
+  column is used for colouring instead (so observed vs imputed/fallback
+  rows stay distinguishable).
+
+- `diff`:
+
+  fold change (difference) diff column
+
+- `contrast`:
+
+  contrast column
+
+- `avg.abundance`:
+
+  name of column with average abundance
+
+- `group`:
+
+  crosstalk group name for linked brushing, default "BB"
+
+------------------------------------------------------------------------
+
+### Method `histogram()`
+
+plot histogram of selected scores (e.g. p-value, FDR, t-statistics)
+
+#### Usage
+
+    ContrastsPlotter$histogram()
+
+------------------------------------------------------------------------
+
+### Method `histogram_diff()`
+
+plot histogram of differences (diff) fold change
+
+#### Usage
+
+    ContrastsPlotter$histogram_diff(binwidth = 0.05)
+
+#### Arguments
+
+- `binwidth`:
+
+  with of bin in histogram
+
+------------------------------------------------------------------------
+
+### Method `volcano()`
+
+volcano plots (fold change vs FDR)
+
+#### Usage
+
+    ContrastsPlotter$volcano(
+      colour = self$model_name,
+      legend = TRUE,
+      scales = c("fixed", "free", "free_x", "free_y"),
+      min_score = NULL
+    )
+
+#### Arguments
+
+- `colour`:
+
+  column name with color information default modelName
+
+- `legend`:
+
+  default TRUE
+
+- `scales`:
+
+  default fixed
+  [`facet_wrap`](https://ggplot2.tidyverse.org/reference/facet_wrap.html),
+  scales argument
+
+- `min_score`:
+
+  optional lower bound for p-values or FDR values. If NULL, only exact
+  zero and negative values are replaced with the smallest positive
+  observed value in the same score column.
+
+------------------------------------------------------------------------
+
+### Method [`volcano_plotly()`](https://fgcz.github.io/prolfqua/reference/volcano_Plotly.md)
+
+plotly volcano plots
+
+#### Usage
+
+    ContrastsPlotter$volcano_plotly(
+      colour = self$model_name,
+      legend = TRUE,
+      scales = c("fixed", "free", "free_x", "free_y"),
+      min_score = NULL
+    )
+
+#### Arguments
+
+- `colour`:
+
+  column in contrast matrix with colour coding
+
+- `legend`:
+
+  default TRUE
+
+- `scales`:
+
+  default fixed
+  [`facet_wrap`](https://ggplot2.tidyverse.org/reference/facet_wrap.html),
+  scales argument
+
+- `min_score`:
+
+  optional lower bound for p-values or FDR values. If NULL, only exact
+  zero and negative values are replaced with the smallest positive
+  observed value in the same score column.
+
+#### Returns
+
+list of ggplots
+
+------------------------------------------------------------------------
+
+### Method `ma_plot()`
+
+ma plot
+
+MA plot displays the effect size estimate as a function of the mean
+protein intensity across groups. Each dot represents an observed
+protein. Red horizontal lines represent the fold-change threshold.
+
+Sometimes measured effects sizes (differences between samples groups)
+are biased by the signal intensity (here protein abundance). Such
+systematic effects can be explored using MA-plots.
+
+#### Usage
+
+    ContrastsPlotter$ma_plot(
+      fc = self$fcthresh,
+      colour = self$model_name,
+      legend = TRUE,
+      rank = TRUE
+    )
+
+#### Arguments
+
+- `fc`:
+
+  fold change abline
+
+- `colour`:
+
+  column in contrast matrix with colour coding
+
+- `legend`:
+
+  enable legend default TRUE
+
+- `rank`:
+
+  default FALSE, if TRUE then rank of avgAbd is used.
+
+#### Returns
+
+ggplot
+
+------------------------------------------------------------------------
+
+### Method `ma_plotly()`
+
+ma plotly
+
+#### Usage
+
+    ContrastsPlotter$ma_plotly(
+      fc = self$fcthresh,
+      colour = self$model_name,
+      legend = TRUE,
+      rank = FALSE
+    )
+
+#### Arguments
+
+- `fc`:
+
+  horizontal lines
+
+- `colour`:
+
+  column in contrast matrix with colour coding.
+
+- `legend`:
+
+  enable legend default TRUE
+
+- `rank`:
+
+  default FALSE, if TRUE then rank of avgAbd is used.
+
+#### Returns
+
+list of ggplots
+
+------------------------------------------------------------------------
+
+### Method `score_plot()`
+
+plot a score against the log2 fc e.g. t-statistic
+
+#### Usage
+
+    ContrastsPlotter$score_plot(scorespec, colour = self$model_name, legend = TRUE)
+
+#### Arguments
+
+- `scorespec`:
+
+  list(score="statistics", fcthres = 2, thresh = 5)
+
+- `colour`:
+
+  column with colour coding
+
+- `legend`:
+
+  enable legend default TRUE
+
+#### Returns
+
+list of ggplots
+
+------------------------------------------------------------------------
+
+### Method `barplot_threshold()`
+
+shows the number of significant proteins per contrasts
+
+#### Usage
+
+    ContrastsPlotter$barplot_threshold()
+
+#### Returns
+
+list which contains ggplots and summary tables
+
+------------------------------------------------------------------------
+
+### Method `clone()`
+
+The objects of this class are cloneable with this method.
+
+#### Usage
+
+    ContrastsPlotter$clone(deep = FALSE)
+
+#### Arguments
+
+- `deep`:
+
+  Whether to make a deep clone.
+
+## Examples
+
+``` r
+istar <- sim_lfq_data_peptide_config(Nprot = 20)
+#> creating sampleName from file_name column
+#> completing cases
+#> completing cases done
+#> setup done
+model_name <- "Model"
+modelFunction <-
+  strategy_lmer("abundance  ~ group_ + (1 | peptide_Id) + (1|sample)",
+   model_name = model_name)
+pepIntensity <- istar$data
+config <- istar$config
+
+mod <- build_model(
+  pepIntensity,
+  modelFunction,
+  model_name = model_name,
+  subject_id = config$hierarchy_keys_depth())
+#> boundary (singular) fit: see help('isSingular')
+#> boundary (singular) fit: see help('isSingular')
+#> boundary (singular) fit: see help('isSingular')
+#> boundary (singular) fit: see help('isSingular')
+#> boundary (singular) fit: see help('isSingular')
+#> boundary (singular) fit: see help('isSingular')
+#> boundary (singular) fit: see help('isSingular')
+#> boundary (singular) fit: see help('isSingular')
+#> boundary (singular) fit: see help('isSingular')
+#> boundary (singular) fit: see help('isSingular')
+#> boundary (singular) fit: see help('isSingular')
+#> boundary (singular) fit: see help('isSingular')
+#> boundary (singular) fit: see help('isSingular')
+#> Warning: There were 7 warnings in `dplyr::mutate()`.
+#> The first warning was:
+#> ℹ In argument: `linear_model = purrr::map(data, model_strategy$model_fun, pb =
+#>   pb)`.
+#> ℹ In group 1: `protein_Id = "0EfVhX~5954"`.
+#> Caused by warning:
+#> ! grouping factors must have > 1 sampled level
+#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 6 remaining warnings.
+
+ Contr <- c("group_A_vs_Ctrl" = "group_A - group_Ctrl",
+ "group_B_vs_Ctrl" = "group_B - group_Ctrl"
+ )
+contrast <- prolfqua::Contrasts$new(mod,
+  Contr)
+contr <- contrast$get_contrasts()
+#> determine linear functions:
+#> get_contrasts -> contrasts_linfct
+#> contrasts_linfct
+#> Joining with `by = join_by(protein_Id, contrast)`
+cp <- ContrastsPlotter$new(contr,
+  contrast$subject_id,
+  volcano = list(list(score = "FDR", thresh = 0.1)),
+  histogram = list(list(score = "p.value", xlim = c(0,1,0.05)),
+                 list(score = "FDR", xlim = c(0,1,0.05))),
+  score =list(list(score = "statistic",  thresh = 5))
+  )
+
+stopifnot("plotly" %in% class(cp$volcano_plotly()$FDR))
+stopifnot("ggplot" %in% class(cp$score_plot(legend=FALSE)$statistic))
+p <- cp$histogram()
+stopifnot("ggplot" %in% class(p$FDR))
+stopifnot("ggplot" %in% class(p$p.value))
+res <- cp$volcano()
+stopifnot("ggplot" %in% class(res$FDR))
+res_plotly <- cp$volcano_plotly()
+stopifnot("plotly" %in% class(res_plotly$FDR))
+stopifnot("ggplot" %in%  class(cp$ma_plot()))
+stopifnot("plotly" %in%   class(cp$ma_plotly(rank=TRUE)))
+res  <- cp$barplot_threshold()
+stopifnot("ggplot" %in% class(res$FDR$plot))
+stopifnot("ggplot" %in%  class(cp$histogram_diff()))
+```

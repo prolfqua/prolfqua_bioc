@@ -1,0 +1,53 @@
+# plot Violin plot of sd CV or mean given intensity lower or above median
+
+plot Violin plot of sd CV or mean given intensity lower or above median
+
+## Usage
+
+``` r
+plot_stat_violin_median(
+  pdata,
+  factor_key,
+  stat = c("CV", "meanAbundance", "sd")
+)
+```
+
+## Arguments
+
+- pdata:
+
+  data.frame with statistics
+
+- factor_key:
+
+  character — factor column name for x-axis
+
+- stat:
+
+  either CV, mean or sd
+
+## See also
+
+Other stats:
+[`INTERNAL_FUNCTIONS_BY_FAMILY`](https://fgcz.github.io/prolfqua/reference/INTERNAL_FUNCTIONS_BY_FAMILY.md),
+[`compute_pooled()`](https://fgcz.github.io/prolfqua/reference/pooled_var.md),
+[`lfq_power_t_test_proteins()`](https://fgcz.github.io/prolfqua/reference/lfq_power_t_test_proteins.md),
+[`lfq_power_t_test_quantiles_V2()`](https://fgcz.github.io/prolfqua/reference/lfq_power_t_test_quantiles_V2.md),
+[`plot_stat_density()`](https://fgcz.github.io/prolfqua/reference/plot_stat_density.md),
+[`plot_stat_density_median()`](https://fgcz.github.io/prolfqua/reference/plot_stat_density_median.md),
+[`plot_stat_violin()`](https://fgcz.github.io/prolfqua/reference/plot_stat_violin.md),
+[`plot_stdv_vs_mean()`](https://fgcz.github.io/prolfqua/reference/plot_stdv_vs_mean.md),
+[`summarize_stats()`](https://fgcz.github.io/prolfqua/reference/summarize_stats.md)
+
+## Examples
+
+``` r
+bb1 <- prolfqua::sim_lfq_data_peptide_config()
+#> creating sampleName from file_name column
+#> completing cases
+#> completing cases done
+#> setup done
+lfq <- LFQData$new(bb1$data, bb1$config)
+res <- lfq$get_Stats()$stats()
+plot_stat_violin_median(res, lfq$factor_keys()[1], stat = "meanAbundance")
+```

@@ -1,0 +1,361 @@
+# Limma-based contrasts (direct limma pipeline)
+
+Limma-based contrasts (direct limma pipeline)
+
+Limma-based contrasts (direct limma pipeline)
+
+## Value
+
+An R6 class generator.
+
+## Details
+
+Uses limma's `contrasts.fit` + `eBayes` pipeline directly, rather than
+fitting per-protein lm models and then moderating. Inherits from
+[`ContrastsInterface`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.md)
+with the same API as
+[`Contrasts`](https://fgcz.github.io/prolfqua/reference/Contrasts.md).
+
+## See also
+
+Other modelling:
+[`AnovaExtractor`](https://fgcz.github.io/prolfqua/reference/AnovaExtractor.md),
+[`Contrasts`](https://fgcz.github.io/prolfqua/reference/Contrasts.md),
+[`ContrastsDEqMSFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsDEqMSFacade.md),
+[`ContrastsDEqMSVoomFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsDEqMSVoomFacade.md),
+[`ContrastsFacadeBase`](https://fgcz.github.io/prolfqua/reference/ContrastsFacadeBase.md),
+[`ContrastsFirth`](https://fgcz.github.io/prolfqua/reference/ContrastsFirth.md),
+[`ContrastsFirthFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsFirthFacade.md),
+[`ContrastsFirthNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsFirthNestedFacade.md),
+[`ContrastsHurdleFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsHurdleFacade.md),
+[`ContrastsHurdleNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsHurdleNestedFacade.md),
+[`ContrastsLMFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLMFacade.md),
+[`ContrastsLMImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLMImputeFacade.md),
+[`ContrastsLimmaFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaFacade.md),
+[`ContrastsLimmaImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaImputeFacade.md),
+[`ContrastsLimmaVoomFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaVoomFacade.md),
+[`ContrastsLimmaVoomImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaVoomImputeFacade.md),
+[`ContrastsLimpaFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimpaFacade.md),
+[`ContrastsLimpaNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimpaNestedFacade.md),
+[`ContrastsLmerNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLmerNestedFacade.md),
+[`ContrastsModerated`](https://fgcz.github.io/prolfqua/reference/ContrastsModerated.md),
+[`ContrastsModeratedDEqMS`](https://fgcz.github.io/prolfqua/reference/ContrastsModeratedDEqMS.md),
+[`ContrastsPlotter`](https://fgcz.github.io/prolfqua/reference/ContrastsPlotter.md),
+[`ContrastsRLMFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsRLMFacade.md),
+[`ContrastsROPECA`](https://fgcz.github.io/prolfqua/reference/ContrastsROPECA.md),
+[`ContrastsROPECANestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsROPECANestedFacade.md),
+[`ContrastsRfitFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsRfitFacade.md),
+[`ContrastsRfitImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsRfitImputeFacade.md),
+[`ContrastsTable`](https://fgcz.github.io/prolfqua/reference/ContrastsTable.md),
+[`INTERNAL_FUNCTIONS_BY_FAMILY`](https://fgcz.github.io/prolfqua/reference/INTERNAL_FUNCTIONS_BY_FAMILY.md),
+[`LR_test()`](https://fgcz.github.io/prolfqua/reference/LR_test.md),
+[`Model`](https://fgcz.github.io/prolfqua/reference/Model.md),
+[`ModelFirth`](https://fgcz.github.io/prolfqua/reference/ModelFirth.md),
+[`ModelLimma`](https://fgcz.github.io/prolfqua/reference/ModelLimma.md),
+[`StrategyLM`](https://fgcz.github.io/prolfqua/reference/StrategyLM.md),
+[`StrategyLimma`](https://fgcz.github.io/prolfqua/reference/StrategyLimma.md),
+[`StrategyLimpa`](https://fgcz.github.io/prolfqua/reference/StrategyLimpa.md),
+[`StrategyLmer`](https://fgcz.github.io/prolfqua/reference/StrategyLmer.md),
+[`StrategyLogistf`](https://fgcz.github.io/prolfqua/reference/StrategyLogistf.md),
+[`StrategyRLM`](https://fgcz.github.io/prolfqua/reference/StrategyRLM.md),
+[`StrategyRfit`](https://fgcz.github.io/prolfqua/reference/StrategyRfit.md),
+[`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md),
+[`build_model()`](https://fgcz.github.io/prolfqua/reference/build_model.md),
+[`build_model_glm_peptide()`](https://fgcz.github.io/prolfqua/reference/build_model_glm_peptide.md),
+[`build_model_glm_protein()`](https://fgcz.github.io/prolfqua/reference/build_model_glm_protein.md),
+[`build_model_impute()`](https://fgcz.github.io/prolfqua/reference/build_model_impute.md),
+[`build_model_limma()`](https://fgcz.github.io/prolfqua/reference/build_model_limma.md),
+[`build_model_limma_impute()`](https://fgcz.github.io/prolfqua/reference/build_model_limma_impute.md),
+[`build_model_limma_voom()`](https://fgcz.github.io/prolfqua/reference/build_model_limma_voom.md),
+[`build_model_limma_voom_impute()`](https://fgcz.github.io/prolfqua/reference/build_model_limma_voom_impute.md),
+[`build_model_limpa()`](https://fgcz.github.io/prolfqua/reference/build_model_limpa.md),
+[`build_model_logistf()`](https://fgcz.github.io/prolfqua/reference/build_model_logistf.md),
+[`compute_borrowed_variance()`](https://fgcz.github.io/prolfqua/reference/compute_borrowed_variance.md),
+[`compute_borrowed_variance_limma()`](https://fgcz.github.io/prolfqua/reference/compute_borrowed_variance_limma.md),
+[`compute_contrast()`](https://fgcz.github.io/prolfqua/reference/compute_contrast.md),
+[`compute_lmer_contrast()`](https://fgcz.github.io/prolfqua/reference/compute_lmer_contrast.md),
+[`df.residual.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/df.residual.rfit_prolfqua.md),
+[`get_anova_df()`](https://fgcz.github.io/prolfqua/reference/get_anova_df.md),
+[`get_complete_model_fit()`](https://fgcz.github.io/prolfqua/reference/get_complete_model_fit.md),
+[`get_p_values_pbeta()`](https://fgcz.github.io/prolfqua/reference/get_p_values_pbeta.md),
+[`group_label()`](https://fgcz.github.io/prolfqua/reference/group_label.md),
+[`impute_from_model()`](https://fgcz.github.io/prolfqua/reference/impute_from_model.md),
+[`impute_refit_singular()`](https://fgcz.github.io/prolfqua/reference/impute_refit_singular.md),
+[`linfct_from_model()`](https://fgcz.github.io/prolfqua/reference/linfct_from_model.md),
+[`linfct_matrix_contrasts()`](https://fgcz.github.io/prolfqua/reference/linfct_matrix_contrasts.md),
+[`list_facades()`](https://fgcz.github.io/prolfqua/reference/list_facades.md),
+[`lookup_facade()`](https://fgcz.github.io/prolfqua/reference/lookup_facade.md),
+[`merge_contrasts_results()`](https://fgcz.github.io/prolfqua/reference/merge_contrasts_results.md),
+[`model_analyse()`](https://fgcz.github.io/prolfqua/reference/model_analyse.md),
+[`model_summary()`](https://fgcz.github.io/prolfqua/reference/model_summary.md),
+[`moderated_p_deqms()`](https://fgcz.github.io/prolfqua/reference/moderated_p_deqms.md),
+[`moderated_p_deqms_long()`](https://fgcz.github.io/prolfqua/reference/moderated_p_deqms_long.md),
+[`moderated_p_limma()`](https://fgcz.github.io/prolfqua/reference/moderated_p_limma.md),
+[`new_imputed_model()`](https://fgcz.github.io/prolfqua/reference/new_imputed_model.md),
+[`pivot_model_contrasts_to_wide()`](https://fgcz.github.io/prolfqua/reference/pivot_model_contrasts_to_wide.md),
+[`register_facade()`](https://fgcz.github.io/prolfqua/reference/register_facade.md),
+[`sigma.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/sigma.rfit_prolfqua.md),
+[`sim_build_models_lm()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_lm.md),
+[`sim_build_models_lmer()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_lmer.md),
+[`sim_build_models_logistf()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_logistf.md),
+[`sim_make_model_lm()`](https://fgcz.github.io/prolfqua/reference/sim_make_model_lm.md),
+[`sim_make_model_lmer()`](https://fgcz.github.io/prolfqua/reference/sim_make_model_lmer.md),
+[`strategy_limma()`](https://fgcz.github.io/prolfqua/reference/strategy_limma.md),
+[`strategy_limpa()`](https://fgcz.github.io/prolfqua/reference/strategy_limpa.md),
+[`strategy_logistf()`](https://fgcz.github.io/prolfqua/reference/strategy.md),
+[`summary_ROPECA_median_p_scaled()`](https://fgcz.github.io/prolfqua/reference/summary_ROPECA_median_p_scaled.md),
+[`vcov.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/vcov.rfit_prolfqua.md)
+
+## Super class
+
+[`prolfqua::ContrastsInterface`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.md)
+-\> `ContrastsLimma`
+
+## Public fields
+
+- `model`:
+
+  ModelLimma object
+
+- `contrasts`:
+
+  named character vector of contrasts
+
+- `model_name`:
+
+  model name
+
+- `subject_id`:
+
+  columns with subject_id (proteinID)
+
+- `p.adjust`:
+
+  function to adjust p-values
+
+- `contrast_result`:
+
+  cached contrast results
+
+- `eBayes`:
+
+  logical, apply limma eBayes moderation (default TRUE). Set to FALSE to
+  return raw/unmoderated statistics, e.g. for downstream DEqMS
+  moderation via
+  [`ContrastsModeratedDEqMS`](https://fgcz.github.io/prolfqua/reference/ContrastsModeratedDEqMS.md).
+
+## Methods
+
+### Public methods
+
+- [`ContrastsLimma$new()`](#method-ContrastsLimma-new)
+
+- [`ContrastsLimma$get_contrast_sides()`](#method-ContrastsLimma-get_contrast_sides)
+
+- [`ContrastsLimma$get_linfct()`](#method-ContrastsLimma-get_linfct)
+
+- [`ContrastsLimma$get_contrasts()`](#method-ContrastsLimma-get_contrasts)
+
+- [`ContrastsLimma$clone()`](#method-ContrastsLimma-clone)
+
+Inherited methods
+
+- [`prolfqua::ContrastsInterface$column_description()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-column_description)
+- [`prolfqua::ContrastsInterface$contrast_summary_table()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-contrast_summary_table)
+- [`prolfqua::ContrastsInterface$extra_artifacts()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-extra_artifacts)
+- [`prolfqua::ContrastsInterface$filter_significant()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-filter_significant)
+- [`prolfqua::ContrastsInterface$get_Plotter()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_Plotter)
+- [`prolfqua::ContrastsInterface$get_config()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_config)
+- [`prolfqua::ContrastsInterface$get_missing()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_missing)
+- [`prolfqua::ContrastsInterface$get_ora()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_ora)
+- [`prolfqua::ContrastsInterface$get_rank()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_rank)
+- [`prolfqua::ContrastsInterface$to_wide()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-to_wide)
+
+------------------------------------------------------------------------
+
+### Method `new()`
+
+initialize ContrastsLimma
+
+#### Usage
+
+    ContrastsLimma$new(
+      model,
+      contrasts,
+      p.adjust = prolfqua::adjust_p_values,
+      model_name = NULL,
+      eBayes = TRUE
+    )
+
+#### Arguments
+
+- `model`:
+
+  a
+  [`ModelLimma`](https://fgcz.github.io/prolfqua/reference/ModelLimma.md)
+  object
+
+- `contrasts`:
+
+  named character vector of contrasts
+
+- `p.adjust`:
+
+  function to adjust p-values
+
+- `model_name`:
+
+  name of the contrast method
+
+- `eBayes`:
+
+  logical, apply limma eBayes moderation (default TRUE). Set to FALSE to
+  return raw/unmoderated statistics suitable for wrapping with
+  [`ContrastsModeratedDEqMS`](https://fgcz.github.io/prolfqua/reference/ContrastsModeratedDEqMS.md).
+
+------------------------------------------------------------------------
+
+### Method `get_contrast_sides()`
+
+get both sides of contrasts
+
+#### Usage
+
+    ContrastsLimma$get_contrast_sides()
+
+------------------------------------------------------------------------
+
+### Method `get_linfct()`
+
+get linear functions from contrasts
+
+#### Usage
+
+    ContrastsLimma$get_linfct(global = TRUE, avg = TRUE)
+
+#### Arguments
+
+- `global`:
+
+  ignored (for API compatibility)
+
+- `avg`:
+
+  logical, also compute avgAbd linfct
+
+------------------------------------------------------------------------
+
+### Method `get_contrasts()`
+
+get table with contrast estimates via limma pipeline
+
+#### Usage
+
+    ContrastsLimma$get_contrasts(all = FALSE)
+
+#### Arguments
+
+- `all`:
+
+  should all columns be returned (default FALSE)
+
+#### Returns
+
+data.frame with contrasts
+
+------------------------------------------------------------------------
+
+### Method `clone()`
+
+The objects of this class are cloneable with this method.
+
+#### Usage
+
+    ContrastsLimma$clone(deep = FALSE)
+
+#### Arguments
+
+- `deep`:
+
+  Whether to make a deep clone.
+
+## Examples
+
+``` r
+istar <- sim_lfq_data_protein_config(Nprot = 50)
+#> creating sampleName from file_name column
+#> completing cases
+#> completing cases done
+#> setup done
+lProt <- LFQData$new(istar$data, istar$config)
+lProt$rename_response("transformedIntensity")
+
+strat <- strategy_limma("transformedIntensity ~ group_")
+mod_limma <- build_model_limma(lProt, strat)
+#> Warning: Partial NA coefficients for 1 probe(s)
+
+Contr <- c("dil.b_vs_a" = "group_A - group_Ctrl")
+contr_limma <- ContrastsLimma$new(mod_limma, Contr)
+res <- contr_limma$get_contrasts()
+head(res)
+#> # A tibble: 6 × 16
+#>   modelName estimate_type protein_Id  contrast     diff      FDR
+#>   <chr>     <chr>         <chr>       <chr>       <dbl>    <dbl>
+#> 1 limma     observed      0EfVhX~7161 dil.b_vs_a  3.00  0.000699
+#> 2 limma     observed      0m5WN4~3543 dil.b_vs_a  0.222 0.835   
+#> 3 limma     observed      76k03k~9735 dil.b_vs_a  0.509 0.835   
+#> 4 limma     observed      7QuTub~5556 dil.b_vs_a -1.22  0.439   
+#> 5 limma     observed      7cbcrd~0495 dil.b_vs_a  1.38  0.547   
+#> 6 limma     observed      7soopj~3451 dil.b_vs_a  0.822 0.588   
+#> # ℹ 10 more variables: std.error.unmoderated <dbl>, df.unmoderated <dbl>,
+#> #   std.error <dbl>, statistic <dbl>, p.value <dbl>, sigma <dbl>, df <dbl>,
+#> #   conf.low <dbl>, conf.high <dbl>, avgAbd <dbl>
+stopifnot(all(c("diff", "FDR", "p.value", "statistic") %in% colnames(res)))
+
+# Compare with prolfqua's own pipeline
+modelFunction <- strategy_lm("transformedIntensity ~ group_")
+mod <- build_model(lProt, modelFunction)
+contr_prolfqua <- Contrasts$new(mod, Contr)
+res_prolfqua <- contr_prolfqua$get_contrasts()
+#> determine linear functions:
+#> get_contrasts -> contrasts_linfct
+#> contrasts_linfct
+#> Joining with `by = join_by(protein_Id, contrast)`
+
+# fold changes should be very similar
+merged <- dplyr::inner_join(
+  dplyr::select(res, protein_Id, diff_limma = diff),
+  dplyr::select(res_prolfqua, protein_Id, diff_prolfqua = diff),
+  by = "protein_Id")
+#> Adding missing grouping variables: `contrast`
+stopifnot(cor(merged$diff_limma, merged$diff_prolfqua, use = "complete.obs") > 0.99)
+
+# Plotter works
+pl <- contr_limma$get_Plotter()
+
+# to_wide works
+wide <- contr_limma$to_wide()
+head(wide)
+#> # A tibble: 6 × 5
+#>   protein_Id  diff.dil.b_vs_a p.value.dil.b_vs_a FDR.dil.b_vs_a
+#>   <chr>                 <dbl>              <dbl>          <dbl>
+#> 1 0EfVhX~7161           3.00           0.0000143       0.000699
+#> 2 0m5WN4~3543           0.222          0.763           0.835   
+#> 3 76k03k~9735           0.509          0.455           0.835   
+#> 4 7QuTub~5556          -1.22           0.0969          0.439   
+#> 5 7cbcrd~0495           1.38           0.151           0.547   
+#> 6 7soopj~3451           0.822          0.228           0.588   
+#> # ℹ 1 more variable: statistic.dil.b_vs_a <dbl>
+
+# merge_contrasts_results works
+Contr2 <- c("dil.b_vs_a" = "group_A - group_Ctrl")
+imp <- ContrastsLMImputeFacade$new(lProt, "~ group_", Contr2)$contrast
+#> Warning: essentially perfect fit: summary may be unreliable
+merged_res <- merge_contrasts_results(contr_limma, imp)
+#> determine linear functions:
+#> get_contrasts -> contrasts_linfct
+#> contrasts_linfct
+#> Joining with `by = join_by(protein_Id, contrast)`
+#> Joining with `by = join_by(protein_Id, contrast)`
+#> Joining with `by = join_by(protein_Id, contrast)`
+```

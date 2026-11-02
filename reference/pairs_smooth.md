@@ -1,0 +1,72 @@
+# smoothScatter pairs
+
+smoothScatter pairs
+
+## Usage
+
+``` r
+pairs_smooth(data, legend = FALSE, ...)
+```
+
+## Arguments
+
+- data:
+
+  data matrix or data.frame as normally passed to pairs
+
+- legend:
+
+  add legend to plots
+
+- ...:
+
+  params usually passed to pairs
+
+## See also
+
+also [`pairs`](https://rdrr.io/r/graphics/pairs.html)
+
+Other utilities:
+[`INTERNAL_FUNCTIONS_BY_FAMILY`](https://fgcz.github.io/prolfqua/reference/INTERNAL_FUNCTIONS_BY_FAMILY.md),
+[`get_uniprot_id_from_fasta_header()`](https://fgcz.github.io/prolfqua/reference/get_uniprot_id_from_fasta_header.md),
+[`is_contaminant()`](https://fgcz.github.io/prolfqua/reference/is_contaminant.md),
+[`is_decoy()`](https://fgcz.github.io/prolfqua/reference/is_decoy.md),
+[`matrix_to_tibble()`](https://fgcz.github.io/prolfqua/reference/matrix_to_tibble.md),
+[`multigroup_volcano()`](https://fgcz.github.io/prolfqua/reference/multigroup_volcano.md),
+[`panel_cor()`](https://fgcz.github.io/prolfqua/reference/panel_cor.md),
+[`table_facade()`](https://fgcz.github.io/prolfqua/reference/table_facade.md)
+
+## Examples
+
+``` r
+tmp = matrix(rep((1:100),times = 4) + rnorm(100*4,0,3),ncol=4)
+pairs_smooth(tmp,main="small data", legend=TRUE)
+
+pairs_smooth(tmp,main="small data")
+
+pairs_smooth(tmp,log="xy",main="small data", legend=TRUE)
+#> Warning: 1 x value <= 0 omitted from logarithmic plot
+#> Warning: 1 y value <= 0 omitted from logarithmic plot
+#> Warning: 1 x value <= 0 omitted from logarithmic plot
+#> Warning: 1 y value <= 0 omitted from logarithmic plot
+#> Warning: 1 x value <= 0 omitted from logarithmic plot
+#> Warning: 1 x value <= 0 omitted from logarithmic plot
+#> Warning: 2 y values <= 0 omitted from logarithmic plot
+#> Warning: 1 x value <= 0 omitted from logarithmic plot
+#> Warning: 1 y value <= 0 omitted from logarithmic plot
+#> Warning: 1 x value <= 0 omitted from logarithmic plot
+#> Warning: 1 y value <= 0 omitted from logarithmic plot
+#> Warning: 1 x value <= 0 omitted from logarithmic plot
+#> Warning: 1 x value <= 0 omitted from logarithmic plot
+#> Warning: 2 y values <= 0 omitted from logarithmic plot
+#> Warning: 1 y value <= 0 omitted from logarithmic plot
+#> Warning: 1 y value <= 0 omitted from logarithmic plot
+#> Warning: 2 y values <= 0 omitted from logarithmic plot
+#> Warning: 2 x values <= 0 omitted from logarithmic plot
+#> Warning: 1 y value <= 0 omitted from logarithmic plot
+#> Warning: 2 x values <= 0 omitted from logarithmic plot
+#> Warning: 1 y value <= 0 omitted from logarithmic plot
+#> Warning: 2 x values <= 0 omitted from logarithmic plot
+#> Warning: 2 x values <= 0 omitted from logarithmic plot
+#> Warning: 2 y values <= 0 omitted from logarithmic plot
+```

@@ -1,0 +1,711 @@
+# Comparing modelling methods on one dataset
+
+## Purpose
+
+[`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md)
+provides a common front-end for several contrast backends:
+
+- `lm` — ordinary least-squares linear model fitted per protein, Wald
+  contrasts.
+- `rfit` — rank-based robust regression
+  ([`Rfit::rfit`](https://rdrr.io/pkg/Rfit/man/rfit.html)); like `lm`
+  but resistant to outliers in the response.
+- `limma` — linear model with empirical-Bayes moderated variance
+  shrinkage across proteins.
+- `limma_impute` — `limma` with LOD imputation and borrowed per-protein
+  variance for groups with no observations.
+- `limpa` — vooma precision-weighted model on DPC-aggregated proteins
+  (requires `AggregateLimpa` for DPC-based aggregation with standard
+  errors).
+- `lmer` — linear mixed-effects model on nested peptide/precursor data,
+  reporting protein-level contrasts.
+- `ropeca` — peptide-level fold changes aggregated to protein via ROPECA
+  median + beta-distribution p-values.
+- `lm_impute` — `lm` that refits failed/singular proteins with LOD
+  imputation and borrowed variance.
+- `deqms` — `limma` plus DEqMS count-dependent variance moderation using
+  peptide counts per protein.
+- `firth` — Firth bias-reduced logistic regression on presence/absence
+  (missingness) of aggregated proteins.
+- `firth_nested` — Firth logistic regression on peptide-level
+  missingness, reporting protein-level contrasts.
+
+All of them expose the same basic interface: `get_contrasts()`,
+`get_Plotter()`, and `to_wide()`. All examples below return
+protein-level contrasts. The important difference is the required input
+level:
+
+- `lm`, `rfit`, `limma`, `limma_impute`, `lm_impute`, and `deqms`
+  require aggregated protein-level data
+- `limpa` requires protein-level data from `AggregateLimpa` (which
+  provides standard errors and observation counts for vooma precision
+  weighting)
+- `lmer` and `ropeca` require lower-level measurements such as peptides
+  nested within proteins, but still report protein-level contrasts
+- `firth` can be used with either aggregated protein-level data or
+  nested peptide-level data and still reports protein-level contrasts
+
+This vignette starts from one simulated peptide-level experiment,
+aggregates it to protein level, and then demonstrates both families of
+facades separately.
+
+## Simulate one experiment
+
+``` r
+istar <- sim_lfq_data_peptide_config(Nprot = 80, seed = 42)
+
+
+lfq_peptide <- LFQData$new(istar$data, istar$config)
+lfq_peptide <- lfq_peptide$get_Transformer()$log2()$lfq
+
+lfq_protein <- lfq_peptide$get_Aggregator()$aggregate()
+
+lfq_peptide$hierarchy_keys()
+```
+
+    ## [1] "protein_Id" "peptide_Id"
+
+``` r
+lfq_protein$hierarchy_keys()
+```
+
+    ## [1] "protein_Id"
+
+``` r
+lfq_protein$nr_children_col()
+```
+
+    ## [1] "nr_children_protein_Id"
+
+The aggregation step produces protein-level intensities while keeping
+count metadata in the `LFQData` object. The DEqMS facade uses
+`lfq_protein$nr_children_col()` directly, so no extra count table has to
+be passed around.
+
+## Define contrasts
+
+``` r
+contrasts <- c(
+  "A_vs_Ctrl" = "group_A - group_Ctrl",
+  "B_vs_Ctrl" = "group_B - group_Ctrl"
+)
+```
+
+Two contrasts let us see how each backend handles multiple comparisons
+and how FDR correction propagates across contrasts.
+
+## Protein-input facades
+
+The following facades require aggregated input, which in practice means
+`lfqdata$subject_id()` must match `lfqdata$hierarchy_keys()`. `firth` is
+included here on purpose because it can be fitted directly on aggregated
+protein input.
+
+``` r
+fa_lm <- build_contrast_analysis(
+  lfq_protein,
+  "~ group_",
+  contrasts,
+  method = "lm"
+)
+
+fa_rfit <- build_contrast_analysis(
+  lfq_protein,
+  "~ group_",
+  contrasts,
+  method = "rfit"
+)
+
+fa_limma <- build_contrast_analysis(
+  lfq_protein,
+  "~ group_",
+  contrasts,
+  method = "limma"
+)
+
+fa_limma_impute <- build_contrast_analysis(
+  lfq_protein,
+  "~ group_",
+  contrasts,
+  method = "limma_impute"
+)
+
+fa_deqms <- build_contrast_analysis(
+  lfq_protein,
+  "~ group_",
+  contrasts,
+  method = "deqms"
+)
+
+fa_lm_impute <- build_contrast_analysis(
+  lfq_protein,
+  "~ group_",
+  contrasts,
+  method = "lm_impute"
+)
+
+fa_firth_protein <- build_contrast_analysis(
+  lfq_protein,
+  "~ group_",
+  contrasts,
+  method = "firth"
+)
+```
+
+#### limpa facade (DPC-based aggregation)
+
+The `limpa` facade is different from the other protein-level facades: it
+requires its own aggregation step via `AggregateLimpa`, which uses
+limpa’s Detection Probability Curve (DPC) to aggregate peptides to
+proteins while producing per-protein, per-sample standard errors. These
+SEs feed into a bivariate vooma variance model for precision weighting.
+
+``` r
+lfq_limpa <- AggregateLimpa$new(lfq_peptide, "protein")$aggregate()
+
+fa_limpa <- build_contrast_analysis(
+  lfq_limpa,
+  "~ group_",
+  contrasts,
+  method = "limpa"
+)
+```
+
+Because all protein-input facades share the same interface and report
+protein-level contrasts, their outputs can be combined directly.
+
+``` r
+# Proteins missing in the baseline lm facade (used to flag rescued proteins)
+lm_missing_ids <- fa_lm$get_missing() |>
+  dplyr::select(protein_Id, contrast) |>
+  dplyr::mutate(rescued = TRUE)
+
+results_limpa <- if (requireNamespace("limpa", quietly = TRUE)) {
+  fa_limpa$get_contrasts()
+} else {
+  data.frame()
+}
+
+results_protein <- bind_rows(
+  fa_lm$get_contrasts(),
+  fa_rfit$get_contrasts(),
+  fa_limma$get_contrasts(),
+  fa_limma_impute$get_contrasts(),
+  fa_lm_impute$get_contrasts(),
+  fa_deqms$get_contrasts(),
+  fa_firth_protein$get_contrasts(),
+  results_limpa
+) |>
+  dplyr::select(dplyr::any_of(c(
+    "modelName", "estimate_type", "protein_Id", "contrast", "avgAbd", "diff", "FDR",
+    "statistic", "std.error", "df", "p.value", "conf.low", "conf.high",
+    "sigma"
+  ))) |>
+  dplyr::left_join(lm_missing_ids, by = c("protein_Id", "contrast")) |>
+  dplyr::mutate(
+    rescued = dplyr::coalesce(rescued, FALSE),
+    significant = FDR < 0.1 & abs(diff) > 0.5
+  )
+
+results_protein |>
+  dplyr::count(modelName, name = "n_results")
+```
+
+    ## # A tibble: 8 × 2
+    ##   modelName    n_results
+    ##   <chr>            <int>
+    ## 1 deqms              157
+    ## 2 firth              160
+    ## 3 limma              155
+    ## 4 limma_impute       160
+    ## 5 limpa              160
+    ## 6 lm                 157
+    ## 7 lm_impute          160
+    ## 8 rfit               157
+
+The `modelName` column is the facade key. For facades that combine
+several underlying result types, such as `lm_impute`, the
+`estimate_type` column tells you how each row was produced (`observed`
+or `lod_imputed`).
+
+``` r
+results_protein |>
+  dplyr::count(modelName, contrast, estimate_type, name = "n_results")
+```
+
+    ## # A tibble: 20 × 4
+    ##    modelName    contrast  estimate_type n_results
+    ##    <chr>        <chr>     <chr>             <int>
+    ##  1 deqms        A_vs_Ctrl observed             78
+    ##  2 deqms        B_vs_Ctrl observed             79
+    ##  3 firth        A_vs_Ctrl observed             80
+    ##  4 firth        B_vs_Ctrl observed             80
+    ##  5 limma        A_vs_Ctrl observed             78
+    ##  6 limma        B_vs_Ctrl observed             77
+    ##  7 limma_impute A_vs_Ctrl lod_imputed           3
+    ##  8 limma_impute A_vs_Ctrl observed             77
+    ##  9 limma_impute B_vs_Ctrl lod_imputed           3
+    ## 10 limma_impute B_vs_Ctrl observed             77
+    ## 11 limpa        A_vs_Ctrl observed             80
+    ## 12 limpa        B_vs_Ctrl observed             80
+    ## 13 lm           A_vs_Ctrl observed             78
+    ## 14 lm           B_vs_Ctrl observed             79
+    ## 15 lm_impute    A_vs_Ctrl lod_imputed           3
+    ## 16 lm_impute    A_vs_Ctrl observed             77
+    ## 17 lm_impute    B_vs_Ctrl lod_imputed           3
+    ## 18 lm_impute    B_vs_Ctrl observed             77
+    ## 19 rfit         A_vs_Ctrl observed             78
+    ## 20 rfit         B_vs_Ctrl observed             79
+
+## Protein-level volcano comparison
+
+### Standard facades
+
+``` r
+standard_facades <- c("lm", "rfit", "limma", "deqms")
+results_standard <- results_protein |>
+  dplyr::filter(modelName %in% standard_facades)
+
+ggplot(results_standard, aes(x = diff, y = -log10(p.value), color = significant)) +
+  geom_point(alpha = 0.6, size = 1.5) +
+  facet_grid(contrast ~ modelName, scales = "free_y") +
+  geom_vline(xintercept = c(-0.5, 0.5), linetype = "dashed", color = "grey60") +
+  geom_hline(yintercept = -log10(0.1), linetype = "dashed", color = "grey60") +
+  scale_color_manual(values = c(`TRUE` = "firebrick", `FALSE` = "grey70")) +
+  labs(x = "log2 fold change", y = "-log10(p.value)", color = "FDR < 0.1\nand |diff| > 0.5") +
+  theme_minimal(base_size = 12)
+```
+
+![Volcano plots for the standard protein-level facades (lm, rfit, limma,
+deqms).](ComparingMethods_files/figure-html/volcano_standard-1.png)
+
+Volcano plots for the standard protein-level facades (lm, rfit, limma,
+deqms).
+
+### Imputation and missingness facades
+
+Rescued proteins (missing in plain `lm`) are shown as large red diamonds
+so they stand out clearly. This group includes the LOD imputation
+facades (`lm_impute`, `limma_impute`) and the firth logistic regression
+facade which models missingness directly.
+
+``` r
+impute_facades <- c("lm_impute", "limma_impute", "firth")
+results_impute <- results_protein |>
+  dplyr::filter(modelName %in% impute_facades) |>
+  dplyr::mutate(modelName = factor(modelName, levels = impute_facades))
+
+ggplot(results_impute, aes(x = diff, y = -log10(p.value))) +
+  geom_point(data = dplyr::filter(results_impute, !rescued),
+             aes(color = significant), alpha = 0.5, size = 1.2) +
+  geom_point(data = dplyr::filter(results_impute, rescued),
+             color = "red", shape = 18, size = 5, alpha = 1) +
+  facet_grid(contrast ~ modelName, scales = "free_y") +
+  geom_vline(xintercept = c(-0.5, 0.5), linetype = "dashed", color = "grey60") +
+  geom_hline(yintercept = -log10(0.1), linetype = "dashed", color = "grey60") +
+  scale_color_manual(values = c(`TRUE` = "firebrick", `FALSE` = "grey70")) +
+  labs(x = "log2 fold change", y = "-log10(p.value)", color = "FDR < 0.1\nand |diff| > 0.5") +
+  theme_minimal(base_size = 12)
+```
+
+![Volcano plots for the imputation and missingness facades. Large red
+diamonds mark proteins rescued (missing in plain
+lm).](ComparingMethods_files/figure-html/volcano_impute-1.png)
+
+Volcano plots for the imputation and missingness facades. Large red
+diamonds mark proteins rescued (missing in plain lm).
+
+## Looking at the strongest protein-level hits
+
+``` r
+results_protein |>
+  dplyr::group_by(modelName, contrast) |>
+  dplyr::slice_min(order_by = p.value, n = 5, with_ties = FALSE) |>
+  dplyr::ungroup() |>
+  dplyr::select(modelName, estimate_type, contrast, protein_Id, diff, p.value, FDR)
+```
+
+    ## # A tibble: 80 × 7
+    ##    modelName estimate_type contrast  protein_Id    diff  p.value      FDR
+    ##    <chr>     <chr>         <chr>     <chr>        <dbl>    <dbl>    <dbl>
+    ##  1 deqms     observed      A_vs_Ctrl Zci7Jw~7064 -0.722 3.79e-12 2.96e-10
+    ##  2 deqms     observed      A_vs_Ctrl 6TevMr~7550  0.765 3.46e-11 1.35e- 9
+    ##  3 deqms     observed      A_vs_Ctrl 4Y4DYT~0927  0.583 5.59e-11 1.45e- 9
+    ##  4 deqms     observed      A_vs_Ctrl 0CubNR~0890  0.674 9.73e-11 1.90e- 9
+    ##  5 deqms     observed      A_vs_Ctrl KVkccD~1805 -0.524 1.25e- 9 1.95e- 8
+    ##  6 deqms     observed      B_vs_Ctrl fylZqB~3883  0.717 1.05e-13 8.28e-12
+    ##  7 deqms     observed      B_vs_Ctrl XxJoJB~7286  0.587 4.63e-12 1.83e-10
+    ##  8 deqms     observed      B_vs_Ctrl f0Cvvj~6658  0.345 5.39e-10 1.42e- 8
+    ##  9 deqms     observed      B_vs_Ctrl TR3Ksv~1492 -0.413 3.73e- 9 7.37e- 8
+    ## 10 deqms     observed      B_vs_Ctrl 4Y4DYT~0927  0.424 8.16e- 9 1.29e- 7
+    ## # ℹ 70 more rows
+
+## Proteins that could not be estimated
+
+Every facade has a `get_missing()` method that returns the protein ×
+contrast pairs present in the input data but absent from
+`get_contrasts()`. This makes it easy to see which proteins each method
+fails on and to compare coverage.
+
+``` r
+missing_limpa <- if (requireNamespace("limpa", quietly = TRUE)) {
+  fa_limpa$get_missing() |> dplyr::mutate(facade = "limpa")
+} else {
+  data.frame()
+}
+
+missing_all <- dplyr::bind_rows(
+  fa_lm$get_missing() |> dplyr::mutate(facade = "lm"),
+  fa_limma$get_missing() |> dplyr::mutate(facade = "limma"),
+  fa_limma_impute$get_missing() |> dplyr::mutate(facade = "limma_impute"),
+  fa_lm_impute$get_missing() |> dplyr::mutate(facade = "lm_impute"),
+  fa_deqms$get_missing() |> dplyr::mutate(facade = "deqms"),
+  fa_firth_protein$get_missing() |> dplyr::mutate(facade = "firth"),
+  missing_limpa
+)
+
+missing_all |>
+  dplyr::count(facade, contrast, name = "n_missing") |>
+  knitr::kable(caption = "Number of missing protein × contrast pairs per facade")
+```
+
+| facade | contrast  | n_missing |
+|:-------|:----------|----------:|
+| deqms  | A_vs_Ctrl |         2 |
+| deqms  | B_vs_Ctrl |         1 |
+| limma  | A_vs_Ctrl |         2 |
+| limma  | B_vs_Ctrl |         3 |
+| lm     | A_vs_Ctrl |         2 |
+| lm     | B_vs_Ctrl |         1 |
+
+Number of missing protein × contrast pairs per facade
+
+### Per-sample intensities of the missing proteins
+
+``` r
+missing_proteins <- unique(missing_all$protein_Id)
+
+if (length(missing_proteins) > 0) {
+  lfq_protein$data_long() |>
+    dplyr::filter(protein_Id %in% missing_proteins) |>
+    dplyr::select(protein_Id, sampleName,
+                  !!rlang::sym(lfq_protein$response())) |>
+    tidyr::pivot_wider(names_from = sampleName,
+                       values_from = !!rlang::sym(lfq_protein$response())) |>
+    knitr::kable(digits = 2, caption = "Per-sample intensities of proteins that could not be estimated")
+}
+```
+
+| protein_Id  | A_V1 | A_V2 | A_V3 | A_V4 | B_V1 | B_V2 | B_V3 | B_V4 | Ctrl_V1 | Ctrl_V2 | Ctrl_V3 | Ctrl_V4 |
+|:------------|-----:|-----:|-----:|-----:|-----:|-----:|-----:|-----:|--------:|--------:|--------:|--------:|
+| 8mS8sK~0150 |   NA |   NA |   NA |   NA | 3.85 |   NA |   NA | 3.76 |      NA |      NA |    3.37 |    3.55 |
+| DTCi0N~0734 |   NA |   NA |   NA |   NA |   NA | 4.37 | 4.35 | 4.28 |      NA |    4.06 |    4.07 |    4.21 |
+| OrL0ux~1369 |   NA |   NA |   NA | 3.78 |   NA |   NA |   NA |   NA |    4.12 |    4.05 |      NA |    3.98 |
+
+Per-sample intensities of proteins that could not be estimated
+
+The missing cells (NA) explain why these proteins cannot be estimated —
+they lack observations in one or more groups. The `lm_impute` and
+`limma_impute` facades re-fit after imputing individual values with the
+LOD and borrowing covariance from successful fits. These should have
+fewer missing proteins than plain `lm` or `limma`.
+
+### Estimates for the missing proteins from `lm_impute` and `limma_impute`
+
+For proteins that plain `lm` could not estimate, the imputation-based
+facades can still produce contrast results. The table below shows these
+rescued estimates side by side.
+
+``` r
+lm_missing_proteins <- fa_lm$get_missing()$protein_Id |> unique()
+
+if (length(lm_missing_proteins) > 0) {
+  rescued <- results_protein |>
+    dplyr::filter(
+      protein_Id %in% lm_missing_proteins,
+      modelName %in% c("lm_impute", "limma_impute", "limpa")
+    ) |>
+    dplyr::arrange(protein_Id, contrast, modelName)
+
+  rescued |>
+    knitr::kable(
+      digits = 3,
+      caption = "Contrast estimates from lm_impute and limma_impute for proteins that plain lm could not estimate"
+    )
+} else {
+  cat("All proteins were estimable by plain lm — no rescued estimates to show.")
+}
+```
+
+| modelName    | estimate_type | protein_Id  | contrast  | avgAbd |   diff |   FDR | statistic | std.error |     df | p.value | conf.low | conf.high | sigma | rescued | significant |
+|:-------------|:--------------|:------------|:----------|-------:|-------:|------:|----------:|----------:|-------:|--------:|---------:|----------:|------:|:--------|:------------|
+| limma_impute | lod_imputed   | 8mS8sK~0150 | A_vs_Ctrl |  3.776 |  0.000 | 1.000 |     0.000 |     0.063 |  4.468 |   1.000 |   -0.167 |     0.167 | 0.089 | TRUE    | FALSE       |
+| limpa        | observed      | 8mS8sK~0150 | A_vs_Ctrl |  3.146 | -0.298 | 0.415 |    -1.048 |     0.284 | 21.096 |   0.306 |   -0.888 |     0.293 | 0.895 | TRUE    | FALSE       |
+| lm_impute    | lod_imputed   | 8mS8sK~0150 | A_vs_Ctrl |  3.776 |  0.000 | 1.000 |     0.000 |     0.063 |  4.468 |   1.000 |   -0.167 |     0.167 | 0.089 | TRUE    | FALSE       |
+| limma_impute | lod_imputed   | 8mS8sK~0150 | B_vs_Ctrl |  3.784 |  0.018 | 0.803 |     0.279 |     0.063 |  4.468 |   0.792 |   -0.150 |     0.185 | 0.089 | FALSE   | FALSE       |
+| limpa        | observed      | 8mS8sK~0150 | B_vs_Ctrl |  3.420 |  0.251 | 0.434 |     0.897 |     0.280 | 21.096 |   0.380 |   -0.330 |     0.832 | 0.895 | FALSE   | FALSE       |
+| lm_impute    | lod_imputed   | 8mS8sK~0150 | B_vs_Ctrl |  3.784 |  0.018 | 0.803 |     0.279 |     0.063 |  4.468 |   0.792 |   -0.150 |     0.185 | 0.089 | FALSE   | FALSE       |
+| limma_impute | lod_imputed   | DTCi0N~0734 | A_vs_Ctrl |  3.902 | -0.253 | 0.017 |    -3.996 |     0.063 |  6.468 |   0.006 |   -0.405 |    -0.101 | 0.090 | TRUE    | FALSE       |
+| limpa        | observed      | DTCi0N~0734 | A_vs_Ctrl |  3.622 | -0.826 | 0.016 |    -2.932 |     0.282 | 21.096 |   0.008 |   -1.411 |    -0.240 | 1.042 | TRUE    | TRUE        |
+| lm_impute    | lod_imputed   | DTCi0N~0734 | A_vs_Ctrl |  3.902 | -0.253 | 0.017 |    -3.997 |     0.063 |  6.468 |   0.006 |   -0.405 |    -0.101 | 0.090 | TRUE    | FALSE       |
+| limma_impute | lod_imputed   | DTCi0N~0734 | B_vs_Ctrl |  4.112 |  0.166 | 0.051 |     2.626 |     0.063 |  6.468 |   0.037 |    0.014 |     0.319 | 0.090 | FALSE   | FALSE       |
+| limpa        | observed      | DTCi0N~0734 | B_vs_Ctrl |  4.136 |  0.201 | 0.539 |     0.722 |     0.279 | 21.096 |   0.478 |   -0.378 |     0.780 | 1.042 | FALSE   | FALSE       |
+| lm_impute    | lod_imputed   | DTCi0N~0734 | B_vs_Ctrl |  4.112 |  0.166 | 0.051 |     2.626 |     0.063 |  6.468 |   0.037 |    0.014 |     0.319 | 0.090 | FALSE   | FALSE       |
+| limma_impute | lod_imputed   | OrL0ux~1369 | A_vs_Ctrl |  3.879 | -0.207 | 0.050 |    -3.293 |     0.063 |  4.468 |   0.026 |   -0.374 |    -0.039 | 0.089 | FALSE   | FALSE       |
+| limpa        | observed      | OrL0ux~1369 | A_vs_Ctrl |  3.649 | -0.618 | 0.028 |    -2.629 |     0.235 | 21.096 |   0.016 |   -1.107 |    -0.129 | 0.925 | FALSE   | TRUE        |
+| lm_impute    | lod_imputed   | OrL0ux~1369 | A_vs_Ctrl |  3.879 | -0.207 | 0.050 |    -3.293 |     0.063 |  4.468 |   0.026 |   -0.374 |    -0.039 | 0.089 | FALSE   | FALSE       |
+| limma_impute | lod_imputed   | OrL0ux~1369 | B_vs_Ctrl |  3.879 | -0.207 | 0.038 |    -3.293 |     0.063 |  4.468 |   0.026 |   -0.374 |    -0.039 | 0.089 | TRUE    | FALSE       |
+| limpa        | observed      | OrL0ux~1369 | B_vs_Ctrl |  3.515 | -0.885 | 0.008 |    -3.214 |     0.275 | 21.096 |   0.004 |   -1.458 |    -0.313 | 0.925 | TRUE    | TRUE        |
+| lm_impute    | lod_imputed   | OrL0ux~1369 | B_vs_Ctrl |  3.879 | -0.207 | 0.038 |    -3.293 |     0.063 |  4.468 |   0.026 |   -0.374 |    -0.039 | 0.089 | TRUE    | FALSE       |
+
+Contrast estimates from lm_impute and limma_impute for proteins that
+plain lm could not estimate
+
+## Peptide-input facades
+
+The peptide-input facades take peptide/precursor-level `LFQData` and
+return protein-level contrasts. They are defined in
+`R/ContrastsChildToParentFacades.R` and use the `*_nested` method keys:
+`lmer_nested`, `ropeca_nested`, `firth_nested`, and `limpa_nested`.
+`firth_nested` is the peptide-input counterpart of the protein-input
+`firth` shown above.
+
+``` r
+fa_lmer <- build_contrast_analysis(
+  lfq_peptide,
+  "~ group_ + (1 | peptide_Id) + (1 | sampleName)",
+  contrasts,
+  method = "lmer_nested"
+)
+
+fa_ropeca <- build_contrast_analysis(
+  lfq_peptide,
+  "~ group_",
+  contrasts,
+  method = "ropeca_nested"
+)
+
+fa_firth_peptide <- build_contrast_analysis(
+  lfq_peptide,
+  "~ group_",
+  contrasts,
+  method = "firth_nested"
+)
+```
+
+`ropeca_nested` aggregates peptide evidence back to proteins, whereas
+`lmer_nested` models the nested peptide structure directly before
+reporting protein-level contrasts. `firth_nested` also reports
+protein-level contrasts: proteins with exactly one peptide are fitted
+without an added peptide term, while proteins with multiple peptides are
+fitted with the lowest hierarchy key added internally.
+
+``` r
+results_peptide <- bind_rows(
+  fa_lmer$get_contrasts(),
+  fa_ropeca$get_contrasts(),
+  fa_firth_peptide$get_contrasts()
+) |>
+  dplyr::select(dplyr::any_of(c(
+    "modelName", "estimate_type", "protein_Id", "contrast", "avgAbd", "diff", "FDR",
+    "statistic", "std.error", "df", "p.value", "conf.low", "conf.high",
+    "sigma"
+  ))) |>
+  dplyr::mutate(
+    significant = FDR < 0.1 & abs(diff) > 0.5
+  )
+
+results_peptide |>
+  dplyr::count(modelName, name = "n_results")
+```
+
+    ## # A tibble: 3 × 2
+    ##   modelName     n_results
+    ##   <chr>             <int>
+    ## 1 firth_nested        160
+    ## 2 lmer_nested         102
+    ## 3 ropeca_nested       157
+
+``` r
+ggplot(results_peptide, aes(x = diff, y = -log10(p.value), color = significant)) +
+  geom_point(alpha = 0.6, size = 1.2) +
+  facet_grid(contrast ~ modelName, scales = "free_y") +
+  geom_vline(xintercept = c(-0.5, 0.5), linetype = "dashed", color = "grey60") +
+  geom_hline(yintercept = -log10(0.1), linetype = "dashed", color = "grey60") +
+  scale_color_manual(values = c(`TRUE` = "firebrick", `FALSE` = "grey70")) +
+  labs(
+    x = "log2 fold change",
+    y = "-log10(p.value)",
+    color = "FDR < 0.1\nand |diff| > 0.5"
+  ) +
+  theme_minimal(base_size = 12)
+```
+
+![Volcano plots for the peptide-level facades. Rows are contrasts,
+columns are
+backends.](ComparingMethods_files/figure-html/volcano_peptide-1.png)
+
+Volcano plots for the peptide-level facades. Rows are contrasts, columns
+are backends.
+
+## Hurdle: intensity and detection combined
+
+`ContrastsHurdleFacade` fits no model of its own. It joins a fitted
+intensity facade and a fitted detection facade (`firth_nested` or
+`binomial_nested`) by protein and contrast, and combines their p-values
+with Fisher’s method, as msqrob2’s hurdle model does. A protein
+estimated by one component only keeps that component’s p-value; a
+protein detected in every sample keeps its intensity p-value. `diff`
+comes from the intensity component, so `lm_impute` is the better
+partner: it also estimates `diff` for proteins detected in one group
+only.
+
+``` r
+fa_hurdle <- ContrastsHurdleFacade$new(fa_lm_impute, fa_firth_peptide)
+results_hurdle <- fa_hurdle$get_contrasts()
+
+results_hurdle |>
+  dplyr::count(contrast, hurdle_components, name = "n_results")
+```
+
+    ## # A tibble: 4 × 3
+    ##   contrast  hurdle_components n_results
+    ##   <chr>     <chr>                 <int>
+    ## 1 A_vs_Ctrl both                     66
+    ## 2 A_vs_Ctrl intensity                14
+    ## 3 B_vs_Ctrl both                     66
+    ## 4 B_vs_Ctrl intensity                14
+
+``` r
+results_hurdle |>
+  dplyr::slice_min(order_by = p.value, n = 5, by = contrast) |>
+  dplyr::select(
+    contrast, protein_Id, diff, p.value.intensity, diff.detection,
+    p.value.detection, p.value, FDR
+  )
+```
+
+    ## # A tibble: 10 × 8
+    ##    contrast protein_Id   diff p.value.intensity diff.detection p.value.detection
+    ##    <chr>    <chr>       <dbl>             <dbl>          <dbl>             <dbl>
+    ##  1 A_vs_Ct… Zci7Jw~70… -0.722          3.15e-11       1.16e+ 0            0.430 
+    ##  2 A_vs_Ct… KVkccD~18… -0.524          1.99e- 9      -2.06e+ 0            0.214 
+    ##  3 A_vs_Ct… 4Y4DYT~09…  0.583          1.99e- 8       1.07e-15            1     
+    ##  4 A_vs_Ct… 0CubNR~08…  0.674          4.07e- 8       1.35e+ 0            0.468 
+    ##  5 A_vs_Ct… 6TevMr~75…  0.765          4.26e- 8      -1.36e-16            1     
+    ##  6 B_vs_Ct… fylZqB~38…  0.717          1.66e-10      -4.48e-16            1     
+    ##  7 B_vs_Ct… f0Cvvj~66…  0.345          3.71e-10       3.82e-16            1     
+    ##  8 B_vs_Ct… XxJoJB~72…  0.587          2.82e- 9      -4.48e-16            1     
+    ##  9 B_vs_Ct… DOwxjj~62…  0.294          1.44e- 7       4.49e-16            1     
+    ## 10 B_vs_Ct… 2FL9I1~16… -0.417          2.08e- 7      -1.31e+ 0            0.0752
+    ## # ℹ 2 more variables: p.value <dbl>, FDR <dbl>
+
+The `hurdle_nested` method does all of this from the peptide data in one
+call: median polish, `lm_impute`, `binomial_firth_nested` for detection,
+and the Fisher combination.
+
+``` r
+fa_hurdle_nested <- build_contrast_analysis(
+  lfq_peptide,
+  "~ group_",
+  contrasts,
+  method = "hurdle_nested"
+)
+fa_hurdle_nested$get_contrasts() |>
+  dplyr::count(contrast, hurdle_components, name = "n_results")
+```
+
+    ## # A tibble: 4 × 3
+    ##   contrast  hurdle_components n_results
+    ##   <chr>     <chr>                 <int>
+    ## 1 A_vs_Ctrl both                     66
+    ## 2 A_vs_Ctrl intensity                14
+    ## 3 B_vs_Ctrl both                     66
+    ## 4 B_vs_Ctrl intensity                14
+
+## Remarks
+
+The facades make it easy to benchmark alternative contrast backends
+without rewriting the analysis pipeline:
+
+- the protein-level facades now enforce aggregation before modelling
+- the `limpa` facade uses its own DPC-based aggregation
+  (`AggregateLimpa`) which produces standard errors propagated into
+  vooma precision weights
+- the peptide-level facades now explicitly require lower-level hierarchy
+  below the analysis subject
+- the shared facade API still makes it straightforward to compare
+  methods once the data level is chosen consistently
+
+The results are comparable at the API level, but the comparison is only
+meaningful when methods using the same biological unit are plotted
+together.
+
+## Session Info
+
+``` r
+sessionInfo()
+```
+
+    ## R version 4.6.2 (2026-10-29)
+    ## Platform: x86_64-pc-linux-gnu
+    ## Running under: Ubuntu 24.04.5 LTS
+    ## 
+    ## Matrix products: default
+    ## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+    ## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
+    ## 
+    ## locale:
+    ##  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+    ##  [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+    ##  [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+    ## [10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+    ## 
+    ## time zone: UTC
+    ## tzcode source: system (glibc)
+    ## 
+    ## attached base packages:
+    ## [1] stats     graphics  grDevices utils     datasets  methods   base     
+    ## 
+    ## other attached packages:
+    ## [1] ggplot2_4.0.3   dplyr_1.2.1     prolfqua_0.99.6
+    ## 
+    ## loaded via a namespace (and not attached):
+    ##   [1] Rdpack_2.6.6           gridExtra_2.3.1        rlang_1.3.0           
+    ##   [4] magrittr_2.0.5         clue_0.3-68            GetoptLong_1.1.1      
+    ##   [7] otel_0.2.0             matrixStats_1.5.0      compiler_4.6.2        
+    ##  [10] mgcv_1.9-4             png_0.1-9              systemfonts_1.3.2     
+    ##  [13] vctrs_0.7.3            pkgconfig_2.0.3        shape_1.4.6.1         
+    ##  [16] crayon_1.5.3           fastmap_1.2.0          backports_1.5.1       
+    ##  [19] labeling_0.4.3         utf8_1.2.6             rmarkdown_2.32        
+    ##  [22] nloptr_2.2.1           ragg_1.5.2             UpSetR_1.4.1          
+    ##  [25] purrr_1.2.2            xfun_0.62              glmnet_5.2            
+    ##  [28] jomo_2.7-6             logistf_1.26.1         cachem_1.1.0          
+    ##  [31] jsonlite_2.0.0         progress_1.2.3         pan_2.0               
+    ##  [34] Rfit_0.27.0            prettyunits_1.2.0      broom_1.0.13          
+    ##  [37] parallel_4.6.2         cluster_2.1.8.3        R6_2.6.1              
+    ##  [40] bslib_0.12.0           stringi_1.8.9          RColorBrewer_1.1-3    
+    ##  [43] limma_3.68.5           boot_1.3-32            rpart_4.1.27          
+    ##  [46] numDeriv_2016.8-1.1    jquerylib_0.1.4        Rcpp_1.1.2            
+    ##  [49] iterators_1.0.14       knitr_1.52             IRanges_2.46.0        
+    ##  [52] Matrix_1.7-6           splines_4.6.2          nnet_7.3-21           
+    ##  [55] tidyselect_1.2.1       yaml_2.3.12            doParallel_1.0.17     
+    ##  [58] codetools_0.2-20       lmerTest_3.2-1         lattice_0.23-1        
+    ##  [61] tibble_3.3.1           plyr_1.8.9             withr_3.0.3           
+    ##  [64] S7_0.2.2               evaluate_1.0.5         desc_1.4.3            
+    ##  [67] survival_3.8-12        circlize_0.4.18        pillar_1.11.1         
+    ##  [70] mice_3.19.0            foreach_1.5.2          stats4_4.6.2          
+    ##  [73] reformulas_0.4.4       plotly_4.12.1          generics_0.1.4        
+    ##  [76] hms_1.1.4              S4Vectors_0.50.3       scales_1.4.0          
+    ##  [79] minqa_1.2.8            glue_1.8.1             tools_4.6.2           
+    ##  [82] data.table_1.18.6.1    lme4_2.1-0             forcats_1.0.1         
+    ##  [85] fs_2.1.0               grid_4.6.2             limpa_1.4.2           
+    ##  [88] tidyr_1.3.2            rbibutils_2.4.1        colorspace_2.1-4      
+    ##  [91] nlme_3.1-171           formula.tools_1.7.1    cli_3.6.6             
+    ##  [94] textshaping_1.0.5      viridisLite_0.4.3      ComplexHeatmap_2.28.0 
+    ##  [97] gtable_0.3.6           sass_0.4.10            digest_0.6.39         
+    ## [100] operator.tools_1.6.3.1 BiocGenerics_0.58.1    ggrepel_0.9.8         
+    ## [103] rjson_0.2.23           htmlwidgets_1.6.4      farver_2.1.2          
+    ## [106] htmltools_0.5.9        pkgdown_2.2.1          lifecycle_1.0.5       
+    ## [109] httr_1.4.9             GlobalOptions_0.1.4    mitml_0.4-5           
+    ## [112] statmod_1.5.2          MASS_7.3-66

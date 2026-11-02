@@ -1,0 +1,56 @@
+# Compute fold changes given Contrasts
+
+Compute fold changes given Contrasts
+
+## Usage
+
+``` r
+get_contrast(data, hierarchy_keys, contrasts)
+```
+
+## Arguments
+
+- data:
+
+  hierarchy_keys of Analysis Configuration
+
+- contrasts:
+
+  list of contrasts to compute
+
+## See also
+
+Other imputation:
+[`missigness_histogram()`](https://fgcz.github.io/prolfqua/reference/missigness_histogram.md),
+[`missingness_per_condition()`](https://fgcz.github.io/prolfqua/reference/missingness_per_condition.md),
+[`missingness_per_condition_cumsum()`](https://fgcz.github.io/prolfqua/reference/missingness_per_condition_cumsum.md),
+[`upset_interaction_missing_stats()`](https://fgcz.github.io/prolfqua/reference/UpSet_interaction_missing_stats.md),
+[`upset_missing_stats()`](https://fgcz.github.io/prolfqua/reference/UpSet_missing_stats.md)
+
+## Examples
+
+``` r
+
+istar <- sim_lfq_data_peptide_config()
+#> creating sampleName from file_name column
+#> completing cases
+#> completing cases done
+#> setup done
+lfq <- LFQData$new(istar$data, istar$config)
+lfq$complete_cases()
+#> completing cases
+
+Contrasts <- c("dilution.b-a" = "group_A - group_B", "dilution.c-e" = "group_A - group_Ctrl")
+
+var <- summarize_stats(lfq)
+var <- prolfqua::make_interaction_column(var, columns = lfq$relevant_factor_keys())
+
+imp <- var |> tidyr::pivot_wider(id_cols = lfq$hierarchy_keys(),
+                        names_from = interaction,
+                        values_from = !!rlang::sym("meanAbundance"))
+
+imputed <- get_contrast(imp, lfq$hierarchy_keys(), Contrasts)
+#> dilution.b-a=group_A - group_B
+#> dilution.c-e=group_A - group_Ctrl
+
+```

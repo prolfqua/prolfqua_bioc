@@ -1,0 +1,59 @@
+# Apply function requiring a matrix to tidy table
+
+Apply function requiring a matrix to tidy table
+
+## Usage
+
+``` r
+apply_to_response_matrix(lfqdata, .func, .funcname = NULL)
+```
+
+## Arguments
+
+- lfqdata:
+
+  LFQData object
+
+- .func:
+
+  function taking and returning a matrix
+
+- .funcname:
+
+  name of function (used for creating new column)
+
+## Value
+
+list with \`data\` (data.frame) and \`colname\` (new column name)
+
+## See also
+
+Other preprocessing:
+[`INTERNAL_FUNCTIONS_BY_FAMILY`](https://fgcz.github.io/prolfqua/reference/INTERNAL_FUNCTIONS_BY_FAMILY.md),
+[`filter_proteins_by_peptide_count()`](https://fgcz.github.io/prolfqua/reference/filter_proteins_by_peptide_count.md),
+[`get_robscales()`](https://fgcz.github.io/prolfqua/reference/get_robscales.md),
+[`nr_B_in_A()`](https://fgcz.github.io/prolfqua/reference/nr_B_in_A.md),
+[`robust_scale()`](https://fgcz.github.io/prolfqua/reference/robust_scale.md),
+[`scale_with_subset()`](https://fgcz.github.io/prolfqua/reference/scale_with_subset.md)
+
+## Examples
+
+``` r
+bb <- sim_lfq_data_peptide_config(Nprot = 100)
+#> creating sampleName from file_name column
+#> completing cases
+#> completing cases done
+#> setup done
+lfqdata <- LFQData$new(bb$data, bb$config)
+res <- apply_to_response_matrix(lfqdata, .func = base::scale)
+#> Joining with `by = join_by(sampleName, isotopeLabel, protein_Id, peptide_Id)`
+stopifnot("abundance_base..scale" %in% colnames(res$data))
+
+res <- apply_to_response_matrix(lfqdata, .func = robust_scale)
+#> Joining with `by = join_by(sampleName, isotopeLabel, protein_Id, peptide_Id)`
+
+if (require("vsn")) {
+  res <- apply_to_response_matrix(lfqdata, .func = vsn::justvsn)
+}
+#> Joining with `by = join_by(sampleName, isotopeLabel, protein_Id, peptide_Id)`
+```

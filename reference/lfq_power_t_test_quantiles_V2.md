@@ -1,0 +1,71 @@
+# estimate sample sizes
+
+estimate sample sizes
+
+## Usage
+
+``` r
+lfq_power_t_test_quantiles_V2(
+  quantile_sd,
+  delta = c(0.59, 1, 2),
+  power = 0.8,
+  sig.level = 0.05,
+  min.n = 1.5
+)
+```
+
+## Arguments
+
+- quantile_sd:
+
+  output of \`summarize_stats_quantiles\`
+
+- delta:
+
+  effect size you are interested in
+
+- power:
+
+  of test
+
+- sig.level:
+
+  P-Value
+
+- min.n:
+
+  smallest n to determine
+
+## See also
+
+Other stats:
+[`INTERNAL_FUNCTIONS_BY_FAMILY`](https://fgcz.github.io/prolfqua/reference/INTERNAL_FUNCTIONS_BY_FAMILY.md),
+[`compute_pooled()`](https://fgcz.github.io/prolfqua/reference/pooled_var.md),
+[`lfq_power_t_test_proteins()`](https://fgcz.github.io/prolfqua/reference/lfq_power_t_test_proteins.md),
+[`plot_stat_density()`](https://fgcz.github.io/prolfqua/reference/plot_stat_density.md),
+[`plot_stat_density_median()`](https://fgcz.github.io/prolfqua/reference/plot_stat_density_median.md),
+[`plot_stat_violin()`](https://fgcz.github.io/prolfqua/reference/plot_stat_violin.md),
+[`plot_stat_violin_median()`](https://fgcz.github.io/prolfqua/reference/plot_stat_violin_median.md),
+[`plot_stdv_vs_mean()`](https://fgcz.github.io/prolfqua/reference/plot_stdv_vs_mean.md),
+[`summarize_stats()`](https://fgcz.github.io/prolfqua/reference/summarize_stats.md)
+
+## Examples
+
+``` r
+
+
+
+bb1 <- prolfqua::sim_lfq_data_peptide_config()
+#> creating sampleName from file_name column
+#> completing cases
+#> completing cases done
+#> setup done
+lfq <- LFQData$new(bb1$data, bb1$config)
+stats_res <- summarize_stats(lfq)
+xx <- summarize_stats_quantiles(stats_res, lfq$relevant_factor_keys(), probs = c(0.5, 0.8))
+bbb <- lfq_power_t_test_quantiles_V2(xx$long)
+bbb <- dplyr::bind_rows(bbb)
+summary <- bbb |>
+ dplyr::select( -N_exact, -quantiles, -sdtrimmed ) |>
+ tidyr::pivot_wider(names_from = delta, values_from = N)
+```

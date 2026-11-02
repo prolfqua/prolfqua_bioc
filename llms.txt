@@ -1,0 +1,751 @@
+# prolfqua - a comprehensive R package for Proteomics Differential Expression Analysis
+
+> **prolfqua_bioc is the Bioconductor copy of
+> [fgcz/prolfqua](https://github.com/fgcz/prolfqua).** It exists only to
+> be pushed to Bioconductor and differs from fgcz/prolfqua only in the
+> version number (Bioconductor numbering) and the R requirement. The
+> package ships three vignettes; all tutorials, the full documentation
+> (<https://fgcz.github.io/prolfqua/>), releases and issue tracking are
+> at [fgcz/prolfqua](https://github.com/fgcz/prolfqua). Make code
+> changes in fgcz/prolfqua; they are merged into this repository from
+> there.
+
+![prolfqua hex sticker](reference/figures/imgfile.png)
+
+The R package contains functions for analyzing mass spectrometry based
+experiments. This package is developed at the [FGCZ](https://fgcz.ch/).
+The package documentation including vignettes can be accessed at
+<https://fgcz.github.io/prolfqua/index.html>
+
+`prolfqua` makes easy things easy while remaining fully hackable.
+
+# How to install prolfqua?
+
+Requirements : A Windows\|Linux\|MacOSX platform with R (\>= 4.1)
+installed.
+
+We recommend to install the package using the latest
+[release](https://github.com/fgcz/prolfqua/releases) Download the
+`prolfqua_X.Y.Z.tar.gz` from the [github release
+page](https://github.com/fgcz/prolfqua/releases) into your working
+directory. and then execute:
+
+    install.packages("./prolfqua_X.Y.Z.tar.gz",repos = NULL, type="source")
+
+To install the package without vignettes from github you can execute in
+R.
+
+    install.packages('remotes')
+    remotes::install_github('fgcz/prolfqua', dependencies = TRUE)
+
+If you want to build the vignettes on your system:
+
+    install.packages('remotes')
+    remotes::install_github('fgcz/prolfqua', build_vignettes = TRUE, dependencies = TRUE)
+
+Let us please know about any installation problems or errors when using
+the package: <https://github.com/fgcz/prolfqua/issues>
+
+# How to get started
+
+How to build a `LFQData` object from a table with protein or peptide
+quantification results, and a table with sample annotation is described
+in more detail here the: [CreatingConfigurations
+vignette](https://fgcz.github.io/prolfqua/articles/CreatingConfigurations.html)
+
+A minimal example for a table with protein abundances is:
+
+``` r
+#Table with abundances
+df <- data.frame(protein_Id = c("tr|A|HUMAN","tr|B|HUMAN","tr|C|HUMAN","tr|D|HUMAN"),
+                 Intensity_A = c(100,10000,10,NA),
+                 Intensity_B = c(NA, 9000, 20, 100),
+                 Intensity_C = c(200,8000,NA,150),
+                 Intensity_D = c(130,11000, 50, 50))
+# Table with sample annotation
+annot <- data.frame(Sample = c("Intensity_A", "Intensity_B", "Intensity_C", "Intensity_D"), Group = c("A","A","B","C"))
+
+# convert into long format
+table_long <- tidyr::pivot_longer(df, starts_with("Intensity_"),names_to = "Sample", values_to = "Intensity")
+
+table_long <- dplyr::inner_join(annot, table_long)
+
+# create TableAnnotation and AnalysisConfiguration
+
+config <- prolfqua::AnalysisConfiguration$new()
+config$file_name = "Sample"
+config$work_intensity = "Intensity"
+config$hierarchy[["protein_Id"]]    <-  "protein_Id"
+config$factors[["Group"]] <- "Group"
+
+# Build LFQData object
+analysis_data <- prolfqua::setup_analysis(table_long, config)
+lfqdata <- prolfqua::LFQData$new(analysis_data, config)
+lfqdata$hierarchy_counts()
+```
+
+Once you have created an `LFQData` you can use prolfqua like this.
+
+``` r
+R.version.string; packageVersion("prolfqua")
+
+## here we simulate peptide level data
+startdata <- sim_lfq_data_peptide_config()
+lfqpep <- LFQData$new(startdata$data, startdata$config)
+
+
+## transform intensities
+lfqpep <- lfqpep$get_Transformer()$log2()$robscale()$lfq
+lfqpep$rename_response("log_peptide_abundance")
+agr <- lfqpep$get_Aggregator()
+lfqpro <- agr$medpolish()
+lfqpro$rename_response("log_protein_abundance")
+
+## plot Figure 3 panels A-D
+pl <- lfqpep$get_Plotter()
+panelA <- pl$intensity_distribution_density() +
+  ggplot2::labs(tag = "A") + ggplot2::theme(legend.position = "none")
+panelB <- agr$plot()$plots[[1]] + ggplot2::labs(tag = "B")
+panelC <- lfqpro$get_Stats()$violin() + ggplot2::labs(tag = "C")
+pl <- lfqpro$get_Plotter()
+panelD <- pl$boxplots()$boxplot[[1]] + ggplot2::labs(tag = "D")
+ggpubr::ggarrange(panelA, panelB, panelC, panelD)
+```
+
+![image](https://github.com/fgcz/prolfqua/assets/1926513/4d5bb64b-6e45-4d00-b029-f08995ac3127)
+
+image
+
+``` r
+## specify model
+modelFunction <-
+ strategy_lm("log_protein_abundance  ~ group_")
+
+## fit models to lfqpro data
+mod <- build_model(
+ lfqpro,
+ modelFunction
+)
+
+## specify contrasts
+Contr <- c("AvsCtrl" = "group_A - group_Ctrl",
+     "BvsCtrl" = "group_B - group_Ctrl",
+     "BvsA" = "group_B - group_A"
+      )
+      
+## determine contrasts and plot
+contrastX <- prolfqua::Contrasts$new(mod, Contr)
+pl <- contrastX$get_Plotter()
+pl$volcano()$FDR
+```
+
+![image](https://github.com/fgcz/prolfqua/assets/1926513/4ae8634b-ce6c-4fa2-8e42-c8bc64a12821)
+
+image
+
+[![SIB in-silico
+talk](https://img.youtube.com/vi/acDiXq2xbOw/1.jpg)](https://www.youtube.com/watch?v=acDiXq2xbOw)
+
+- Watch the [silico
+  talks](https://www.sib.swiss/in-silico-talks/prolfqua-a-comprehensive-r-package-for-protein-differential-expression-analysis)
+- See our article at the [Journal of Proteome
+  Research](https://pubmed.ncbi.nlm.nih.gov/36939687/)
+- See [Bioconductor 2021 Conference
+  poster](https://fgcz-proteomics.uzh.ch/~wolski/PosterBioconductor.html).
+- Watch the lightning (8 min) talk at
+  [EuroBioc2020](https://www.youtube.com/watch?v=jOXU4X7nV9I&t) on
+  YouTube or [slides](https://f1000research.com/slides/9-1476).
+- Read the pkgdown generate website
+  <https://fgcz.github.io/prolfqua/index.html>
+
+# Detailed documentation with R code:
+
+Document’s explaining how to run an analysis with prolfqua are at
+github.io <https://fgcz.github.io/prolfqua/index.html>.
+
+- [Comparing two
+  Conditions](https://fgcz.github.io/prolfqua/articles/Comparing2Groups.html)
+- [QC and protein wise sample size
+  estimation](https://fgcz.github.io/prolfqua/articles/QualityControlAndSampleSizeEstimation.html)
+- [Analysing factorial
+  designs](https://fgcz.github.io/prolfqua/articles/TwoFactorDesigns.html)
+
+Example QC and sample size report
+
+- [QC and sample size
+  Report](https://fgcz.github.io/prolfqua/articles/QualityControlAndSampleSizeEstimation.html)
+
+# Related projects
+
+- prolfquabenchmark - a package to document the performance of prolfqua,
+  MSstats, msqrob, and proda. See documentation:
+  \[<https://prolfqua.github.io/prolfquabenchmark/>\]
+- prolfquapp: Generating Dynamic DEA Reports with the prolfqua R Package
+  <https://github.com/prolfqua/prolfquapp>
+- prophosqua - (scripts for the analysis of phospho experiments)
+  <https://github.com/prolfqua/prophosqua>
+
+# How to cite?
+
+Please do reference the [prolfqua article at Journal of Proteome
+Research](https://pubmed.ncbi.nlm.nih.gov/36939687/)
+
+    @article{prolfquawolski2023,
+    author = {Wolski, Witold E. and Nanni, Paolo and Grossmann, Jonas and d’Errico, Maria and Schlapbach, Ralph and Panse, Christian},
+    title = {prolfqua: A Comprehensive R-Package for Proteomics Differential Expression Analysis},
+    journal = {Journal of Proteome Research},
+    volume = {22},
+    number = {4},
+    pages = {1092--1104},
+    year = {2023},
+    doi = {10.1021/acs.jproteome.2c00441},
+        note = {PMID: 36939687},
+    URL = {https://doi.org/10.1021/acs.jproteome.2c00441},
+    eprint = {https://doi.org/10.1021/acs.jproteome.2c00441}
+    }
+
+## Motivation
+
+The package for **pro**teomics **l**abel **f**ree **qua**ntification
+`prolfqua` (read : prolevka) evolved from a set of scripts and functions
+written in the R programming language to visualize and analyze mass
+spectrometric data, and some of them are still in R packages such as
+quantable, protViz or imsbInfer. For computing protein fold changes
+among treatment conditions, we first used t-test or linear models, then
+started to use functions implemented in the package limma to obtain
+moderated p-values. We did also try to use other packages such as
+MSStats, ROPECA or MSqRob all implemented in R, with the idea to
+integrate the various approaches to protein fold-change estimation.
+Although all these packages were written in R, model specification,
+input and output formats differ widely and wildly, which made our aim to
+use the original implementations challenging. Therefore, and also to
+understand the algorithms used, we attempted to reimplement those
+methods, if possible.
+
+When developing *prolfqua* we were inspired by packages such as *sf* or
+*stars* which use data in long table format and *dplyr* for data
+transformation and ggplot2 for visualization. In the long table format
+each column stores a different attribute, e.g. there is only a single
+column with the raw intensities. In the wide table format there might be
+several columns with the same attribute, e.g. for each recorded sample a
+raw intensity column. In *prolfqua* the data needed for analysis is
+represented using a single data-frame in long format and a configuration
+object. The configuration annotates the table, specifies what
+information is in which column. The results of the statistical modelling
+are stored in data frames. Relying on the long data table format enabled
+us to access a large variety of useful visualizations as well as data
+preprocessing methods implemented in the R packages *dplyr* and
+*ggplot2*.
+
+The use of an annotated table makes integrating new data if provided in
+long formatted tables simple. Hence for Spectronaut or Skyline text
+output, all is needed is a table annotation (see code snipped). Since
+MSStats formatted input is a table in long format *prolefqa* works with
+MSstats formatted files. For software, which writes the data in a wide
+table format, e.g. Maxquant, we implemented methods which first
+transform the data into a long format.
+
+A further design decision, which differentiates `prolfqua` is that it
+embraces and supports R’s linear model formula interface, or R lme4
+formula interface. R’s formula interface for linear models is flexible,
+widely used and documented. The linear model and linear mixed model
+interfaces allow specifying a wide range of essential models, including
+parallel designs, factorial designs, repeated measurements and many
+more. Since `prolfqua` uses R modelling infrastructure directly, we can
+fit all these models to proteomics data. This is not easily possible
+with any other package dedicated to proteomics data analysis. For
+instance, MSStats, although using the same modelling infrastructure,
+supports only a small subset of possible models. Limma, on the other
+hand, supports R formula interface but not for linear mixed models.
+Since the ROPECA package relies on *limma* it is limited to the same
+subset of models. MSqRob is limited to random effects model’s, and it is
+unclear how to fit these models to factorial designs, and how
+interactions among factors can be computed and tested.
+
+The use of R’s formula interface does not limit *prolfqua* to the output
+provided by the R modelling infrastructure. *prolfqua* also implements
+p-value moderations, as in the limma publication or computing
+probabilities of differential regulation, as suggested in the ROPECA
+publication. Moreover, the design decision to use the R formula
+interface allowed us to integrate Bayesian regression models provided by
+the r-package *brms*. Because of that, we can benchmark all those
+methods: linear models, mixed effect models, p-value moderation, ROPECA
+as well as Bayesian regression models within the same framework, which
+enabled us to evaluate the practical relevance of these methods.
+
+Last but not least *prolfqua* supports the LFQ data analysis workflow,
+e.g. computing coefficients of Variations (CV) for peptide and proteins,
+sample size estimation, visualization and summarization of missing data
+and intensity distributions, multivariate analysis of the data, etc. It
+also implements various protein intensity summarization and inference
+methods, e.g. top 3, or Tukeys median polish etc. Last but not least,
+ANOVA analysis or model selection using the likelihood ratio test for
+thousand of proteins can be performed.
+
+To use `prolfqua` knowledge of the R regression model infrastructure is
+of advantage. Acknowledging, the complexity of the formula interface, we
+provide an MSstats emulator, where the model specification is generated
+based on the annotation file structure.
+
+# Related resources
+
+- [proDA](https://www.bioconductor.org/packages/release/bioc/html/proDA.html)
+- [MSstats](https://www.bioconductor.org/packages/release/bioc/html/MSstats.html)
+- [MSQRob](https://github.com/statOmics/MSqRob)
+- [Triqler](https://github.com/statisticalbiotechnology/triqler)
+- [DAPAR](https://bioconductor.org/packages/release/bioc/html/DAPAR.html)
+- [DAPARData](https://bioconductor.org/packages/release/data/experiment/html/DAPARdata.html)
+- [PECA/ROPECA](https://bioconductor.org/packages/release/bioc/html/PECA.html)
+
+# Relevant background information
+
+- [R Companion](https://rcompanion.org/rcompanion/h_01.html)
+- [Extending the Linear Model with
+  R](https://www.maths.bath.ac.uk/~jjf23/ELM/)
+- [Bayesian Data Analysis](https://sites.stat.columbia.edu/gelman/book/)
+- [Bayesian essentials with R - R
+  package](https://CRAN.R-project.org/package=bayess)
+- [Contrasts in R - an example vignette by Rose
+  Maier](https://rstudio-pubs-static.s3.amazonaws.com/65059_586f394d8eb84f84b1baaf56ffb6b47f.html)
+- [Interactions and Contrasts PH525x
+  series](https://genomicsclass.github.io/book/pages/interactions_and_contrasts.html)
+
+# R packages to compute contrasts from linear and other models
+
+- [marginaleffects](https://marginaleffects.com/) Compute and plot
+  predictions, slopes, marginal means, and comparisons (contrasts, risk
+  ratios, odds ratios, etc.) for over 70 classes of statistical models
+  in R.
+- [emmeans](https://CRAN.R-project.org/package=emmeans) Obtain estimated
+  marginal means (EMMs) for many linear, generalized linear, and mixed
+  models.
+- [lmerTest](https://CRAN.R-project.org/package=lmerTest) computes
+  contrast for [lme4](https://CRAN.R-project.org/package=lme4) models
+- [multcomp](https://CRAN.R-project.org/package=multcomp) computes
+  contrast for linear models and adjusts p-values (multiple comparison)
+
+# Future interesting topics or packages to look at
+
+- [modelsummary](https://modelsummary.com/)
+
+- [modelsummary
+  tutorial](https://modelsummary.com/vignettes/get_started.html)
+
+- [edgeR tutorial](https://gist.github.com/jdblischak/11384914)
+
+- [another edgeR
+  tutorial](https://web.stanford.edu/class/bios221/labs/rnaseq/lab_4_rnaseq.html)
+
+- <https://fromthebottomoftheheap.net/2021/02/02/random-effects-in-gams/>
+
+# Sample size estimation based on FDR
+
+- [ssize](https://www.bioconductor.org/packages/release/bioc/html/ssize.html)
+- [ssize.fdr](https://CRAN.R-project.org/package=ssize.fdr)
+  - related article
+    \[<https://journal.r-project.org/archive/2009/RJ-2009-019/RJ-2009-019.pdf>\]
+- [proper](https://bioconductor.org/packages/release/bioc/html/PROPER.html)
+
+# What package name?
+
+What name should we use?
+
+<https://twitter.com/WitoldE/status/1338799648149041156>
+
+- prolfqua - PROteomics Label Free QUAntification package (read
+  prolewka)
+- LFQService - we do proteomics LFQ services at the FGCZ.
+- nalfqua - Not Another Label Free QUAntification package (read nalewka)
+- prodea - proteomics differential expression analysis ?
+
+# Package index
+
+## All functions
+
+- [`AggregateLimpa`](https://fgcz.github.io/prolfqua/reference/AggregateLimpa.md)
+  : AggregateLimpa
+
+- [`AggregateMedpolish`](https://fgcz.github.io/prolfqua/reference/AggregateMedpolish.md)
+  : AggregateMedpolish
+
+- [`AggregateRlm`](https://fgcz.github.io/prolfqua/reference/AggregateRlm.md)
+  : AggregateRlm
+
+- [`AggregateTopN`](https://fgcz.github.io/prolfqua/reference/AggregateTopN.md)
+  : AggregateTopN
+
+- [`AnalysisConfiguration`](https://fgcz.github.io/prolfqua/reference/AnalysisConfiguration.md)
+  : Analysis Configuration
+
+- [`AnovaExtractor`](https://fgcz.github.io/prolfqua/reference/AnovaExtractor.md)
+  : R6 class for extracting ANOVA results as a data frame
+
+- [`ContrastConfiguration`](https://fgcz.github.io/prolfqua/reference/ContrastConfiguration.md)
+  : Contrast Configuration
+
+- [`Contrasts`](https://fgcz.github.io/prolfqua/reference/Contrasts.md)
+  : Estimate contrasts using Wald Test
+
+- [`ContrastsBinomialFirthNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsBinomialFirthNestedFacade.md)
+  : Firth-penalized detection-count facade for nested input
+
+- [`ContrastsBinomialNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsBinomialNestedFacade.md)
+  : Quasibinomial detection-count facade for nested input
+
+- [`ContrastsDEqMSFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsDEqMSFacade.md)
+  : DEqMS contrast analysis facade
+
+- [`ContrastsDEqMSVoomFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsDEqMSVoomFacade.md)
+  : DEqMS contrast analysis with vooma weights facade
+
+- [`ContrastsFirth`](https://fgcz.github.io/prolfqua/reference/ContrastsFirth.md)
+  : Estimate contrasts using Wald Test
+
+- [`ContrastsFirthFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsFirthFacade.md)
+  : Firth logistic missingness contrast analysis facade
+
+- [`ContrastsFirthNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsFirthNestedFacade.md)
+  : Firth logistic missingness contrast analysis facade for nested input
+
+- [`ContrastsHurdleFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsHurdleFacade.md)
+  : Hurdle contrasts: intensity and detection combined with Fisher's
+  method
+
+- [`ContrastsHurdleNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsHurdleNestedFacade.md)
+  : Hurdle contrast facade for nested input
+
+- [`ContrastsInterface`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.md)
+  : Base class for all Contrasts classes
+
+- [`ContrastsLMFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLMFacade.md)
+  : LM contrast analysis facade
+
+- [`ContrastsLMImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLMImputeFacade.md)
+  : LM contrast analysis with LOD imputation facade
+
+- [`ContrastsLimma`](https://fgcz.github.io/prolfqua/reference/ContrastsLimma.md)
+  : Limma-based contrasts (direct limma pipeline)
+
+- [`ContrastsLimmaFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaFacade.md)
+  : Limma contrast analysis facade
+
+- [`ContrastsLimmaImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaImputeFacade.md)
+  : Limma contrast analysis with LOD imputation facade
+
+- [`ContrastsLimmaVoomFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaVoomFacade.md)
+  : Limma-voom contrast analysis facade
+
+- [`ContrastsLimmaVoomImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimmaVoomImputeFacade.md)
+  : Limma-voom contrast analysis with LOD imputation facade
+
+- [`ContrastsLimpaFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimpaFacade.md)
+  : Limpa contrast analysis facade
+
+- [`ContrastsLimpaNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLimpaNestedFacade.md)
+  : Limpa contrast analysis facade for nested input
+
+- [`ContrastsLmerNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLmerNestedFacade.md)
+  : Lmer (mixed-model) contrast analysis facade for nested input
+
+- [`ContrastsModerated`](https://fgcz.github.io/prolfqua/reference/ContrastsModerated.md)
+  : Limma moderated contrasts
+
+- [`ContrastsModeratedDEqMS`](https://fgcz.github.io/prolfqua/reference/ContrastsModeratedDEqMS.md)
+  : DEqMS count-dependent moderated contrasts
+
+- [`ContrastsPlotter`](https://fgcz.github.io/prolfqua/reference/ContrastsPlotter.md)
+  : plot contrasts
+
+- [`ContrastsRLMFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsRLMFacade.md)
+  : RLM contrast analysis facade
+
+- [`ContrastsROPECA`](https://fgcz.github.io/prolfqua/reference/ContrastsROPECA.md)
+  : ROPECA reproducibility-optimization method
+
+- [`ContrastsROPECANestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsROPECANestedFacade.md)
+  : ROPECA contrast analysis facade for nested input
+
+- [`ContrastsRfitFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsRfitFacade.md)
+  : Rfit rank-based regression contrast analysis facade
+
+- [`ContrastsRfitImputeFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsRfitImputeFacade.md)
+  : Rfit rank-regression contrast analysis with LOD imputation facade
+
+- [`ContrastsTable`](https://fgcz.github.io/prolfqua/reference/ContrastsTable.md)
+  : holds results when contrasts are added.
+
+- [`FACADE_REGISTRY`](https://fgcz.github.io/prolfqua/reference/FACADE_REGISTRY.md)
+  : Registry of available contrast facade classes
+
+- [`HierarchyCountsSample`](https://fgcz.github.io/prolfqua/reference/HierarchyCountsSample.md)
+  : Count distinct elements for each level of hierarchy per sample
+
+- [`INTERNAL_FUNCTIONS_BY_FAMILY`](https://fgcz.github.io/prolfqua/reference/INTERNAL_FUNCTIONS_BY_FAMILY.md)
+  : Internal Functions by category
+
+- [`LFQData`](https://fgcz.github.io/prolfqua/reference/LFQData.md) :
+  LFQData R6 class
+
+- [`LFQDataPlotter`](https://fgcz.github.io/prolfqua/reference/LFQDataPlotter.md)
+  : LFQDataPlotter —- Create various visualization of the LFQdata
+
+- [`LFQDataStats`](https://fgcz.github.io/prolfqua/reference/LFQDataStats.md)
+  : Decorates LFQData with methods to compute statistics of interactions
+
+- [`LFQDataSummariser`](https://fgcz.github.io/prolfqua/reference/LFQDataSummariser.md)
+  : Summarize LFQData
+
+- [`LFQDataToSummarizedExperiment()`](https://fgcz.github.io/prolfqua/reference/LFQDataToSummarizedExperiment.md)
+  : converts LFQData object to SummarizedExperiment
+
+- [`LFQDataTransformer`](https://fgcz.github.io/prolfqua/reference/LFQDataTransformer.md)
+  : Decorate LFQData with Methods for transforming Intensities
+
+- [`LR_test()`](https://fgcz.github.io/prolfqua/reference/LR_test.md) :
+  Likelihood ratio test
+
+- [`MissingHelpers`](https://fgcz.github.io/prolfqua/reference/MissingHelpers.md)
+  : Group statistics and limit of detection
+
+- [`Model`](https://fgcz.github.io/prolfqua/reference/Model.md) : R6
+  class representing modelling result
+
+- [`ModelFirth`](https://fgcz.github.io/prolfqua/reference/ModelFirth.md)
+  : R6 class representing modelling result
+
+- [`ModelInterface`](https://fgcz.github.io/prolfqua/reference/ModelInterface.md)
+  : R6 interface class representing modelling result
+
+- [`ModelLimma`](https://fgcz.github.io/prolfqua/reference/ModelLimma.md)
+  : R6 class representing a limma modelling result
+
+- [`PACKAGE_DATA`](https://fgcz.github.io/prolfqua/reference/PACKAGE_DATA.md)
+  : Package Data
+
+- [`R6_extract_values()`](https://fgcz.github.io/prolfqua/reference/R6_extract_values.md)
+  : Extract all value slots in an R6 object
+
+- [`StrategyBinomial`](https://fgcz.github.io/prolfqua/reference/StrategyBinomial.md)
+  : Quasibinomial detection-count strategy
+
+- [`StrategyBinomialFirth`](https://fgcz.github.io/prolfqua/reference/StrategyBinomialFirth.md)
+  : Firth-penalized quasibinomial detection-count strategy
+
+- [`StrategyLM`](https://fgcz.github.io/prolfqua/reference/StrategyLM.md)
+  : Linear model strategy (R6 class)
+
+- [`StrategyLimma`](https://fgcz.github.io/prolfqua/reference/StrategyLimma.md)
+  : R6 class for limma modelling strategy
+
+- [`StrategyLimpa`](https://fgcz.github.io/prolfqua/reference/StrategyLimpa.md)
+  : R6 class for limpa modelling strategy
+
+- [`StrategyLmer`](https://fgcz.github.io/prolfqua/reference/StrategyLmer.md)
+  : Linear mixed-effects model strategy (R6 class)
+
+- [`StrategyLogistf`](https://fgcz.github.io/prolfqua/reference/StrategyLogistf.md)
+  : Firth's logistic regression strategy (R6 class)
+
+- [`StrategyRLM`](https://fgcz.github.io/prolfqua/reference/StrategyRLM.md)
+  : Robust linear model strategy (R6 class)
+
+- [`StrategyRfit`](https://fgcz.github.io/prolfqua/reference/StrategyRfit.md)
+  : Rank-based regression strategy (R6 class)
+
+- [`upset_interaction_missing_stats()`](https://fgcz.github.io/prolfqua/reference/UpSet_interaction_missing_stats.md)
+  : UpSetR plot from interaction_missing_stats
+
+- [`adjust_p_values()`](https://fgcz.github.io/prolfqua/reference/adjust_p_values.md)
+  : adjust columns
+
+- [`annotation_add_contrasts()`](https://fgcz.github.io/prolfqua/reference/annotation_add_contrasts.md)
+  : DRY function: process and export annotated contrasts
+
+- [`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md)
+  : Build a contrast analysis using one of several statistical methods
+
+- [`build_model()`](https://fgcz.github.io/prolfqua/reference/build_model.md)
+  : Build protein models from data
+
+- [`build_model_glm_peptide()`](https://fgcz.github.io/prolfqua/reference/build_model_glm_peptide.md)
+  : Build Firth logistic model for nested LFQData
+
+- [`build_model_glm_protein()`](https://fgcz.github.io/prolfqua/reference/build_model_glm_protein.md)
+  : Build Firth logistic model for aggregated LFQData
+
+- [`build_model_impute()`](https://fgcz.github.io/prolfqua/reference/build_model_impute.md)
+  : Build protein models with LOD imputation for failed fits
+
+- [`build_model_limma()`](https://fgcz.github.io/prolfqua/reference/build_model_limma.md)
+  : Build limma model from LFQData
+
+- [`build_model_limma_impute()`](https://fgcz.github.io/prolfqua/reference/build_model_limma_impute.md)
+  : Build limma model with LOD imputation for failed proteins
+
+- [`build_model_limma_voom()`](https://fgcz.github.io/prolfqua/reference/build_model_limma_voom.md)
+  : Build limma model with vooma precision weights (proteomics)
+
+- [`build_model_limma_voom_impute()`](https://fgcz.github.io/prolfqua/reference/build_model_limma_voom_impute.md)
+  : Build limma-voom model with LOD imputation for failed proteins
+
+- [`build_model_limpa()`](https://fgcz.github.io/prolfqua/reference/build_model_limpa.md)
+  : Build limpa vooma model from aggregated LFQData
+
+- [`center_to_reference_cfg()`](https://fgcz.github.io/prolfqua/reference/center_to_reference_cfg.md)
+  : center to reference
+
+- [`df.residual(`*`<rfit_prolfqua>`*`)`](https://fgcz.github.io/prolfqua/reference/df.residual.rfit_prolfqua.md)
+  : Residual degrees of freedom for an augmented rfit fit
+
+- [`find_package_file()`](https://fgcz.github.io/prolfqua/reference/find_package_file.md)
+  : find file stored in package
+
+- [`generate_contrasts()`](https://fgcz.github.io/prolfqua/reference/generate_contrasts.md)
+  : Combined generate_contrasts
+
+- [`generate_contrasts_for_factor()`](https://fgcz.github.io/prolfqua/reference/generate_contrasts_for_factor.md)
+  : Single-factor contrasts (pairwise comparisons)
+
+- [`get_uniprot_id_from_fasta_header()`](https://fgcz.github.io/prolfqua/reference/get_uniprot_id_from_fasta_header.md)
+  : Extracts uniprot ID
+
+- [`group_label()`](https://fgcz.github.io/prolfqua/reference/group_label.md)
+  : group label function
+
+- [`impute_from_model()`](https://fgcz.github.io/prolfqua/reference/impute_from_model.md)
+  : Fill missing responses with predictions from per-subject linear
+  models
+
+- [`interaction_contrasts()`](https://fgcz.github.io/prolfqua/reference/interaction_contrasts.md)
+  : Interaction contrasts (difference of differences)
+
+- [`is_contaminant()`](https://fgcz.github.io/prolfqua/reference/is_contaminant.md)
+  : Detect contaminant identifiers
+
+- [`is_decoy()`](https://fgcz.github.io/prolfqua/reference/is_decoy.md)
+  : Detect decoy / reverse-database identifiers
+
+- [`level_specific_contrasts()`](https://fgcz.github.io/prolfqua/reference/level_specific_contrasts.md)
+  : Level-specific contrasts (per secondary level)
+
+- [`list_facades()`](https://fgcz.github.io/prolfqua/reference/list_facades.md)
+  : List currently registered contrast facades
+
+- [`list_to_AnalysisConfiguration()`](https://fgcz.github.io/prolfqua/reference/list_to_AnalysisConfiguration.md)
+  : read minimal yaml to reconstruct configuration
+
+- [`list_to_ContrastConfiguration()`](https://fgcz.github.io/prolfqua/reference/list_to_ContrastConfiguration.md)
+  : Rebuild a ContrastConfiguration from a list
+
+- [`lookup_facade()`](https://fgcz.github.io/prolfqua/reference/lookup_facade.md)
+  : Look up a contrast facade by short name
+
+- [`main_effect_contrasts()`](https://fgcz.github.io/prolfqua/reference/main_effect_contrasts.md)
+  : main effects contrasts
+
+- [`matrix_to_tibble()`](https://fgcz.github.io/prolfqua/reference/matrix_to_tibble.md)
+  : matrix or data.frame to tibble (taken from tidyquant)
+
+- [`merge_contrasts_results()`](https://fgcz.github.io/prolfqua/reference/merge_contrasts_results.md)
+  : Merge contrast results coming from two different model.
+
+- [`nr_children_experiment()`](https://fgcz.github.io/prolfqua/reference/nr_children_experiment.md)
+  : Max nr_children across samples per hierarchy unit
+
+- [`nr_features_experiment()`](https://fgcz.github.io/prolfqua/reference/nr_features_experiment.md)
+  : Count distinct child features per hierarchy unit
+
+- [`nr_obs_sample()`](https://fgcz.github.io/prolfqua/reference/nr_obs_sample.md)
+  : Aggregates e.g. protein abundances from peptide abundances
+
+- [`pivot_model_contrasts_to_wide()`](https://fgcz.github.io/prolfqua/reference/pivot_model_contrasts_to_wide.md)
+  : pivot model contrasts matrix to wide format produced by
+  \`contrasts_linfct\` and ...
+
+- [`prolfqua_data()`](https://fgcz.github.io/prolfqua/reference/prolfqua_data.md)
+  : load data from prolfqua
+
+- [`register_facade()`](https://fgcz.github.io/prolfqua/reference/register_facade.md)
+  : Register a contrast facade class
+
+- [`setup_analysis()`](https://fgcz.github.io/prolfqua/reference/setup_analysis.md)
+  :
+
+  Setup a tidy table compatible with a `AnalysisConfiguration`
+
+- [`sigma(`*`<rfit_prolfqua>`*`)`](https://fgcz.github.io/prolfqua/reference/sigma.rfit_prolfqua.md)
+  : Scale estimate for an augmented rfit fit
+
+- [`sim_lfq_data()`](https://fgcz.github.io/prolfqua/reference/sim_lfq_data.md)
+  : simulate protein level data with two groups
+
+- [`sim_lfq_data_2factor_config()`](https://fgcz.github.io/prolfqua/reference/sim_lfq_data_2Factor_config.md)
+  : Simulate data, protein, with config with 2 factors Treatment and
+  Background
+
+- [`sim_lfq_data_peptide_config()`](https://fgcz.github.io/prolfqua/reference/sim_lfq_data_peptide_config.md)
+  : Simulate data, protein and peptide, with config
+
+- [`sim_lfq_data_protein_config()`](https://fgcz.github.io/prolfqua/reference/sim_lfq_data_protein_config.md)
+  : Simulate data, protein, with config
+
+- [`strategy_logistf()`](https://fgcz.github.io/prolfqua/reference/strategy.md)
+  [`strategy_rfit()`](https://fgcz.github.io/prolfqua/reference/strategy.md)
+  [`strategy_lmer()`](https://fgcz.github.io/prolfqua/reference/strategy.md)
+  [`strategy_lm()`](https://fgcz.github.io/prolfqua/reference/strategy.md)
+  [`strategy_rlm()`](https://fgcz.github.io/prolfqua/reference/strategy.md)
+  : Create Firth's logistic regression strategy
+
+- [`strategy_binomial()`](https://fgcz.github.io/prolfqua/reference/strategy_binomial.md)
+  : Create a quasibinomial detection-count strategy
+
+- [`strategy_binomial_firth()`](https://fgcz.github.io/prolfqua/reference/strategy_binomial_firth.md)
+  : Create a Firth-penalized quasibinomial detection-count strategy
+
+- [`strategy_limma()`](https://fgcz.github.io/prolfqua/reference/strategy_limma.md)
+  : Create limma modelling strategy
+
+- [`strategy_limpa()`](https://fgcz.github.io/prolfqua/reference/strategy_limpa.md)
+  : Create limpa modelling strategy
+
+- [`summarize_stats_factors()`](https://fgcz.github.io/prolfqua/reference/summarize_stats_factors.md)
+  : compute var sd etc for all factor levels
+
+- [`table_facade()`](https://fgcz.github.io/prolfqua/reference/table_facade.md)
+  : table facade to easily switch implementations
+
+- [`vcov(`*`<rfit_prolfqua>`*`)`](https://fgcz.github.io/prolfqua/reference/vcov.rfit_prolfqua.md)
+  : Named variance-covariance matrix for an augmented rfit fit
+
+- [`volcano_plotly()`](https://fgcz.github.io/prolfqua/reference/volcano_Plotly.md)
+  : volcano plotly
+
+- [`which_missing()`](https://fgcz.github.io/prolfqua/reference/which_missing.md)
+  : add missing values to x vector based on the values of x
+
+# Articles
+
+### All vignettes
+
+- [Comparing Two Groups with
+  prolfqua](https://fgcz.github.io/prolfqua/articles/Comparing2Groups.md):
+- [Comparing modelling methods on one
+  dataset](https://fgcz.github.io/prolfqua/articles/ComparingMethods.md):
+- [Contrasts from
+  factors](https://fgcz.github.io/prolfqua/articles/ContrastsFromFactors.md):
+- [Importing your data:
+  AnalysisConfiguration](https://fgcz.github.io/prolfqua/articles/CreatingConfigurations.md):
+- [Under the hood: strategy, model and
+  contrasts](https://fgcz.github.io/prolfqua/articles/LowLevelAPI.md):
+- [Filling the gaps: model-based imputation for heatmaps and
+  PCA](https://fgcz.github.io/prolfqua/articles/ModelBasedImputation.md):
+- [All modelling methods at a
+  glance](https://fgcz.github.io/prolfqua/articles/ModellingMethods.md):
+- [Introduction to
+  prolfqua](https://fgcz.github.io/prolfqua/articles/prolfqua.md):
+- [QC and Sample Size
+  Estimation](https://fgcz.github.io/prolfqua/articles/QualityControlAndSampleSizeEstimation.md):
+- [Simulating peptide-level
+  data](https://fgcz.github.io/prolfqua/articles/SimulateData.md):
+- [Two-factor
+  designs](https://fgcz.github.io/prolfqua/articles/TwoFactorDesigns.md):
