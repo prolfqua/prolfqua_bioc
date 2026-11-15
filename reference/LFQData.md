@@ -61,6 +61,8 @@ Other LFQData:
 
 - [`LFQData$remove_decoys()`](#method-LFQData-remove_decoys)
 
+- [`LFQData$remove_contaminants()`](#method-LFQData-remove_contaminants)
+
 - [`LFQData$decoy_proportion()`](#method-LFQData-decoy_proportion)
 
 - [`LFQData$complete_cases()`](#method-LFQData-complete_cases)
@@ -267,7 +269,7 @@ is data transformed
 
 #### Returns
 
-logical
+logical when called without argument, otherwise self (invisible)
 
 ------------------------------------------------------------------------
 
@@ -293,15 +295,36 @@ self
 
 ### `LFQData$filter_proteins_by_peptide_count()`
 
-remove proteins with less than X peptides
+remove parents (e.g. proteins) with fewer than \`threshold\` distinct
+children (e.g. peptides) and add the count as a column. By default the
+second hierarchy level is counted within the first, independent of
+\`hierarchy_depth\`; a hierarchy with one level is an error.
 
 #### Usage
 
-    LFQData$filter_proteins_by_peptide_count()
+    LFQData$filter_proteins_by_peptide_count(
+      threshold = NULL,
+      parent = NULL,
+      child = NULL
+    )
+
+#### Arguments
+
+- `threshold`:
+
+  minimum number of children, default \`config\$min_peptides_protein\`
+
+- `parent`:
+
+  parent key column, default the first hierarchy key
+
+- `child`:
+
+  child key column, default the second hierarchy key
 
 #### Returns
 
-self
+self (invisible)
 
 ------------------------------------------------------------------------
 
@@ -321,6 +344,24 @@ a new decoy-free LFQData (self is not modified).
 #### Returns
 
 LFQData without decoys
+
+------------------------------------------------------------------------
+
+### `LFQData$remove_contaminants()`
+
+remove contaminant entries (rows whose top-level hierarchy id, e.g.
+protein_Id, is a contaminant). Detection uses the configured
+\`pattern_contaminants\` unioned with the built-in defaults (see
+[`is_contaminant`](https://fgcz.github.io/prolfqua/reference/is_contaminant.md)).
+Returns a new contaminant-free LFQData (self is not modified).
+
+#### Usage
+
+    LFQData$remove_contaminants()
+
+#### Returns
+
+LFQData without contaminants
 
 ------------------------------------------------------------------------
 
@@ -515,7 +556,8 @@ return the tidy (long-format) data frame
 
 ### `LFQData$rename_response()`
 
-new name of response variable
+new name of response variable. Renaming to the current response name
+changes nothing; renaming to another existing column is an error.
 
 #### Usage
 
@@ -526,6 +568,10 @@ new name of response variable
 - `newname`:
 
   default Intensity
+
+#### Returns
+
+self (invisible)
 
 ------------------------------------------------------------------------
 
@@ -630,15 +676,15 @@ get Aggregator
 
 - `method`:
 
-  aggregation method: "medpolish", "rlm", or "topN"
+  aggregation method: "medpolish", "rlm", "topN", or "limpa"
 
 - `...`:
 
-  passed to aggregator constructor (e.g. prefix, N, func)
+  passed to aggregator constructor (e.g. prefix, N, func, dpc_slope)
 
 #### Returns
 
-AggregateMedpolish, AggregateRlm, or AggregateTopN
+AggregateMedpolish, AggregateRlm, AggregateTopN, or AggregateLimpa
 
 ------------------------------------------------------------------------
 
@@ -666,7 +712,7 @@ istar <- sim_lfq_data_peptide_config()
 #> setup done
 lfqdata <- LFQData$new(istar$data, istar$config)
 lfqdata$filter_proteins_by_peptide_count()
-#> removing proteins with less than: 2 peptpides
+#> removing protein_Id with fewer than 2 peptide_Id
 #> Column added : nr_peptide_Id_IN_protein_Id
 tmp <- lfqdata$data_wide()
 testthat::expect_equal(nrow(tmp$data) , nrow(tmp$rowdata))

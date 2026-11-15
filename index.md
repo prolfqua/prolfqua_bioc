@@ -210,19 +210,23 @@ Example QC and sample size report
 Please do reference the [prolfqua article at Journal of Proteome
 Research](https://pubmed.ncbi.nlm.nih.gov/36939687/)
 
-    @article{prolfquawolski2023,
-    author = {Wolski, Witold E. and Nanni, Paolo and Grossmann, Jonas and d’Errico, Maria and Schlapbach, Ralph and Panse, Christian},
-    title = {prolfqua: A Comprehensive R-Package for Proteomics Differential Expression Analysis},
-    journal = {Journal of Proteome Research},
-    volume = {22},
-    number = {4},
-    pages = {1092--1104},
-    year = {2023},
-    doi = {10.1021/acs.jproteome.2c00441},
-        note = {PMID: 36939687},
-    URL = {https://doi.org/10.1021/acs.jproteome.2c00441},
-    eprint = {https://doi.org/10.1021/acs.jproteome.2c00441}
-    }
+    R> citation('prolfqua')
+    To cite prolfqua in publications use:
+
+      Wolski WE, Nanni P, Grossmann J, d'Errico M, Schlapbach R, Panse C (2023). "prolfqua : A Comprehensive R-Package for Proteomics Differential Expression Analysis." _J. Proteome Res. 2023, 22, 4,
+      1092-1104_. doi:10.1021/acs.jproteome.2c00441 <https://doi.org/10.1021/acs.jproteome.2c00441>.
+
+    A BibTeX entry for LaTeX users is
+
+      @Article{,
+        title = {{prolfqua} : A Comprehensive R-Package for Proteomics Differential Expression Analysis},
+        author = {Witold Eryk Wolski and Paolo Nanni and Jonas Grossmann and Maria d'Errico and Ralph Schlapbach and Christian Panse},
+        journal = {J. Proteome Res. 2023, 22, 4, 1092-1104},
+        year = {2023},
+        month = {March},
+        day = {20},
+        doi = {10.1021/acs.jproteome.2c00441},
+      }
 
 ## Motivation
 

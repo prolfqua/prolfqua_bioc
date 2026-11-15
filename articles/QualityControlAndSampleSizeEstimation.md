@@ -8,7 +8,7 @@ read a “proteinGroups.txt” file from the MaxQuant software, and next, we
 specify a prolfqua configuration. Afterward, the data is transformed and
 normalized, and plots describing the data are generated. Finally, we
 estimate how many samples are necessary to properly quantify a two-fold
-change for $90$ of all the proteins with a power of $0.8$.
+change for $`90%`$ of all the proteins with a power of $`0.8`$.
 
 ## Loading data
 
@@ -151,8 +151,8 @@ Scatter plot of standard deviation vs mean
 
 ### Normalize protein intensities
 
-Next, we want to normalize the data by first $\log_{2}$ transforming it
-and then z-scaling. The $log_{2}$ stabilizes the variance, while the
+Next, we want to normalize the data by first $`\log_2`$ transforming it
+and then z-scaling. The $`log_2`$ stabilizes the variance, while the
 z-scaling removes systematic differences from the samples.
 
 ``` r
@@ -382,15 +382,15 @@ x <- x |> dplyr::filter(group_ == "A") |> dplyr::arrange(desc(N),protein_Id)
 prolfqua::table_facade(x[1:7,], caption = "Sample size for each protein")
 ```
 
-| protein_Id  | peptide_Id | isotopeLabel | group\_ | nrReplicates | nrMeasured | nrNAs |        sd |       var | meanAbundance | medianAbundance | interaction | delta |  N_exact |   N |
-|:------------|:-----------|:-------------|:--------|-------------:|-----------:|------:|----------:|----------:|--------------:|----------------:|:------------|------:|---------:|----:|
-| 0EfVhX~0087 | dJkdz7so   | light        | A       |            4 |          2 |     2 | 0.1816806 | 0.0330078 |      3.971469 |        3.971469 | group_A     |     1 | 2.023422 |   3 |
-| HvIpHG~9079 | opjydeWJ   | light        | A       |            4 |          3 |     1 | 0.2392614 | 0.0572460 |      4.094835 |        3.997946 | group_A     |     1 | 2.344670 |   3 |
-| JcKVfU~9653 | 9LMQBevj   | light        | A       |            4 |          4 |     0 | 0.1871014 | 0.0350069 |      5.482917 |        5.406550 | group_A     |     1 | 2.050429 |   3 |
-| 0EfVhX~0087 | ahQLlQY7   | light        | A       |            4 |          4 |     0 | 0.0620097 | 0.0038452 |      4.742744 |        4.735435 | group_A     |     1 | 1.533666 |   2 |
-| 0EfVhX~0087 | ITLb4x1q   | light        | A       |            4 |          3 |     1 | 0.1535287 | 0.0235710 |      4.190351 |        4.178250 | group_A     |     1 | 1.892113 |   2 |
-| 7cbcrd~5725 | D5dQ4nKk   | light        | A       |            4 |          4 |     0 | 0.0508679 | 0.0025875 |      4.956022 |        4.964554 | group_A     |     1 | 1.500024 |   2 |
-| 9VUkAq~4703 | eIC06D7g   | light        | A       |            4 |          4 |     0 | 0.0945821 | 0.0089458 |      4.159728 |        4.182873 | group_A     |     1 | 1.654299 |   2 |
+| protein_Id | peptide_Id | isotopeLabel | group\_ | nrReplicates | nrMeasured | nrNAs | sd | var | meanAbundance | medianAbundance | interaction | delta | N_exact | N |
+|:---|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|:---|---:|---:|---:|
+| 0EfVhX~0087 | dJkdz7so | light | A | 4 | 2 | 2 | 0.1816806 | 0.0330078 | 3.971469 | 3.971469 | group_A | 1 | 2.023422 | 3 |
+| HvIpHG~9079 | opjydeWJ | light | A | 4 | 3 | 1 | 0.2392614 | 0.0572460 | 4.094835 | 3.997946 | group_A | 1 | 2.344670 | 3 |
+| JcKVfU~9653 | 9LMQBevj | light | A | 4 | 4 | 0 | 0.1871014 | 0.0350069 | 5.482917 | 5.406550 | group_A | 1 | 2.050429 | 3 |
+| 0EfVhX~0087 | ahQLlQY7 | light | A | 4 | 4 | 0 | 0.0620097 | 0.0038452 | 4.742744 | 4.735435 | group_A | 1 | 1.533666 | 2 |
+| 0EfVhX~0087 | ITLb4x1q | light | A | 4 | 3 | 1 | 0.1535287 | 0.0235710 | 4.190351 | 4.178250 | group_A | 1 | 1.892113 | 2 |
+| 7cbcrd~5725 | D5dQ4nKk | light | A | 4 | 4 | 0 | 0.0508679 | 0.0025875 | 4.956022 | 4.964554 | group_A | 1 | 1.500024 | 2 |
+| 9VUkAq~4703 | eIC06D7g | light | A | 4 | 4 | 0 | 0.0945821 | 0.0089458 | 4.159728 | 4.182873 | group_A | 1 | 1.654299 | 2 |
 
 Sample size for each protein
 
@@ -418,11 +418,11 @@ sessionInfo()
 
     ## R version 4.6.2 (2026-10-29)
     ## Platform: x86_64-pc-linux-gnu
-    ## Running under: Ubuntu 24.04.5 LTS
+    ## Running under: Ubuntu 26.04.1 LTS
     ## 
     ## Matrix products: default
     ## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
-    ## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
+    ## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.32.so;  LAPACK version 3.12.0
     ## 
     ## locale:
     ##  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
@@ -442,7 +442,7 @@ sessionInfo()
     ## loaded via a namespace (and not attached):
     ##   [1] Rdpack_2.6.6           gridExtra_2.3.1        rlang_1.3.0           
     ##   [4] magrittr_2.0.5         clue_0.3-68            GetoptLong_1.1.1      
-    ##   [7] otel_0.2.0             matrixStats_1.5.0      compiler_4.6.2        
+    ##   [7] otel_0.3.0             matrixStats_1.5.0      compiler_4.6.2        
     ##  [10] mgcv_1.9-4             png_0.1-9              systemfonts_1.3.2     
     ##  [13] vctrs_0.7.3            pkgconfig_2.0.3        shape_1.4.6.1         
     ##  [16] crayon_1.5.3           fastmap_1.2.0          backports_1.5.1       
@@ -461,12 +461,12 @@ sessionInfo()
     ##  [55] tidyselect_1.2.1       yaml_2.3.12            doParallel_1.0.17     
     ##  [58] codetools_0.2-20       lattice_0.23-1         tibble_3.3.1          
     ##  [61] plyr_1.8.9             shiny_1.14.0           withr_3.0.3           
-    ##  [64] S7_0.2.2               prolfqua_0.99.8        evaluate_1.0.5        
+    ##  [64] S7_0.2.2               prolfqua_0.99.9        evaluate_1.0.5        
     ##  [67] desc_1.4.3             survival_3.8-12        circlize_0.4.18       
     ##  [70] pillar_1.11.1          BiocManager_1.30.27    mice_3.19.0           
     ##  [73] KernSmooth_2.23-27     foreach_1.5.2          stats4_4.6.2          
     ##  [76] reformulas_0.4.4       plotly_4.12.1          generics_0.1.4        
-    ##  [79] S4Vectors_0.50.3       ggplot2_4.0.3          scales_1.4.0          
+    ##  [79] S4Vectors_0.50.3       ggplot2_4.0.4          scales_1.4.0          
     ##  [82] minqa_1.2.8            xtable_1.8-8           glue_1.8.1            
     ##  [85] tools_4.6.2            data.table_1.18.6.1    lme4_2.1-0            
     ##  [88] forcats_1.0.1          fs_2.1.0               grid_4.6.2            

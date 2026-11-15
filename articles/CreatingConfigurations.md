@@ -227,11 +227,11 @@ sessionInfo()
 
     ## R version 4.6.2 (2026-10-29)
     ## Platform: x86_64-pc-linux-gnu
-    ## Running under: Ubuntu 24.04.5 LTS
+    ## Running under: Ubuntu 26.04.1 LTS
     ## 
     ## Matrix products: default
     ## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
-    ## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
+    ## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.32.so;  LAPACK version 3.12.0
     ## 
     ## locale:
     ##  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
@@ -251,7 +251,7 @@ sessionInfo()
     ## loaded via a namespace (and not attached):
     ##   [1] Rdpack_2.6.6           gridExtra_2.3.1        rlang_1.3.0           
     ##   [4] magrittr_2.0.5         clue_0.3-68            GetoptLong_1.1.1      
-    ##   [7] otel_0.2.0             matrixStats_1.5.0      compiler_4.6.2        
+    ##   [7] otel_0.3.0             matrixStats_1.5.0      compiler_4.6.2        
     ##  [10] mgcv_1.9-4             png_0.1-9              systemfonts_1.3.2     
     ##  [13] vctrs_0.7.3            pkgconfig_2.0.3        shape_1.4.6.1         
     ##  [16] crayon_1.5.3           fastmap_1.2.0          backports_1.5.1       
@@ -269,11 +269,11 @@ sessionInfo()
     ##  [52] tidyselect_1.2.1       yaml_2.3.12            doParallel_1.0.17     
     ##  [55] codetools_0.2-20       lattice_0.23-1         tibble_3.3.1          
     ##  [58] plyr_1.8.9             withr_3.0.3            S7_0.2.2              
-    ##  [61] prolfqua_0.99.8        evaluate_1.0.5         desc_1.4.3            
+    ##  [61] prolfqua_0.99.9        evaluate_1.0.5         desc_1.4.3            
     ##  [64] survival_3.8-12        circlize_0.4.18        pillar_1.11.1         
     ##  [67] BiocManager_1.30.27    mice_3.19.0            foreach_1.5.2         
     ##  [70] stats4_4.6.2           reformulas_0.4.4       plotly_4.12.1         
-    ##  [73] generics_0.1.4         S4Vectors_0.50.3       ggplot2_4.0.3         
+    ##  [73] generics_0.1.4         S4Vectors_0.50.3       ggplot2_4.0.4         
     ##  [76] scales_1.4.0           minqa_1.2.8            glue_1.8.1            
     ##  [79] tools_4.6.2            data.table_1.18.6.1    lme4_2.1-0            
     ##  [82] forcats_1.0.1          fs_2.1.0               grid_4.6.2            

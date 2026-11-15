@@ -437,26 +437,26 @@ if (length(lm_missing_proteins) > 0) {
 }
 ```
 
-| modelName    | estimate_type | protein_Id  | contrast  | avgAbd |   diff |   FDR | statistic | std.error |     df | p.value | conf.low | conf.high | sigma | rescued | significant |
-|:-------------|:--------------|:------------|:----------|-------:|-------:|------:|----------:|----------:|-------:|--------:|---------:|----------:|------:|:--------|:------------|
-| limma_impute | lod_imputed   | 8mS8sK~0150 | A_vs_Ctrl |  3.776 |  0.000 | 1.000 |     0.000 |     0.063 |  4.468 |   1.000 |   -0.167 |     0.167 | 0.089 | TRUE    | FALSE       |
-| limpa        | observed      | 8mS8sK~0150 | A_vs_Ctrl |  3.146 | -0.298 | 0.415 |    -1.048 |     0.284 | 21.096 |   0.306 |   -0.888 |     0.293 | 0.895 | TRUE    | FALSE       |
-| lm_impute    | lod_imputed   | 8mS8sK~0150 | A_vs_Ctrl |  3.776 |  0.000 | 1.000 |     0.000 |     0.063 |  4.468 |   1.000 |   -0.167 |     0.167 | 0.089 | TRUE    | FALSE       |
-| limma_impute | lod_imputed   | 8mS8sK~0150 | B_vs_Ctrl |  3.784 |  0.018 | 0.803 |     0.279 |     0.063 |  4.468 |   0.792 |   -0.150 |     0.185 | 0.089 | FALSE   | FALSE       |
-| limpa        | observed      | 8mS8sK~0150 | B_vs_Ctrl |  3.420 |  0.251 | 0.434 |     0.897 |     0.280 | 21.096 |   0.380 |   -0.330 |     0.832 | 0.895 | FALSE   | FALSE       |
-| lm_impute    | lod_imputed   | 8mS8sK~0150 | B_vs_Ctrl |  3.784 |  0.018 | 0.803 |     0.279 |     0.063 |  4.468 |   0.792 |   -0.150 |     0.185 | 0.089 | FALSE   | FALSE       |
-| limma_impute | lod_imputed   | DTCi0N~0734 | A_vs_Ctrl |  3.902 | -0.253 | 0.017 |    -3.996 |     0.063 |  6.468 |   0.006 |   -0.405 |    -0.101 | 0.090 | TRUE    | FALSE       |
-| limpa        | observed      | DTCi0N~0734 | A_vs_Ctrl |  3.622 | -0.826 | 0.016 |    -2.932 |     0.282 | 21.096 |   0.008 |   -1.411 |    -0.240 | 1.042 | TRUE    | TRUE        |
-| lm_impute    | lod_imputed   | DTCi0N~0734 | A_vs_Ctrl |  3.902 | -0.253 | 0.017 |    -3.997 |     0.063 |  6.468 |   0.006 |   -0.405 |    -0.101 | 0.090 | TRUE    | FALSE       |
-| limma_impute | lod_imputed   | DTCi0N~0734 | B_vs_Ctrl |  4.112 |  0.166 | 0.051 |     2.626 |     0.063 |  6.468 |   0.037 |    0.014 |     0.319 | 0.090 | FALSE   | FALSE       |
-| limpa        | observed      | DTCi0N~0734 | B_vs_Ctrl |  4.136 |  0.201 | 0.539 |     0.722 |     0.279 | 21.096 |   0.478 |   -0.378 |     0.780 | 1.042 | FALSE   | FALSE       |
-| lm_impute    | lod_imputed   | DTCi0N~0734 | B_vs_Ctrl |  4.112 |  0.166 | 0.051 |     2.626 |     0.063 |  6.468 |   0.037 |    0.014 |     0.319 | 0.090 | FALSE   | FALSE       |
-| limma_impute | lod_imputed   | OrL0ux~1369 | A_vs_Ctrl |  3.879 | -0.207 | 0.050 |    -3.293 |     0.063 |  4.468 |   0.026 |   -0.374 |    -0.039 | 0.089 | FALSE   | FALSE       |
-| limpa        | observed      | OrL0ux~1369 | A_vs_Ctrl |  3.649 | -0.618 | 0.028 |    -2.629 |     0.235 | 21.096 |   0.016 |   -1.107 |    -0.129 | 0.925 | FALSE   | TRUE        |
-| lm_impute    | lod_imputed   | OrL0ux~1369 | A_vs_Ctrl |  3.879 | -0.207 | 0.050 |    -3.293 |     0.063 |  4.468 |   0.026 |   -0.374 |    -0.039 | 0.089 | FALSE   | FALSE       |
-| limma_impute | lod_imputed   | OrL0ux~1369 | B_vs_Ctrl |  3.879 | -0.207 | 0.038 |    -3.293 |     0.063 |  4.468 |   0.026 |   -0.374 |    -0.039 | 0.089 | TRUE    | FALSE       |
-| limpa        | observed      | OrL0ux~1369 | B_vs_Ctrl |  3.515 | -0.885 | 0.008 |    -3.214 |     0.275 | 21.096 |   0.004 |   -1.458 |    -0.313 | 0.925 | TRUE    | TRUE        |
-| lm_impute    | lod_imputed   | OrL0ux~1369 | B_vs_Ctrl |  3.879 | -0.207 | 0.038 |    -3.293 |     0.063 |  4.468 |   0.026 |   -0.374 |    -0.039 | 0.089 | TRUE    | FALSE       |
+| modelName | estimate_type | protein_Id | contrast | avgAbd | diff | FDR | statistic | std.error | df | p.value | conf.low | conf.high | sigma | rescued | significant |
+|:---|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|:---|:---|
+| limma_impute | lod_imputed | 8mS8sK~0150 | A_vs_Ctrl | 3.776 | 0.000 | 1.000 | 0.000 | 0.063 | 4.468 | 1.000 | -0.167 | 0.167 | 0.089 | TRUE | FALSE |
+| limpa | observed | 8mS8sK~0150 | A_vs_Ctrl | 3.146 | -0.298 | 0.415 | -1.048 | 0.284 | 21.096 | 0.306 | -0.888 | 0.293 | 0.895 | TRUE | FALSE |
+| lm_impute | lod_imputed | 8mS8sK~0150 | A_vs_Ctrl | 3.776 | 0.000 | 1.000 | 0.000 | 0.063 | 4.468 | 1.000 | -0.167 | 0.167 | 0.089 | TRUE | FALSE |
+| limma_impute | lod_imputed | 8mS8sK~0150 | B_vs_Ctrl | 3.784 | 0.018 | 0.803 | 0.279 | 0.063 | 4.468 | 0.792 | -0.150 | 0.185 | 0.089 | FALSE | FALSE |
+| limpa | observed | 8mS8sK~0150 | B_vs_Ctrl | 3.420 | 0.251 | 0.434 | 0.897 | 0.280 | 21.096 | 0.380 | -0.330 | 0.832 | 0.895 | FALSE | FALSE |
+| lm_impute | lod_imputed | 8mS8sK~0150 | B_vs_Ctrl | 3.784 | 0.018 | 0.803 | 0.279 | 0.063 | 4.468 | 0.792 | -0.150 | 0.185 | 0.089 | FALSE | FALSE |
+| limma_impute | lod_imputed | DTCi0N~0734 | A_vs_Ctrl | 3.902 | -0.253 | 0.017 | -3.996 | 0.063 | 6.468 | 0.006 | -0.405 | -0.101 | 0.090 | TRUE | FALSE |
+| limpa | observed | DTCi0N~0734 | A_vs_Ctrl | 3.622 | -0.826 | 0.016 | -2.932 | 0.282 | 21.096 | 0.008 | -1.411 | -0.240 | 1.042 | TRUE | TRUE |
+| lm_impute | lod_imputed | DTCi0N~0734 | A_vs_Ctrl | 3.902 | -0.253 | 0.017 | -3.997 | 0.063 | 6.468 | 0.006 | -0.405 | -0.101 | 0.090 | TRUE | FALSE |
+| limma_impute | lod_imputed | DTCi0N~0734 | B_vs_Ctrl | 4.112 | 0.166 | 0.051 | 2.626 | 0.063 | 6.468 | 0.037 | 0.014 | 0.319 | 0.090 | FALSE | FALSE |
+| limpa | observed | DTCi0N~0734 | B_vs_Ctrl | 4.136 | 0.201 | 0.539 | 0.722 | 0.279 | 21.096 | 0.478 | -0.378 | 0.780 | 1.042 | FALSE | FALSE |
+| lm_impute | lod_imputed | DTCi0N~0734 | B_vs_Ctrl | 4.112 | 0.166 | 0.051 | 2.626 | 0.063 | 6.468 | 0.037 | 0.014 | 0.319 | 0.090 | FALSE | FALSE |
+| limma_impute | lod_imputed | OrL0ux~1369 | A_vs_Ctrl | 3.879 | -0.207 | 0.050 | -3.293 | 0.063 | 4.468 | 0.026 | -0.374 | -0.039 | 0.089 | FALSE | FALSE |
+| limpa | observed | OrL0ux~1369 | A_vs_Ctrl | 3.649 | -0.618 | 0.028 | -2.629 | 0.235 | 21.096 | 0.016 | -1.107 | -0.129 | 0.925 | FALSE | TRUE |
+| lm_impute | lod_imputed | OrL0ux~1369 | A_vs_Ctrl | 3.879 | -0.207 | 0.050 | -3.293 | 0.063 | 4.468 | 0.026 | -0.374 | -0.039 | 0.089 | FALSE | FALSE |
+| limma_impute | lod_imputed | OrL0ux~1369 | B_vs_Ctrl | 3.879 | -0.207 | 0.038 | -3.293 | 0.063 | 4.468 | 0.026 | -0.374 | -0.039 | 0.089 | TRUE | FALSE |
+| limpa | observed | OrL0ux~1369 | B_vs_Ctrl | 3.515 | -0.885 | 0.008 | -3.214 | 0.275 | 21.096 | 0.004 | -1.458 | -0.313 | 0.925 | TRUE | TRUE |
+| lm_impute | lod_imputed | OrL0ux~1369 | B_vs_Ctrl | 3.879 | -0.207 | 0.038 | -3.293 | 0.063 | 4.468 | 0.026 | -0.374 | -0.039 | 0.089 | TRUE | FALSE |
 
 Contrast estimates from lm_impute and limma_impute for proteins that
 plain lm could not estimate
@@ -590,13 +590,13 @@ results_hurdle |>
     ##    <chr>    <chr>       <dbl>             <dbl>          <dbl>             <dbl>
     ##  1 A_vs_Ct… Zci7Jw~70… -0.722          3.15e-11       1.16e+ 0            0.430 
     ##  2 A_vs_Ct… KVkccD~18… -0.524          1.99e- 9      -2.06e+ 0            0.214 
-    ##  3 A_vs_Ct… 4Y4DYT~09…  0.583          1.99e- 8       1.07e-15            1     
+    ##  3 A_vs_Ct… 4Y4DYT~09…  0.583          1.99e- 8       4.27e-16            1     
     ##  4 A_vs_Ct… 0CubNR~08…  0.674          4.07e- 8       1.35e+ 0            0.468 
-    ##  5 A_vs_Ct… 6TevMr~75…  0.765          4.26e- 8      -1.36e-16            1     
-    ##  6 B_vs_Ct… fylZqB~38…  0.717          1.66e-10      -4.48e-16            1     
-    ##  7 B_vs_Ct… f0Cvvj~66…  0.345          3.71e-10       3.82e-16            1     
-    ##  8 B_vs_Ct… XxJoJB~72…  0.587          2.82e- 9      -4.48e-16            1     
-    ##  9 B_vs_Ct… DOwxjj~62…  0.294          1.44e- 7       4.49e-16            1     
+    ##  5 A_vs_Ct… 6TevMr~75…  0.765          4.26e- 8      -4.90e-16            1     
+    ##  6 B_vs_Ct… fylZqB~38…  0.717          1.66e-10       1.69e-15            1.000 
+    ##  7 B_vs_Ct… f0Cvvj~66…  0.345          3.71e-10       3.19e-16            1     
+    ##  8 B_vs_Ct… XxJoJB~72…  0.587          2.82e- 9       1.69e-15            1.000 
+    ##  9 B_vs_Ct… DOwxjj~62…  0.294          1.44e- 7       5.65e-16            1     
     ## 10 B_vs_Ct… 2FL9I1~16… -0.417          2.08e- 7      -1.31e+ 0            0.0752
     ## # ℹ 2 more variables: p.value <dbl>, FDR <dbl>
 
@@ -649,11 +649,11 @@ sessionInfo()
 
     ## R version 4.6.2 (2026-10-29)
     ## Platform: x86_64-pc-linux-gnu
-    ## Running under: Ubuntu 24.04.5 LTS
+    ## Running under: Ubuntu 26.04.1 LTS
     ## 
     ## Matrix products: default
     ## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
-    ## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
+    ## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.32.so;  LAPACK version 3.12.0
     ## 
     ## locale:
     ##  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
@@ -668,12 +668,12 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] ggplot2_4.0.3   dplyr_1.2.1     prolfqua_0.99.8
+    ## [1] ggplot2_4.0.4   dplyr_1.2.1     prolfqua_0.99.9
     ## 
     ## loaded via a namespace (and not attached):
     ##   [1] Rdpack_2.6.6           gridExtra_2.3.1        rlang_1.3.0           
     ##   [4] magrittr_2.0.5         clue_0.3-68            GetoptLong_1.1.1      
-    ##   [7] otel_0.2.0             matrixStats_1.5.0      compiler_4.6.2        
+    ##   [7] otel_0.3.0             matrixStats_1.5.0      compiler_4.6.2        
     ##  [10] mgcv_1.9-4             png_0.1-9              systemfonts_1.3.2     
     ##  [13] vctrs_0.7.3            pkgconfig_2.0.3        shape_1.4.6.1         
     ##  [16] crayon_1.5.3           fastmap_1.2.0          backports_1.5.1       

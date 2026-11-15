@@ -96,28 +96,28 @@ overview <- data.frame(
 knitr::kable(overview, row.names = FALSE)
 ```
 
-| method                | input  | proteins | FDR_lt_0.1 | model                                                                   |
-|:----------------------|:-------|---------:|-----------:|:------------------------------------------------------------------------|
-| binomial_firth_nested | nested |       20 |          0 | binomial_nested with Firth bias reduction                               |
-| binomial_nested       | nested |       20 |          0 | quasibinomial model, peptide detection counts                           |
-| deqms                 | same   |       20 |         14 | limma with DEqMS peptide-count variance moderation                      |
-| deqms_voom            | same   |       20 |         13 | deqms with vooma precision weights                                      |
-| firth                 | same   |       20 |          0 | Firth logistic regression, protein detection                            |
-| firth_nested          | nested |       20 |          0 | Firth logistic regression, peptide detection                            |
-| hurdle_nested         | nested |       20 |         14 | lm_impute intensity + binomial_firth_nested detection                   |
-| limma                 | same   |       20 |         14 | limma, empirical-Bayes moderated variances                              |
-| limma_impute          | same   |       20 |         14 | limma with LOD imputation                                               |
-| limma_voom            | same   |       20 |         14 | limma with vooma precision weights                                      |
-| limma_voom_impute     | same   |       20 |         14 | limma_voom with LOD imputation                                          |
-| limpa                 | same   |       20 |         16 | limma on limpa DPC-quantified proteins                                  |
-| limpa_nested          | nested |       20 |         16 | limpa, DPC quantification from peptides                                 |
-| lm                    | same   |       20 |         14 | linear model per protein                                                |
-| lm_impute             | same   |       20 |         14 | lm; groups without observations imputed at the limit of detection (LOD) |
-| lmer_nested           | nested |       12 |          5 | mixed model, peptide and sample random effects                          |
-| rfit                  | same   |       20 |         14 | rank-based regression (Rfit)                                            |
-| rfit_impute           | same   |       20 |         14 | rfit with LOD imputation                                                |
-| rlm                   | same   |       20 |         14 | robust linear model (MASS::rlm)                                         |
-| ropeca_nested         | nested |       20 |         14 | peptide fold changes summarised per protein (ROPECA)                    |
+| method | input | proteins | FDR_lt_0.1 | model |
+|:---|:---|---:|---:|:---|
+| binomial_firth_nested | nested | 20 | 0 | binomial_nested with Firth bias reduction |
+| binomial_nested | nested | 20 | 0 | quasibinomial model, peptide detection counts |
+| deqms | aggregated | 20 | 14 | limma with DEqMS peptide-count variance moderation |
+| deqms_voom | aggregated | 20 | 13 | deqms with vooma precision weights |
+| firth | aggregated | 20 | 0 | Firth logistic regression, protein detection |
+| firth_nested | nested | 20 | 0 | Firth logistic regression, peptide detection |
+| hurdle_nested | nested | 20 | 14 | lm_impute intensity + binomial_firth_nested detection |
+| limma | aggregated | 20 | 14 | limma, empirical-Bayes moderated variances |
+| limma_impute | aggregated | 20 | 14 | limma with LOD imputation |
+| limma_voom | aggregated | 20 | 14 | limma with vooma precision weights |
+| limma_voom_impute | aggregated | 20 | 14 | limma_voom with LOD imputation |
+| limpa | aggregated | 20 | 16 | limma on limpa DPC-quantified proteins |
+| limpa_nested | nested | 20 | 16 | limpa, DPC quantification from peptides |
+| lm | aggregated | 20 | 14 | linear model per protein |
+| lm_impute | aggregated | 20 | 14 | lm; groups without observations imputed at the limit of detection (LOD) |
+| lmer_nested | nested | 12 | 5 | mixed model, peptide and sample random effects |
+| rfit | aggregated | 20 | 14 | rank-based regression (Rfit) |
+| rfit_impute | aggregated | 20 | 14 | rfit with LOD imputation |
+| rlm | aggregated | 20 | 14 | robust linear model (MASS::rlm) |
+| ropeca_nested | nested | 20 | 14 | peptide fold changes summarised per protein (ROPECA) |
 
 The detection models (`firth`, `firth_nested`, `binomial_nested`,
 `binomial_firth_nested`) test differences in how often a protein or its
@@ -167,11 +167,11 @@ knitr::kable(one, digits = 3)
 sessionInfo()
 #> R version 4.6.2 (2026-10-29)
 #> Platform: x86_64-pc-linux-gnu
-#> Running under: Ubuntu 24.04.5 LTS
+#> Running under: Ubuntu 26.04.1 LTS
 #> 
 #> Matrix products: default
 #> BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
-#> LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
+#> LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.32.so;  LAPACK version 3.12.0
 #> 
 #> locale:
 #>  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
@@ -186,12 +186,12 @@ sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] prolfqua_0.99.8  BiocStyle_2.40.0
+#> [1] prolfqua_0.99.9  BiocStyle_2.40.0
 #> 
 #> loaded via a namespace (and not attached):
 #>   [1] Rdpack_2.6.6           gridExtra_2.3.1        rlang_1.3.0           
 #>   [4] magrittr_2.0.5         clue_0.3-68            GetoptLong_1.1.1      
-#>   [7] otel_0.2.0             matrixStats_1.5.0      compiler_4.6.2        
+#>   [7] otel_0.3.0             matrixStats_1.5.0      compiler_4.6.2        
 #>  [10] mgcv_1.9-4             png_0.1-9              systemfonts_1.3.2     
 #>  [13] vctrs_0.7.3            pkgconfig_2.0.3        shape_1.4.6.1         
 #>  [16] crayon_1.5.3           fastmap_1.2.0          backports_1.5.1       
@@ -214,7 +214,7 @@ sessionInfo()
 #>  [67] circlize_0.4.18        pillar_1.11.1          BiocManager_1.30.27   
 #>  [70] mice_3.19.0            foreach_1.5.2          stats4_4.6.2          
 #>  [73] reformulas_0.4.4       plotly_4.12.1          generics_0.1.4        
-#>  [76] hms_1.1.4              S4Vectors_0.50.3       ggplot2_4.0.3         
+#>  [76] hms_1.1.4              S4Vectors_0.50.3       ggplot2_4.0.4         
 #>  [79] scales_1.4.0           minqa_1.2.8            glue_1.8.1            
 #>  [82] tools_4.6.2            data.table_1.18.6.1    lme4_2.1-0            
 #>  [85] forcats_1.0.1          fs_2.1.0               grid_4.6.2            
