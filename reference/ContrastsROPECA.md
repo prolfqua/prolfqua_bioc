@@ -326,10 +326,7 @@ mod <- build_model(
 
  contr <- prolfqua::Contrasts$new(mod, Contr)
  dim(contr$get_contrasts())
-#> determine linear functions:
-#> get_contrasts -> contrasts_linfct
 #> contrasts_linfct
-#> Joining with `by = join_by(protein_Id, peptide_Id, contrast)`
 #> [1] 78 17
  contrM <- prolfqua::ContrastsModerated$new(contr)
  dim(contrM$get_contrasts())

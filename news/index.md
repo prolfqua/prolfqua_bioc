@@ -1,9 +1,92 @@
 # Changelog
 
-## prolfqua 0.99.9 (Bioconductor)
+## prolfqua 0.99.10 (Bioconductor)
 
-- Corresponds to prolfqua 1.9.1 on GitHub; the changes are listed below.
+- Corresponds to prolfqua 1.9.2 on GitHub; the changes are listed below.
 - Requires R \>= 4.6.
+
+## prolfqua 1.9.2
+
+### New features
+
+- New
+  [`lfqdata_from_wide()`](https://fgcz.github.io/prolfqua/reference/lfqdata_from_wide.md),
+  the inverse of
+  [`tidy_to_wide_config()`](https://fgcz.github.io/prolfqua/reference/tidy_to_wide_config.md):
+  one or more feature x sample matrices, their row annotation and their
+  sample annotation back to an `LFQData`. It replaces the matrix-to-long
+  conversions that downstream packages write by hand for AnnData and
+  SummarizedExperiment input.
+- `LFQDataTransformer$intensity_array()` takes `transformed`;
+  `intensity_array(exp, force = TRUE, transformed = FALSE)` marks a
+  back-transformation as untransformed, so callers no longer reset
+  `is_transformed(FALSE)` afterwards.
+- New `LFQData$is_aggregatable()`: whether there is a hierarchy level
+  below the modelled one to aggregate from.
+- `ContrastsFacadeBase$get_missing()` uses the contrast column named in
+  the facade’s `ContrastConfiguration` (`contrast_col`) instead of
+  assuming `contrast`, so facades of other packages with their own
+  column name (e.g. SAINT’s `Bait`) can inherit it.
+
+### Behaviour changes
+
+- Breaking: a `ContrastsPlotter` histogram spec takes the bin boundaries
+  as `breaks`,
+  e.g. `list(score = "FDR", breaks = seq(0, 1, by = 0.05))`, passed to
+  [`ggplot2::geom_histogram()`](https://ggplot2.tidyverse.org/reference/geom_histogram.html).
+  The old `xlim = c(0, 1, 0.05)` was not an axis range but a (from, to,
+  by) triple; a spec without numeric `breaks` now stops with
+  `prolfqua_error_bad_argument`.
+- Requires tidyr \>= 1.3.0: identifier splitting uses
+  [`tidyr::separate_wider_delim()`](https://tidyr.tidyverse.org/reference/separate_wider_delim.html)
+  instead of the superseded `separate()`. Results are unchanged;
+  [`separate_hierarchy()`](https://fgcz.github.io/prolfqua/reference/separate_hierarchy.md),
+  [`get_uniprot_id_from_fasta_header()`](https://fgcz.github.io/prolfqua/reference/get_uniprot_id_from_fasta_header.md)
+  and the contrast-side parser no longer warn about identifiers with too
+  few or too many pieces.
+- The model strategies
+  ([`strategy_lm()`](https://fgcz.github.io/prolfqua/reference/strategy.md)
+  and the other `Strategy*` classes), `Model`, `ModelFirth` and
+  `ContrastsFirth` check their arguments when constructed and stop with
+  `prolfqua_error_bad_argument` or `prolfqua_error_missing_column`: a
+  strategy needs a formula, `Model` a model table with the subject
+  columns and a strategy, `ModelFirth` the elements `models1`, `models2`
+  and `hkey`, `ContrastsFirth` a `ModelFirth` and named contrasts.
+  Before, a malformed argument failed later with an unrelated error.
+- [`setup_analysis()`](https://fgcz.github.io/prolfqua/reference/setup_analysis.md)
+  reports a missing `isotopeLabel` or `qValue` column with a message
+  instead of a warning; both are optional and get the defaults `"light"`
+  and `0`. A missing `nr_children` column still warns, because the
+  default of 1 changes the fitting weights of aggregated data.
+
+### Bug fixes
+
+- [`LFQDataToSummarizedExperiment()`](https://fgcz.github.io/prolfqua/reference/LFQDataToSummarizedExperiment.md)
+  stops with an install hint when SummarizedExperiment or S4Vectors is
+  missing; before, it returned `NULL` silently.
+- `Contrasts$get_contrasts()` no longer prints the debug lines
+  “determine linear functions:” and “get_contrasts -\>
+  contrasts_linfct”.
+- `firth` and `firth_nested` work when the protein key is not called
+  `protein_Id`:
+  [`build_model_logistf()`](https://fgcz.github.io/prolfqua/reference/build_model_logistf.md)
+  passed no subject id to `ModelFirth`, so the contrasts looked for a
+  `protein_Id` column and failed.
+- Building a contrast analysis
+  ([`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md)
+  and the facade classes) stops with `prolfqua_error_bad_argument` when
+  a contrast names a group without samples, e.g. `group_A` after all its
+  runs were filtered out. The message names the contrast, the empty
+  group and the groups with samples; before, the analysis went ahead and
+  failed later or returned no estimates for that contrast.
+- `LFQDataPlotter$write_pdf()` no longer closes the graphics devices the
+  user has open (it called
+  [`graphics.off()`](https://rdrr.io/r/grDevices/dev.html) before and
+  after writing). `write_pdf()`, `write_boxplots()`,
+  `LFQDataAggregator$write_plots()` and `LR_test(path = )` close their
+  PDF device when drawing fails, instead of leaving it open so that
+  later plots go into it. `write_boxplots()` returns the file path
+  invisibly.
 
 ## prolfqua 1.9.1
 

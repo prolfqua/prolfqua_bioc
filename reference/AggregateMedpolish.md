@@ -18,7 +18,8 @@ Other LFQData:
 [`LFQDataPlotter`](https://fgcz.github.io/prolfqua/reference/LFQDataPlotter.md),
 [`LFQDataStats`](https://fgcz.github.io/prolfqua/reference/LFQDataStats.md),
 [`LFQDataSummariser`](https://fgcz.github.io/prolfqua/reference/LFQDataSummariser.md),
-[`LFQDataToSummarizedExperiment()`](https://fgcz.github.io/prolfqua/reference/LFQDataToSummarizedExperiment.md)
+[`LFQDataToSummarizedExperiment()`](https://fgcz.github.io/prolfqua/reference/LFQDataToSummarizedExperiment.md),
+[`lfqdata_from_wide()`](https://fgcz.github.io/prolfqua/reference/lfqdata_from_wide.md)
 
 ## Super class
 
@@ -82,7 +83,6 @@ lfqdata <- LFQData$new(data, istar$config)
 lfqTrans <- lfqdata$clone()$get_Transformer()$log2()$robscale()$lfq
 #> Column added : log2_abundance
 #> data is : TRUE
-#> Joining with `by = join_by(sampleName, isotopeLabel, protein_Id, peptide_Id)`
 
 agg <- AggregateMedpolish$new(lfqTrans, "protein")
 agg$aggregate()

@@ -265,10 +265,7 @@ lfqdata <- lfqdata$get_Transformer()$log2()$lfq
 contrasts <- c("A_vs_Ctrl" = "group_A - group_Ctrl")
 fa <- ContrastsROPECANestedFacade$new(lfqdata, "~ group_", contrasts)
 head(fa$get_contrasts())
-#> determine linear functions:
-#> get_contrasts -> contrasts_linfct
 #> contrasts_linfct
-#> Joining with `by = join_by(protein_Id, peptide_Id, contrast)`
 #> # A tibble: 6 × 14
 #> # Groups:   contrast [1]
 #>   modelName   estimate_type protein_Id contrast avgAbd    diff     FDR statistic

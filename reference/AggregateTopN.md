@@ -18,7 +18,8 @@ Other LFQData:
 [`LFQDataPlotter`](https://fgcz.github.io/prolfqua/reference/LFQDataPlotter.md),
 [`LFQDataStats`](https://fgcz.github.io/prolfqua/reference/LFQDataStats.md),
 [`LFQDataSummariser`](https://fgcz.github.io/prolfqua/reference/LFQDataSummariser.md),
-[`LFQDataToSummarizedExperiment()`](https://fgcz.github.io/prolfqua/reference/LFQDataToSummarizedExperiment.md)
+[`LFQDataToSummarizedExperiment()`](https://fgcz.github.io/prolfqua/reference/LFQDataToSummarizedExperiment.md),
+[`lfqdata_from_wide()`](https://fgcz.github.io/prolfqua/reference/lfqdata_from_wide.md)
 
 ## Super class
 
@@ -121,7 +122,6 @@ lfqdata <- LFQData$new(data, istar$config)
 
 agg <- AggregateTopN$new(lfqdata, "protein", N = 3, func = "sum")
 agg$aggregate()
-#> Joining with `by = join_by(protein_Id, peptide_Id)`
 #> Columns added : srm_meanInt srm_meanIntRank
 #> completing cases
 p <- agg$plot()
@@ -134,7 +134,6 @@ p$plots[[1]]
 
 agg_mean <- AggregateTopN$new(lfqdata, "protein", N = 3, func = "mean")
 agg_mean$aggregate()
-#> Joining with `by = join_by(protein_Id, peptide_Id)`
 #> Columns added : srm_meanInt srm_meanIntRank
 #> completing cases
 protPlotter <- agg_mean$lfq_agg$get_Plotter()
