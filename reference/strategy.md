@@ -82,7 +82,6 @@ Other modelling:
 [`ContrastsFacadeBase`](https://fgcz.github.io/prolfqua/reference/ContrastsFacadeBase.md),
 [`ContrastsFirth`](https://fgcz.github.io/prolfqua/reference/ContrastsFirth.md),
 [`ContrastsFirthFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsFirthFacade.md),
-[`ContrastsFirthNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsFirthNestedFacade.md),
 [`ContrastsHurdleFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsHurdleFacade.md),
 [`ContrastsHurdleNestedFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsHurdleNestedFacade.md),
 [`ContrastsLMFacade`](https://fgcz.github.io/prolfqua/reference/ContrastsLMFacade.md),
@@ -118,7 +117,6 @@ Other modelling:
 [`StrategyRfit`](https://fgcz.github.io/prolfqua/reference/StrategyRfit.md),
 [`build_contrast_analysis()`](https://fgcz.github.io/prolfqua/reference/build_contrast_analysis.md),
 [`build_model()`](https://fgcz.github.io/prolfqua/reference/build_model.md),
-[`build_model_glm_peptide()`](https://fgcz.github.io/prolfqua/reference/build_model_glm_peptide.md),
 [`build_model_glm_protein()`](https://fgcz.github.io/prolfqua/reference/build_model_glm_protein.md),
 [`build_model_impute()`](https://fgcz.github.io/prolfqua/reference/build_model_impute.md),
 [`build_model_limma()`](https://fgcz.github.io/prolfqua/reference/build_model_limma.md),
@@ -168,7 +166,7 @@ Other modelling:
 tmp <- strategy_logistf("bin_resp ~ condition", model_name = "parallel design")
 tmp$formula
 #> bin_resp ~ condition
-#> <environment: 0x5aa4eabf9fc8>
+#> <environment: 0x55871249eb38>
 
 istar <- prolfqua::sim_lfq_data_peptide_config(Nprot = 10, with_missing = TRUE,
   weight_missing = 0.5, seed = 3)
@@ -220,20 +218,20 @@ modelFunction$model_fun(nestProtein$data[[4]])
 tmp <- strategy_rfit("Intensity ~ condition", model_name = "parallel design")
 tmp$formula
 #> Intensity ~ condition
-#> <environment: 0x5aa4d9958be0>
+#> <environment: 0x55871322fd98>
 modelFunction <- strategy_lmer("abundanceC ~ group_ + (1|peptide_Id)",
   model_name = "random_example")
 modelFunction$formula
 #> abundanceC ~ group_ + (1 | peptide_Id)
-#> <environment: 0x5aa4f2c2e0c8>
+#> <environment: 0x5587195e6a08>
 tmp <- strategy_lm("Intensity ~ condition", model_name = "parallel design")
 tmp$formula
 #> Intensity ~ condition
-#> <environment: 0x5aa4f2ca85b8>
+#> <environment: 0x558712a27340>
 tmp$weights
 #> NULL
 tmp <- strategy_rlm("Intensity ~ condition", model_name = "parallel design")
 tmp$formula
 #> Intensity ~ condition
-#> <environment: 0x5aa4f03e49d8>
+#> <environment: 0x5587262073f0>
 ```
