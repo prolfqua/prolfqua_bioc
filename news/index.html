@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prolfqua</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.99.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.99.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,10 +50,22 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.99.11" id="prolfqua-09911-bioconductor">prolfqua 0.99.11 (Bioconductor)<a class="anchor" aria-label="anchor" href="#prolfqua-09911-bioconductor"></a></h2>
-<ul><li>Corresponds to prolfqua 1.9.3 on GitHub; the changes are listed below.</li>
+<h2 class="pkg-version" data-toc-text="0.99.12" id="prolfqua-09912-bioconductor">prolfqua 0.99.12 (Bioconductor)<a class="anchor" aria-label="anchor" href="#prolfqua-09912-bioconductor"></a></h2>
+<ul><li>Corresponds to prolfqua 1.9.4 on GitHub; the changes are listed below.</li>
 <li>Requires R &gt;= 4.6.</li>
 </ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.9.4" id="prolfqua-194">prolfqua 1.9.4<a class="anchor" aria-label="anchor" href="#prolfqua-194"></a></h2>
+<div class="section level3">
+<h3 id="new-features-1-9-4">New features<a class="anchor" aria-label="anchor" href="#new-features-1-9-4"></a></h3>
+<ul><li>New method <code>ropecaV2_nested</code> (<code>ContrastsROPECAV2NestedFacade</code>, <code>ContrastsROPECAV2</code>): ROPECA with calibrated protein p-values. <code>ropeca_nested</code> tests the median signed peptide p-value against a beta distribution, which is conservative for independent peptides and makes proteins with many correlated peptides too significant; its 10-peptide cap only damps that. <code>ropecaV2_nested</code> converts the moderated peptide t-statistics to normal scores and tests their median per protein against its exact null distribution, allowing for the correlation of the peptides of a protein, which it estimates once from the peptide model residuals. Share of p &lt; 0.05 for proteins that do not change, by number of peptides (prolfquabenchmark vignette <code>Benchmark_ropeca</code>): on simulated proteins whose peptide correlation varies between proteins, 0.050 to 0.067 for 2 to 20 peptides, where <code>ropeca_nested</code> gives 0.037 to 0.082; on the human proteins of IonStar, whose peptides are nearly uncorrelated, 0.041 to 0.053 for 2 to more than 20 peptides, where <code>ropeca_nested</code> gives 0.018 down to 0.000. <code>diff</code> is the median peptide fold change, as in <code>ropeca_nested</code>; <code>statistic</code>, <code>std.error</code> and the 95% interval follow from the p-value. <code>ropeca_nested</code> is unchanged.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-9-4">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-9-4"></a></h3>
+<ul><li>
+<code>ropeca_nested</code> / <code>ContrastsROPECA</code>: the protein p-value counted peptides without a p-value (failed or non-estimable peptide fits) in the number of peptides, which made those proteins too significant, e.g. p = 0.00067 instead of 0.0031 for two tested peptides and one untested. <code><a href="../reference/summary_ROPECA_median_p_scaled.html">summary_ROPECA_median_p_scaled()</a></code> now counts only peptides with a p-value in <code>n_not_na</code>, as the original ROPECA (PECA) does; <code>df</code> of <code>ropeca_nested</code> changes with it.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.9.3" id="prolfqua-193">prolfqua 1.9.3<a class="anchor" aria-label="anchor" href="#prolfqua-193"></a></h2>
 <div class="section level3">
