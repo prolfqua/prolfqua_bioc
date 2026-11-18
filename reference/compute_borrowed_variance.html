@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prolfqua</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.99.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.99.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Vignettes</h6></li>
     <li><a class="dropdown-item" href="../articles/CreatingConfigurations.html">Importing your data: AnalysisConfiguration</a></li>
+    <li><a class="dropdown-item" href="../articles/TransformingLFQData.html">Transforming and calibrating LFQ data</a></li>
     <li><a class="dropdown-item" href="../articles/Comparing2Groups.html">Comparing Two Groups with prolfqua</a></li>
     <li><a class="dropdown-item" href="../articles/ModellingMethods.html">All modelling methods at a glance</a></li>
     <li><a class="dropdown-item" href="../articles/TwoFactorDesigns.html">Two-factor designs</a></li>
@@ -80,8 +81,8 @@
 <dd><p>behaviour when donor <code>vcov</code> matrices cannot be
 aligned by coefficient name (<code>method = "vcov"</code> only). "fallback"
 (default) warns and falls back to the sigma method, preserving the lm
-behaviour. "fail" signals a <code>prolfqua_borrow_failed</code> condition so the
-caller can skip the rescue; backends without an lm-style
+behaviour. "fail" borrows from the largest subset sharing the maximal
+coefficient set without a sigma fallback; backends without an lm-style
 <code>summary(fit)$cov.unscaled</code> (e.g. rfit) must use this because the
 sigma fallback is not applicable to them.</p></dd>
 
@@ -166,7 +167,9 @@ sigma fallback is not applicable to them.</p></dd>
 <code><a href="moderated_p_deqms_long.html">moderated_p_deqms_long()</a></code>,
 <code><a href="moderated_p_limma.html">moderated_p_limma()</a></code>,
 <code><a href="new_imputed_model.html">new_imputed_model()</a></code>,
+<code><a href="nobs.rfit_prolfqua.html">nobs.rfit_prolfqua()</a></code>,
 <code><a href="pivot_model_contrasts_to_wide.html">pivot_model_contrasts_to_wide()</a></code>,
+<code><a href="prolfqua_analysis_methods.html">prolfqua_analysis_methods</a></code>,
 <code><a href="register_facade.html">register_facade()</a></code>,
 <code><a href="sigma.rfit_prolfqua.html">sigma.rfit_prolfqua()</a></code>,
 <code><a href="sim_build_models_lm.html">sim_build_models_lm()</a></code>,
@@ -185,9 +188,6 @@ sigma fallback is not applicable to them.</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="sim_build_models_lm.html">sim_build_models_lm</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"parallel3"</span>, weight_missing <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> creating sampleName from file_name column</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> completing cases</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> completing cases done</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> setup done</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Sigma method (default): returns median sigma and df from donors</span></span></span>
 <span class="r-in"><span><span class="va">borrowed_s</span> <span class="op">&lt;-</span> <span class="fu">prolfqua</span><span class="fu">:::</span><span class="fu">compute_borrowed_variance</span><span class="op">(</span></span></span>
@@ -201,9 +201,6 @@ sigma fallback is not applicable to them.</p></dd>
 <span class="r-in"><span><span class="va">mod_no_missing</span> <span class="op">&lt;-</span> <span class="fu"><a href="sim_build_models_lm.html">sim_build_models_lm</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"parallel3"</span>,</span></span>
 <span class="r-in"><span>  Nprot <span class="op">=</span> <span class="fl">10</span>, with_missing <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> creating sampleName from file_name column</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> completing cases</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> completing cases done</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> setup done</span>
 <span class="r-in"><span><span class="va">borrowed_v</span> <span class="op">&lt;-</span> <span class="fu">prolfqua</span><span class="fu">:::</span><span class="fu">compute_borrowed_variance</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">mod_no_missing</span><span class="op">$</span><span class="va">model_df</span>, method <span class="op">=</span> <span class="st">"vcov"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="va">borrowed_v</span><span class="op">$</span><span class="va">method</span> <span class="op">==</span> <span class="st">"vcov"</span><span class="op">)</span></span></span>

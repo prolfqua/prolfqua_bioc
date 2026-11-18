@@ -60,6 +60,8 @@ Other LFQData:
 
 - [`LFQDataStats$power_t_test()`](#method-LFQDataStats-power_t_test)
 
+- [`LFQDataStats$power_fdr_pilot()`](#method-LFQDataStats-power_fdr_pilot)
+
 - [`LFQDataStats$clone()`](#method-LFQDataStats-clone)
 
 ------------------------------------------------------------------------
@@ -80,9 +82,8 @@ create analyse variances and CV
 
 - `stats`:
 
-  if \`interaction\`, compute within-group stats; if \`all\`, compute
-  overall CV; if \`pooled\`, use pooled variance with grouping
-  information
+  if `interaction`, compute within-group stats; if `all`, compute
+  overall CV; if `pooled`, use pooled variance with grouping information
 
 ------------------------------------------------------------------------
 
@@ -152,7 +153,8 @@ ggplot
 
 ### `LFQDataStats$density_median()`
 
-plot density or ecdf of CV or sd for the 50
+plot density or ecdf of CV or sd for the 50% of low intensity data and
+50% of high intensity data
 
 #### Usage
 
@@ -186,7 +188,8 @@ ggplot
 
 ### `LFQDataStats$violin_median()`
 
-plot violinplot of CV or sd for the 50
+plot violinplot of CV or sd for the 50% of low intensity data and 50% of
+high intensity data
 
 #### Usage
 
@@ -275,6 +278,62 @@ compute sample for each protein
 
 ------------------------------------------------------------------------
 
+### `LFQDataStats$power_fdr_pilot()`
+
+Plan balanced two-group sample size from pooled within-group pilot
+variances; see
+[`power_fdr_prior_n()`](https://fgcz.github.io/prolfqua/reference/power_fdr_prior_n.md)
+for assumptions and returned values. Grouping and feature identities
+follow the current LFQData configuration, regardless of the `stats` mode
+used to construct this decorator. Untransformed data emit a warning and
+return `NULL`.
+
+#### Usage
+
+    LFQDataStats$power_fdr_pilot(
+      delta_mean,
+      delta_se = 0,
+      fdr = 0.05,
+      power = 0.8,
+      pi0 = 0.95,
+      max_n = 100
+    )
+
+#### Arguments
+
+- `delta_mean`:
+
+  planned mean difference among non-null features, on the transformed
+  response scale
+
+- `delta_se`:
+
+  standard deviation of true non-null differences, not an estimated
+  mean's standard error
+
+- `fdr`:
+
+  target false discovery rate
+
+- `power`:
+
+  target average power among non-null features
+
+- `pi0`:
+
+  assumed proportion of truly null features
+
+- `max_n`:
+
+  largest sample count per group to consider
+
+#### Returns
+
+The list returned by
+[`power_fdr_prior_n()`](https://fgcz.github.io/prolfqua/reference/power_fdr_prior_n.md).
+
+------------------------------------------------------------------------
+
 ### `LFQDataStats$clone()`
 
 The objects of this class are cloneable with this method.
@@ -309,13 +368,13 @@ runallfuncs <- function(x){
   if(!x$lfq$is_transformed()){
     stopifnot(is.null(x$power_t_test()))
     stopifnot(is.null(x$power_t_test_quantiles()))
+    stopifnot(is.null(x$power_fdr_pilot(delta_mean = 0.1)))
+  } else {
+    stopifnot(is.list(x$power_fdr_pilot(delta_mean = 0.1, max_n = 20)))
   }
 }
 bb <- prolfqua::sim_lfq_data_peptide_config()
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 
 
 
@@ -329,8 +388,9 @@ lfqstats$violin()
 #> (`stat_summary()`).
 
 runallfuncs(lfqstats)
-#> Warning: data is not transformed - aborting
-#> Warning: data is not transformed - aborting
+#> Warning: power_t_test requires transformed data; aborting.
+#> Warning: power_t_test_quantiles requires transformed data; aborting.
+#> Warning: power_fdr_pilot requires transformed data; aborting.
 x <- lfqstats
 
 #study variance of normalized data
@@ -356,9 +416,6 @@ runallfuncs(lfqstats)
 # Group size 1
 bb <- prolfqua::sim_lfq_data_peptide_config(N=1)
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 lfq1 <- LFQData$new(bb$data, bb$config)
 table_factors_size(lfq1$data_long(), lfq1$file_name(),
   lfq1$sample_name(), lfq1$factor_keys(), lfq1$relevant_factor_keys())
@@ -379,6 +436,7 @@ lfqstats$violin()
 #> (`stat_summary()`).
 
 runallfuncs(lfqstats)
-#> Warning: data is not transformed - aborting
-#> Warning: data is not transformed - aborting
+#> Warning: power_t_test requires transformed data; aborting.
+#> Warning: power_t_test_quantiles requires transformed data; aborting.
+#> Warning: power_fdr_pilot requires transformed data; aborting.
 ```

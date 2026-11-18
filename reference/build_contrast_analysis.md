@@ -23,13 +23,13 @@ build_contrast_analysis(lfqdata, modelstr, contrasts, method = "lm", ...)
 
 - modelstr:
 
-  model formula string without the response variable (e.g.
+  one right-hand-side formula string without the response variable (e.g.
   `"~ group_"`). The response is taken automatically from
   `lfqdata$get_config()$get_response()`.
 
 - contrasts:
 
-  named character vector of contrasts (e.g.
+  nonempty named character vector of contrast expressions (e.g.
   `c("A_vs_B" = "group_A - group_B")`)
 
 - method:
@@ -44,6 +44,7 @@ build_contrast_analysis(lfqdata, modelstr, contrasts, method = "lm", ...)
   `"hurdle_nested"`, combining intensity and detection. Downstream
   packages may add more via
   [`register_facade`](https://fgcz.github.io/prolfqua/reference/register_facade.md).
+  The Keys and column names are case sensitive and must match exactly.
   The authoritative list is
   `names(`[`list_facades`](https://fgcz.github.io/prolfqua/reference/list_facades.md)`())`.
   Defaults to `"lm"`.
@@ -65,6 +66,48 @@ report protein-level contrasts; the others take input at the level they
 report, usually aggregated proteins. `"limpa"` needs input aggregated
 with
 [`AggregateLimpa`](https://fgcz.github.io/prolfqua/reference/AggregateLimpa.md).
+
+The formula is translated into a design matrix with R's current contrast
+options (normally treatment coding). Configured predictors are
+categorical labels; their reference level is normally the first sorted
+level. Each contrast expression combines group-level coefficient
+weights, rather than referring directly to design-matrix coefficient
+names. For example, `"group_A - group_Ctrl"` subtracts the control group
+mean from the A group mean, including the reference coefficient as
+needed. Interaction cell means are named with a colon and quoted with
+backticks inside expressions. See the *Under the hood* article for
+worked one-factor and `~ A * B` design matrices and linear functions.
+
+Internally, `limpa_nested` and `hurdle_nested` aggregate child features
+to proteins. Detection methods (`binomial_nested`,
+`binomial_firth_nested`, `firth`, and the detection component of
+`hurdle_nested`) encode intensities as detected/not detected. These
+aggregation and detection steps have no inverse. The analysis keeps its
+input in `analysis$.lfqdata`; for aggregated input this is already at
+the modelled hierarchy.
+[`fitted()`](https://rdrr.io/r/stats/fitted.values.html) and
+[`residuals()`](https://rdrr.io/r/stats/residuals.html) expose the
+modelled observed responses (inspect each hurdle component separately).
+Intensity effects are differences on the modelled scale, hence log2 fold
+changes for log2 responses; detection effects are log odds ratios, with
+fitted responses reported as probabilities. Transformations performed
+before this call retain their input columns in LFQData; this call does
+not record a transformation history or infer inverse transformations.
+
+With a fixed design and fixed observations per protein, the per-protein
+`lm` and `lmer_nested` fitting loops grow approximately linearly with
+the number of proteins and run sequentially. `limma` fits the expression
+matrix in one call and has lower per-protein overhead. Single-run
+elapsed seconds for 500, 1000 and 2000 proteins were respectively 0.173,
+0.288 and 0.592 for `lm`; 0.077, 0.043 and 0.050 for `limma`; and 7.902,
+15.314 and 29.667 for `lmer_nested` (R 4.6.2, arm64 macOS, 12 samples,
+three peptides per protein for the nested model, no missing responses).
+These timings cover facade construction, including fitting, but exclude
+lazy contrast extraction. They are illustrative timings, not guarantees:
+sample count, design width, missingness and mixed-model convergence
+affect cost. Some mixed fits in this run emitted convergence warnings.
+Reproduction code and environment details are in
+`srr/benchmark-runtime.R` in the source repository.
 
 ## See also
 
@@ -142,7 +185,9 @@ Other modelling:
 [`moderated_p_deqms_long()`](https://fgcz.github.io/prolfqua/reference/moderated_p_deqms_long.md),
 [`moderated_p_limma()`](https://fgcz.github.io/prolfqua/reference/moderated_p_limma.md),
 [`new_imputed_model()`](https://fgcz.github.io/prolfqua/reference/new_imputed_model.md),
+[`nobs.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/nobs.rfit_prolfqua.md),
 [`pivot_model_contrasts_to_wide()`](https://fgcz.github.io/prolfqua/reference/pivot_model_contrasts_to_wide.md),
+[`prolfqua_analysis_methods`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md),
 [`register_facade()`](https://fgcz.github.io/prolfqua/reference/register_facade.md),
 [`sigma.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/sigma.rfit_prolfqua.md),
 [`sim_build_models_lm()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_lm.md),
@@ -161,16 +206,12 @@ Other modelling:
 ``` r
 istar <- sim_lfq_data_protein_config(Nprot = 20)
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 lfqdata <- LFQData$new(istar$data, istar$config)
 lfqdata$rename_response("transformedIntensity")
 contrasts <- c("A_vs_Ctrl" = "group_A - group_Ctrl")
 
 fa_lm    <- build_contrast_analysis(lfqdata, "~ group_", contrasts, method = "lm")
 head(fa_lm$get_contrasts())
-#> contrasts_linfct
 #> # A tibble: 6 × 16
 #>   modelName estimate_type protein_Id  contrast     diff avgAbd
 #>   <chr>     <chr>         <chr>       <chr>       <dbl>  <dbl>
@@ -201,7 +242,6 @@ head(fa_limma$get_contrasts())
 
 fa_deqms <- build_contrast_analysis(lfqdata, "~ group_", contrasts, method = "deqms")
 head(fa_deqms$get_contrasts())
-#> contrasts_linfct
 #> # A tibble: 6 × 16
 #>   modelName estimate_type contrast  protein_Id     diff avgAbd
 #>   <chr>     <chr>         <chr>     <chr>         <dbl>  <dbl>
@@ -212,14 +252,11 @@ head(fa_deqms$get_contrasts())
 #> 5 deqms     observed      A_vs_Ctrl At886V~3296 -1.01     19.1
 #> 6 deqms     observed      A_vs_Ctrl BEJI92~9143 -0.873    20.9
 #> # ℹ 10 more variables: std.error.unmoderated <dbl>, df.unmoderated <int>,
-#> #   std.error <dbl>, statistic <dbl>, df <int>, p.value <dbl>, conf.low <dbl>,
+#> #   std.error <dbl>, statistic <dbl>, df <dbl>, p.value <dbl>, conf.low <dbl>,
 #> #   conf.high <dbl>, sigma <dbl>, FDR <dbl>
 
 istar_pep <- sim_lfq_data_peptide_config()
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 lfqdata_pep <- LFQData$new(istar_pep$data, istar_pep$config)
 lfqdata_pep <- lfqdata_pep$get_Transformer()$log2()$lfq
 #> Column added : log2_abundance
@@ -244,7 +281,6 @@ fa_lmer <- build_contrast_analysis(
 #> ! grouping factors must have > 1 sampled level
 #> ℹ Run `dplyr::last_dplyr_warnings()` to see the 3 remaining warnings.
 head(fa_lmer$get_contrasts())
-#> contrasts_linfct
 #> # A tibble: 6 × 16
 #>   modelName   estimate_type protein_Id  contrast       diff avgAbd
 #>   <chr>       <chr>         <chr>       <chr>         <dbl>  <dbl>
@@ -260,7 +296,6 @@ head(fa_lmer$get_contrasts())
 
 fa_ropeca <- build_contrast_analysis(lfqdata_pep, "~ group_", contrasts, method = "ropeca_nested")
 head(fa_ropeca$get_contrasts())
-#> contrasts_linfct
 #> # A tibble: 6 × 14
 #> # Groups:   contrast [1]
 #>   modelName   estimate_type protein_Id contrast avgAbd    diff     FDR statistic
@@ -275,16 +310,14 @@ head(fa_ropeca$get_contrasts())
 #> #   conf.high <dbl>, sigma <dbl>
 
 fa_firth <- build_contrast_analysis(lfqdata, "~ group_", contrasts, method = "firth")
-#> completing cases
 head(fa_firth$get_contrasts())
-#> contrasts_linfct
 #> # A tibble: 6 × 16
 #> # Groups:   contrast [1]
 #>   modelName estimate_type protein_Id  contrast  sigma    df      diff   FDR
 #>   <chr>     <chr>         <chr>       <chr>     <dbl> <int>     <dbl> <dbl>
-#> 1 firth     observed      0EfVhX~5954 A_vs_Ctrl     1     9  1.07e-15     1
+#> 1 firth     observed      0EfVhX~5954 A_vs_Ctrl     1     9  4.27e-16     1
 #> 2 firth     observed      0m5WN4~1448 A_vs_Ctrl     1     9 -2.20e+ 0     1
-#> 3 firth     observed      7cbcrd~8305 A_vs_Ctrl     1     9  1.07e-15     1
+#> 3 firth     observed      7cbcrd~8305 A_vs_Ctrl     1     9  4.27e-16     1
 #> 4 firth     observed      9VUkAq~4562 A_vs_Ctrl     1     9 -1.35e+ 0     1
 #> 5 firth     observed      At886V~3296 A_vs_Ctrl     1     9  5.58e-16     1
 #> 6 firth     observed      BEJI92~9143 A_vs_Ctrl     1     9 -1.35e+ 0     1

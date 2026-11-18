@@ -84,7 +84,9 @@ Other modelling:
 [`moderated_p_deqms_long()`](https://fgcz.github.io/prolfqua/reference/moderated_p_deqms_long.md),
 [`moderated_p_limma()`](https://fgcz.github.io/prolfqua/reference/moderated_p_limma.md),
 [`new_imputed_model()`](https://fgcz.github.io/prolfqua/reference/new_imputed_model.md),
+[`nobs.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/nobs.rfit_prolfqua.md),
 [`pivot_model_contrasts_to_wide()`](https://fgcz.github.io/prolfqua/reference/pivot_model_contrasts_to_wide.md),
+[`prolfqua_analysis_methods`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md),
 [`register_facade()`](https://fgcz.github.io/prolfqua/reference/register_facade.md),
 [`sigma.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/sigma.rfit_prolfqua.md),
 [`sim_build_models_lm()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_lm.md),
@@ -115,10 +117,10 @@ Other modelling:
 
 Inherited methods
 
-- [`StrategyBase$df_residual()`](https://fgcz.github.io/prolfqua/html/StrategyBase.html#method-StrategyBase-df_residual)
-- [`StrategyBase$initialize()`](https://fgcz.github.io/prolfqua/html/StrategyBase.html#method-StrategyBase-initialize)
-- [`StrategyBase$model_fun()`](https://fgcz.github.io/prolfqua/html/StrategyBase.html#method-StrategyBase-model_fun)
-- [`StrategyBase$sigma()`](https://fgcz.github.io/prolfqua/html/StrategyBase.html#method-StrategyBase-sigma)
+- [`StrategyBase$df_residual()`](https://fgcz.github.io/prolfqua/reference/StrategyBase.html#method-df_residual)
+- [`StrategyBase$initialize()`](https://fgcz.github.io/prolfqua/reference/StrategyBase.html#method-initialize)
+- [`StrategyBase$model_fun()`](https://fgcz.github.io/prolfqua/reference/StrategyBase.html#method-model_fun)
+- [`StrategyBase$sigma()`](https://fgcz.github.io/prolfqua/reference/StrategyBase.html#method-sigma)
 
 ------------------------------------------------------------------------
 
@@ -174,9 +176,6 @@ The objects of this class are cloneable with this method.
 ``` r
 istar <- prolfqua::sim_lfq_data_peptide_config(Nprot = 10, with_missing = FALSE)
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 istar <- prolfqua::LFQData$new(istar$data, istar$config)
 istar$set_data(istar$data_long() |> dplyr::group_by(protein_Id) |>
   dplyr::mutate(abundanceC = abundance - mean(abundance)) |> dplyr::ungroup())

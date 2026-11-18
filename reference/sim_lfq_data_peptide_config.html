@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prolfqua</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.99.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.99.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Vignettes</h6></li>
     <li><a class="dropdown-item" href="../articles/CreatingConfigurations.html">Importing your data: AnalysisConfiguration</a></li>
+    <li><a class="dropdown-item" href="../articles/TransformingLFQData.html">Transforming and calibrating LFQ data</a></li>
     <li><a class="dropdown-item" href="../articles/Comparing2Groups.html">Comparing Two Groups with prolfqua</a></li>
     <li><a class="dropdown-item" href="../articles/ModellingMethods.html">All modelling methods at a glance</a></li>
     <li><a class="dropdown-item" href="../articles/TwoFactorDesigns.html">Two-factor designs</a></li>
@@ -70,7 +71,7 @@
 
 
 <dl><dt id="arg-nprot">Nprot<a class="anchor" aria-label="anchor" href="#arg-nprot"></a></dt>
-<dd><p>number of proteins to simulate</p></dd>
+<dd><p>one positive whole number of proteins to simulate</p></dd>
 
 
 <dt id="arg-with-missing">with_missing<a class="anchor" aria-label="anchor" href="#arg-with-missing"></a></dt>
@@ -78,7 +79,7 @@
 
 
 <dt id="arg-weight-missing">weight_missing<a class="anchor" aria-label="anchor" href="#arg-weight-missing"></a></dt>
-<dd><p>controls proportion of missing values; greater weight means more missingness</p></dd>
+<dd><p>one number in [0, 1]; greater weight means more missingness</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
@@ -99,9 +100,6 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">sim_lfq_data_peptide_config</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> creating sampleName from file_name column</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> completing cases</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> completing cases done</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> setup done</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="st">"data.frame"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="st">"AnalysisConfiguration"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">config</span><span class="op">)</span><span class="op">)</span></span></span>
 </code></pre></div>

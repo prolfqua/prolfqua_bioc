@@ -20,7 +20,7 @@ sim_lfq_data_2factor_config(
 
 - Nprot:
 
-  number of proteins to simulate
+  one positive whole number of proteins to simulate
 
 - with_missing:
 
@@ -28,8 +28,7 @@ sim_lfq_data_2factor_config(
 
 - weight_missing:
 
-  controls proportion of missing values; greater weight means more
-  missingness
+  one number in \[0, 1\]; greater weight means more missingness
 
 - PEPTIDE:
 
@@ -52,19 +51,12 @@ A list containing simulated data and an analysis configuration.
 ``` r
 x <- sim_lfq_data_2factor_config(PEPTIDE= FALSE)
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 dim(x$data)
 #> [1] 160   9
 stopifnot("data.frame" %in% class(x$data))
 stopifnot("AnalysisConfiguration" %in% class(x$config))
 x <- sim_lfq_data_2factor_config(PEPTIDE = TRUE)
-#> Warning: Unknown or uninitialised column: `nrPeptides`.
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 
 head(x$data)
 #> # A tibble: 6 × 10
@@ -78,11 +70,7 @@ head(x$data)
 #> 6 A_V1   A_V1       A         X          light        BEJI92~5282 HBkZvdhT  
 #> # ℹ 3 more variables: abundance <dbl>, qValue <dbl>, nrPeptides <dbl>
 x <- sim_lfq_data_2factor_config(PEPTIDE = TRUE, TWO = TRUE)
-#> Warning: Unknown or uninitialised column: `nrPeptides`.
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 names(x)
 #> [1] "data"   "config"
 nrow(x$data) > 10

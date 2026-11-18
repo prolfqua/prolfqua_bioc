@@ -82,7 +82,9 @@ Other modelling:
 [`moderated_p_deqms_long()`](https://fgcz.github.io/prolfqua/reference/moderated_p_deqms_long.md),
 [`moderated_p_limma()`](https://fgcz.github.io/prolfqua/reference/moderated_p_limma.md),
 [`new_imputed_model()`](https://fgcz.github.io/prolfqua/reference/new_imputed_model.md),
+[`nobs.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/nobs.rfit_prolfqua.md),
 [`pivot_model_contrasts_to_wide()`](https://fgcz.github.io/prolfqua/reference/pivot_model_contrasts_to_wide.md),
+[`prolfqua_analysis_methods`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md),
 [`register_facade()`](https://fgcz.github.io/prolfqua/reference/register_facade.md),
 [`sigma.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/sigma.rfit_prolfqua.md),
 [`sim_build_models_lm()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_lm.md),
@@ -137,10 +139,10 @@ Other modelling:
 
 Inherited methods
 
-- [`ModelInterface$anova_histogram()`](https://fgcz.github.io/prolfqua/html/ModelInterface.html#method-ModelInterface-anova_histogram)
-- [`ModelInterface$coef_histogram()`](https://fgcz.github.io/prolfqua/html/ModelInterface.html#method-ModelInterface-coef_histogram)
-- [`ModelInterface$coef_pairs()`](https://fgcz.github.io/prolfqua/html/ModelInterface.html#method-ModelInterface-coef_pairs)
-- [`ModelInterface$coef_volcano()`](https://fgcz.github.io/prolfqua/html/ModelInterface.html#method-ModelInterface-coef_volcano)
+- [`ModelInterface$anova_histogram()`](https://fgcz.github.io/prolfqua/reference/ModelInterface.html#method-anova_histogram)
+- [`ModelInterface$coef_histogram()`](https://fgcz.github.io/prolfqua/reference/ModelInterface.html#method-coef_histogram)
+- [`ModelInterface$coef_pairs()`](https://fgcz.github.io/prolfqua/reference/ModelInterface.html#method-coef_pairs)
+- [`ModelInterface$coef_volcano()`](https://fgcz.github.io/prolfqua/reference/ModelInterface.html#method-coef_volcano)
 
 ------------------------------------------------------------------------
 
@@ -224,9 +226,6 @@ The objects of this class are cloneable with this method.
 
 istar <- sim_lfq_data_peptide_config(Nprot = 20)
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 lfqdata <- LFQData$new(istar$data, istar$config)
 lfqdata <- lfqdata$get_Transformer()$log2()$lfq
 #> Column added : log2_abundance

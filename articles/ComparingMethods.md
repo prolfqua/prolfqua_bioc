@@ -508,7 +508,7 @@ fa_binomial_firth <- build_contrast_analysis(
 
 `ropeca_nested` and `ropecaV2_nested` aggregate peptide evidence back to
 proteins; `ropecaV2_nested` estimates the correlation of the peptides of
-a protein from the residuals, here 0.03, so that proteins with many
+a protein from the residuals, here 0.06, so that proteins with many
 peptides are not reported as more significant. In contrast,
 `lmer_nested` models the nested peptide structure directly before
 reporting protein-level contrasts. `binomial_firth_nested` also reports
@@ -609,12 +609,12 @@ results_hurdle |>
     ##  2 A_vs_Ct… KVkccD~18… -0.524          1.99e- 9      -1.88e+ 0             0.251
     ##  3 A_vs_Ct… 4Y4DYT~09…  0.583          1.99e- 8       8.51e-16             1    
     ##  4 A_vs_Ct… 0CubNR~08…  0.674          4.07e- 8       1.35e+ 0             0.449
-    ##  5 A_vs_Ct… 6TevMr~75…  0.765          4.26e- 8      -2.15e-15             1.000
-    ##  6 B_vs_Ct… fylZqB~38…  0.717          1.66e-10       0                    1    
-    ##  7 B_vs_Ct… f0Cvvj~66…  0.345          3.71e-10       1.97e-31           NaN    
-    ##  8 B_vs_Ct… XxJoJB~72…  0.587          2.82e- 9       0                    1    
-    ##  9 B_vs_Ct… DOwxjj~62…  0.294          1.44e- 7      -3.94e-31             1    
-    ## 10 B_vs_Ct… TR3Ksv~14… -0.413          4.18e- 7       0                    1    
+    ##  5 A_vs_Ct… 6TevMr~75…  0.765          4.26e- 8      -2.11e-15             1.000
+    ##  6 B_vs_Ct… fylZqB~38…  0.717          1.66e-10      -9.86e-32             1    
+    ##  7 B_vs_Ct… f0Cvvj~66…  0.345          3.71e-10       0                  NaN    
+    ##  8 B_vs_Ct… XxJoJB~72…  0.587          2.82e- 9      -9.86e-32             1    
+    ##  9 B_vs_Ct… DOwxjj~62…  0.294          1.44e- 7       1.97e-31             1    
+    ## 10 B_vs_Ct… TR3Ksv~14… -0.413          4.18e- 7      -9.86e-32             1    
     ## # ℹ 2 more variables: p.value <dbl>, FDR <dbl>
 
 The `hurdle_nested` method does all of this from the peptide data in one
@@ -685,44 +685,37 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] ggplot2_4.0.4    dplyr_1.2.1      prolfqua_0.99.12
+    ## [1] ggplot2_4.0.4    dplyr_1.2.1      prolfqua_0.99.13
     ## 
     ## loaded via a namespace (and not attached):
-    ##   [1] Rdpack_2.6.6           gridExtra_2.3.1        rlang_1.3.0           
-    ##   [4] magrittr_2.0.5         clue_0.3-68            GetoptLong_1.1.1      
-    ##   [7] otel_0.3.0             matrixStats_1.5.0      compiler_4.6.2        
-    ##  [10] mgcv_1.9-4             png_0.1-9              systemfonts_1.3.2     
-    ##  [13] vctrs_0.7.3            stringr_1.6.0          pkgconfig_2.0.3       
-    ##  [16] shape_1.4.6.1          crayon_1.5.3           fastmap_1.2.0         
-    ##  [19] backports_1.5.1        labeling_0.4.3         utf8_1.2.6            
-    ##  [22] rmarkdown_2.32         nloptr_2.2.1           ragg_1.5.2            
-    ##  [25] UpSetR_1.4.1           purrr_1.2.2            xfun_0.62             
-    ##  [28] glmnet_5.2             jomo_2.7-6             logistf_1.26.1        
-    ##  [31] cachem_1.1.0           jsonlite_2.0.0         progress_1.2.3        
-    ##  [34] pan_2.0                Rfit_0.27.0            prettyunits_1.2.0     
-    ##  [37] broom_1.0.13           parallel_4.6.2         cluster_2.1.8.3       
-    ##  [40] R6_2.6.1               bslib_0.12.0           stringi_1.8.9         
-    ##  [43] RColorBrewer_1.1-3     limma_3.68.5           boot_1.3-32           
-    ##  [46] rpart_4.1.27           numDeriv_2016.8-1.1    jquerylib_0.1.4       
-    ##  [49] Rcpp_1.1.2             iterators_1.0.14       knitr_1.52            
-    ##  [52] IRanges_2.46.0         Matrix_1.7-6           splines_4.6.2         
-    ##  [55] nnet_7.3-21            tidyselect_1.2.1       yaml_2.3.12           
-    ##  [58] doParallel_1.0.17      codetools_0.2-20       lmerTest_3.2-1        
-    ##  [61] lattice_0.23-1         tibble_3.3.1           plyr_1.8.9            
-    ##  [64] withr_3.0.3            S7_0.2.2               evaluate_1.0.5        
-    ##  [67] desc_1.4.3             survival_3.8-12        circlize_0.4.18       
-    ##  [70] pillar_1.11.1          mice_3.19.0            foreach_1.5.2         
-    ##  [73] stats4_4.6.2           reformulas_0.4.4       plotly_4.12.1         
-    ##  [76] generics_0.1.4         hms_1.1.4              S4Vectors_0.50.3      
-    ##  [79] scales_1.4.0           minqa_1.2.8            glue_1.8.1            
-    ##  [82] tools_4.6.2            data.table_1.18.6.1    lme4_2.1-0            
-    ##  [85] forcats_1.0.1          fs_2.1.0               grid_4.6.2            
-    ##  [88] limpa_1.4.2            tidyr_1.3.2            rbibutils_2.4.1       
-    ##  [91] colorspace_2.1-4       nlme_3.1-171           formula.tools_1.7.1   
-    ##  [94] cli_3.6.6              textshaping_1.0.5      viridisLite_0.4.3     
-    ##  [97] ComplexHeatmap_2.28.0  gtable_0.3.6           sass_0.4.10           
-    ## [100] digest_0.6.39          operator.tools_1.6.3.1 BiocGenerics_0.58.1   
-    ## [103] ggrepel_0.9.8          rjson_0.2.23           htmlwidgets_1.6.4     
-    ## [106] farver_2.1.2           htmltools_0.5.9        pkgdown_2.2.1         
-    ## [109] lifecycle_1.0.5        httr_1.4.9             GlobalOptions_0.1.4   
-    ## [112] mitml_0.4-5            statmod_1.5.2          MASS_7.3-66
+    ##  [1] tidyselect_1.2.1       farver_2.1.2           S7_0.2.2              
+    ##  [4] fastmap_1.2.0          digest_0.6.39          rpart_4.1.27          
+    ##  [7] lifecycle_1.0.5        survival_3.8-12        Rfit_0.27.0           
+    ## [10] statmod_1.5.2          magrittr_2.0.5         compiler_4.6.2        
+    ## [13] rlang_1.3.0            sass_0.4.10            progress_1.2.3        
+    ## [16] tools_4.6.2            utf8_1.2.6             yaml_2.3.12           
+    ## [19] data.table_1.18.6.1    limpa_1.4.2            knitr_1.52            
+    ## [22] prettyunits_1.2.0      labeling_0.4.3         htmlwidgets_1.6.4     
+    ## [25] RColorBrewer_1.1-3     numDeriv_2016.8-1.1    withr_3.0.3           
+    ## [28] purrr_1.2.2            desc_1.4.3             nnet_7.3-21           
+    ## [31] grid_4.6.2             jomo_2.7-6             mice_3.19.0           
+    ## [34] scales_1.4.0           iterators_1.0.14       MASS_7.3-66           
+    ## [37] cli_3.6.6              rmarkdown_2.32         crayon_1.5.3          
+    ## [40] ragg_1.5.2             reformulas_0.4.4       generics_0.1.4        
+    ## [43] otel_0.3.0             minqa_1.2.8            cachem_1.1.0          
+    ## [46] stringr_1.6.0          operator.tools_1.6.3.1 splines_4.6.2         
+    ## [49] vctrs_0.7.3            boot_1.3-32            glmnet_5.2            
+    ## [52] Matrix_1.7-6           jsonlite_2.0.0         hms_1.1.4             
+    ## [55] mitml_0.4-5            ggrepel_0.9.8          systemfonts_1.3.3     
+    ## [58] foreach_1.5.2          limma_3.68.5           tidyr_1.3.2           
+    ## [61] jquerylib_0.1.4        glue_1.8.1             pkgdown_2.2.1         
+    ## [64] nloptr_2.2.1           pan_2.0                codetools_0.2-20      
+    ## [67] stringi_1.8.9          gtable_0.3.6           shape_1.4.6.1         
+    ## [70] lmerTest_3.2-1         lme4_2.1-0             tibble_3.3.1          
+    ## [73] pillar_1.11.1          htmltools_0.5.9        R6_2.6.1              
+    ## [76] textshaping_1.0.5      Rdpack_2.6.6           formula.tools_1.7.1   
+    ## [79] evaluate_1.0.5         lattice_0.23-1         rbibutils_2.4.1       
+    ## [82] backports_1.5.1        broom_1.0.13           bslib_0.12.0          
+    ## [85] Rcpp_1.1.2             nlme_3.1-171           mgcv_1.9-4            
+    ## [88] logistf_1.26.1         xfun_0.62              fs_2.1.0              
+    ## [91] pkgconfig_2.0.3

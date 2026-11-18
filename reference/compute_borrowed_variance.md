@@ -27,11 +27,11 @@ compute_borrowed_variance(
 
   behaviour when donor `vcov` matrices cannot be aligned by coefficient
   name (`method = "vcov"` only). "fallback" (default) warns and falls
-  back to the sigma method, preserving the lm behaviour. "fail" signals
-  a `prolfqua_borrow_failed` condition so the caller can skip the
-  rescue; backends without an lm-style `summary(fit)$cov.unscaled` (e.g.
-  rfit) must use this because the sigma fallback is not applicable to
-  them.
+  back to the sigma method, preserving the lm behaviour. "fail" borrows
+  from the largest subset sharing the maximal coefficient set without a
+  sigma fallback; backends without an lm-style
+  `summary(fit)$cov.unscaled` (e.g. rfit) must use this because the
+  sigma fallback is not applicable to them.
 
 ## Value
 
@@ -113,7 +113,9 @@ Other modelling:
 [`moderated_p_deqms_long()`](https://fgcz.github.io/prolfqua/reference/moderated_p_deqms_long.md),
 [`moderated_p_limma()`](https://fgcz.github.io/prolfqua/reference/moderated_p_limma.md),
 [`new_imputed_model()`](https://fgcz.github.io/prolfqua/reference/new_imputed_model.md),
+[`nobs.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/nobs.rfit_prolfqua.md),
 [`pivot_model_contrasts_to_wide()`](https://fgcz.github.io/prolfqua/reference/pivot_model_contrasts_to_wide.md),
+[`prolfqua_analysis_methods`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md),
 [`register_facade()`](https://fgcz.github.io/prolfqua/reference/register_facade.md),
 [`sigma.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/sigma.rfit_prolfqua.md),
 [`sim_build_models_lm()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_lm.md),
@@ -132,9 +134,6 @@ Other modelling:
 ``` r
 mod <- sim_build_models_lm(model = "parallel3", weight_missing = 1)
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 
 # Sigma method (default): returns median sigma and df from donors
 borrowed_s <- prolfqua:::compute_borrowed_variance(
@@ -148,9 +147,6 @@ stopifnot(is.numeric(borrowed_s$df) && borrowed_s$df > 0)
 mod_no_missing <- sim_build_models_lm(model = "parallel3",
   Nprot = 10, with_missing = FALSE)
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 borrowed_v <- prolfqua:::compute_borrowed_variance(
   mod_no_missing$model_df, method = "vcov")
 stopifnot(borrowed_v$method == "vcov")

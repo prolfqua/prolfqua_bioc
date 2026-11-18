@@ -105,7 +105,9 @@ Other modelling:
 [`moderated_p_deqms_long()`](https://fgcz.github.io/prolfqua/reference/moderated_p_deqms_long.md),
 [`moderated_p_limma()`](https://fgcz.github.io/prolfqua/reference/moderated_p_limma.md),
 [`new_imputed_model()`](https://fgcz.github.io/prolfqua/reference/new_imputed_model.md),
+[`nobs.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/nobs.rfit_prolfqua.md),
 [`pivot_model_contrasts_to_wide()`](https://fgcz.github.io/prolfqua/reference/pivot_model_contrasts_to_wide.md),
+[`prolfqua_analysis_methods`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md),
 [`register_facade()`](https://fgcz.github.io/prolfqua/reference/register_facade.md),
 [`sigma.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/sigma.rfit_prolfqua.md),
 [`sim_build_models_lm()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_lm.md),
@@ -154,17 +156,17 @@ Other modelling:
 
 Inherited methods
 
-- [`ContrastsInterface$column_description()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-column_description)
-- [`ContrastsInterface$contrast_summary_table()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-contrast_summary_table)
-- [`ContrastsInterface$extra_artifacts()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-extra_artifacts)
-- [`ContrastsInterface$filter_significant()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-filter_significant)
-- [`ContrastsInterface$get_Plotter()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_Plotter)
-- [`ContrastsInterface$get_config()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_config)
-- [`ContrastsInterface$get_contrast_sides()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_contrast_sides)
-- [`ContrastsInterface$get_missing()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_missing)
-- [`ContrastsInterface$get_ora()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_ora)
-- [`ContrastsInterface$get_rank()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_rank)
-- [`ContrastsInterface$to_wide()`](https://fgcz.github.io/prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-to_wide)
+- [`ContrastsInterface$column_description()`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.html#method-column_description)
+- [`ContrastsInterface$contrast_summary_table()`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.html#method-contrast_summary_table)
+- [`ContrastsInterface$extra_artifacts()`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.html#method-extra_artifacts)
+- [`ContrastsInterface$filter_significant()`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.html#method-filter_significant)
+- [`ContrastsInterface$get_Plotter()`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.html#method-get_Plotter)
+- [`ContrastsInterface$get_config()`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.html#method-get_config)
+- [`ContrastsInterface$get_contrast_sides()`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.html#method-get_contrast_sides)
+- [`ContrastsInterface$get_missing()`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.html#method-get_missing)
+- [`ContrastsInterface$get_ora()`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.html#method-get_ora)
+- [`ContrastsInterface$get_rank()`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.html#method-get_rank)
+- [`ContrastsInterface$to_wide()`](https://fgcz.github.io/prolfqua/reference/ContrastsInterface.html#method-to_wide)
 
 ------------------------------------------------------------------------
 
@@ -232,25 +234,16 @@ The objects of this class are cloneable with this method.
 ``` r
 istar <- sim_lfq_data_peptide_config(Nprot = 20, weight_missing = 0.5, seed = 3)
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 lfq_peptide <- LFQData$new(istar$data, istar$config)
 lfq_peptide <- lfq_peptide$get_Transformer()$log2()$lfq
 #> Column added : log2_abundance
 lfq_protein <- lfq_peptide$get_Aggregator()$aggregate()
-#> starting aggregation
 #> Warning: medpolish() did not converge in 10 iterations
-#> completing cases
 contrasts <- c("A_vs_Ctrl" = "group_A - group_Ctrl")
 intensity <- build_contrast_analysis(lfq_protein, "~ group_", contrasts, method = "lm_impute")
 detection <- build_contrast_analysis(lfq_peptide, "~ group_", contrasts, method = "binomial_nested")
-#> completing cases
 hurdle <- ContrastsHurdleFacade$new(intensity, detection)
-#> contrasts_linfct
-#> contrasts_linfct
 res <- hurdle$get_contrasts()
-#> completing cases
 table(res$hurdle_components)
 #> 
 #>      both intensity 
@@ -272,7 +265,6 @@ head(res)
 #> #   p.value.detection <dbl>, FDR.detection <dbl>, chisq.hurdle <dbl>,
 #> #   df.hurdle <dbl>, hurdle_components <chr>
 hurdle$to_wide()
-#> completing cases
 #> # A tibble: 20 × 5
 #>    protein_Id diff.A_vs_Ctrl p.value.A_vs_Ctrl FDR.A_vs_Ctrl statistic.A_vs_Ctrl
 #>    <chr>               <dbl>             <dbl>         <dbl>               <dbl>

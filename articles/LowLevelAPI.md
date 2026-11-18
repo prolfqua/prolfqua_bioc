@@ -117,16 +117,191 @@ The model coefficients:
 head(mod$get_coefficients())
 ```
 
-    ## # A tibble: 6 × 8
+    ## # A tibble: 6 × 9
     ## # Groups:   protein_Id [2]
-    ##   protein_Id  factor     Estimate Std..Error t.value Pr...t.. isSingular nr_coef
-    ##   <chr>       <chr>         <dbl>      <dbl>   <dbl>    <dbl> <lgl>        <int>
-    ## 1 0EfVhX~3967 (Intercep…    22.0       0.494   44.5  7.53e-10 FALSE            3
-    ## 2 0EfVhX~3967 group_B       -2.39      0.755   -3.17 1.57e- 2 FALSE            3
-    ## 3 0EfVhX~3967 group_Ctrl    -1.37      0.755   -1.82 1.12e- 1 FALSE            3
-    ## 4 0m5WN4~6025 (Intercep…    16.9       0.599   28.2  2.68e- 9 FALSE            3
-    ## 5 0m5WN4~6025 group_B        6.58      0.792    8.31 3.32e- 5 FALSE            3
-    ## 6 0m5WN4~6025 group_Ctrl     3.04      0.792    3.84 4.96e- 3 FALSE            3
+    ##   protein_Id  factor      Estimate Std..Error    df t.value Pr...t.. isSingular
+    ##   <chr>       <chr>          <dbl>      <dbl> <int>   <dbl>    <dbl> <lgl>     
+    ## 1 0EfVhX~3967 (Intercept)    22.0       0.494     7   44.5  7.53e-10 FALSE     
+    ## 2 0EfVhX~3967 group_B        -2.39      0.755     7   -3.17 1.57e- 2 FALSE     
+    ## 3 0EfVhX~3967 group_Ctrl     -1.37      0.755     7   -1.82 1.12e- 1 FALSE     
+    ## 4 0m5WN4~6025 (Intercept)    16.9       0.599     8   28.2  2.68e- 9 FALSE     
+    ## 5 0m5WN4~6025 group_B         6.58      0.792     8    8.31 3.32e- 5 FALSE     
+    ## 6 0m5WN4~6025 group_Ctrl      3.04      0.792     8    3.84 4.96e- 3 FALSE     
+    ## # ℹ 1 more variable: nr_coef <int>
+
+## From a formula to coefficient weights
+
+[`setup_analysis()`](https://fgcz.github.io/prolfqua/reference/setup_analysis.md)
+treats configured predictors as categorical labels. It converts numeric
+predictors and ordered factors to character too, so ordered levels and
+numeric slopes are not retained by that route. It builds the configured
+identifiers and retains the analysis columns; other columns and their
+attributes are discarded. The names in `config$factors` are the
+predictor names used in the formula. Method keys, predictor names and
+contrast names are case sensitive.
+
+R normally uses treatment coding (`options("contrasts")`): an intercept
+for the reference group and one coefficient per other level. When
+predictors are character labels, the first sorted level is normally the
+reference. In this small example we explicitly set `Ctrl` as the
+reference to make the coefficients easy to read:
+
+``` r
+one_factor <- data.frame(
+  group_ = factor(rep(c("Ctrl", "A", "B"), each = 3), levels = c("Ctrl", "A", "B")),
+  abundance = c(19.8, 20, 20.2, 21.8, 22, 22.2, 18.8, 19, 19.2)
+)
+one_model <- lm(abundance ~ group_, data = one_factor)
+unique(model.matrix(one_model))
+```
+
+    ##   (Intercept) group_A group_B
+    ## 1           1       0       0
+    ## 4           1       1       0
+    ## 7           1       0       1
+
+``` r
+coef(one_model)
+```
+
+    ## (Intercept)     group_A     group_B 
+    ##          20           2          -1
+
+The coefficient vector is `(Intercept)`, `group_A`, `group_B`: control
+abundance, A minus control, and B minus control.
+[`linfct_from_model()`](https://fgcz.github.io/prolfqua/reference/linfct_from_model.md)
+represents each group mean as a row of weights on those coefficients.
+Internally `.model_coeff_matrix()` creates the weights for observed
+factor combinations and `.coeff_weights_factor_levels()` averages them
+equally within each factor level.
+[`linfct_matrix_contrasts()`](https://fgcz.github.io/prolfqua/reference/linfct_matrix_contrasts.md)
+then evaluates the named expression using those group rows:
+
+``` r
+one_means <- linfct_from_model(one_model)$linfct_factors
+one_means
+```
+
+    ##            (Intercept) group_A group_B
+    ## group_A              1       1       0
+    ## group_B              1       0       1
+    ## group_Ctrl           1       0       0
+
+``` r
+one_contrast <- linfct_matrix_contrasts(one_means, c(A_vs_Ctrl = "group_A - group_Ctrl"))
+one_contrast
+```
+
+    ##           (Intercept) group_A group_B
+    ## A_vs_Ctrl           0       1       0
+
+``` r
+drop(one_contrast %*% coef(one_model))
+```
+
+    ## A_vs_Ctrl 
+    ##         2
+
+Here `A_vs_Ctrl` has weights `(0, 1, 0)` and estimates a difference of
+2. If A were the reference, the individual coefficient names and weights
+would change, but the same contrast of group means would still estimate
+A minus control. The contrast strings refer to group means, which should
+not be confused with individual treatment-coded coefficients.
+
+### Two factors and their interaction
+
+`~ A * B` expands to `~ A + B + A:B`. With two levels per factor, its
+four columns are an intercept, the A effect at the B reference level,
+the B effect at the A reference level, and their interaction. The
+interaction is the change in the A effect between the two B levels:
+
+``` r
+two_factor <- expand.grid(A = c("a0", "a1"), B = c("b0", "b1"), replicate = 1:3)
+two_factor$abundance <- 20 + 3 * (two_factor$A == "a1") - 2 * (two_factor$B == "b1") +
+  4 * (two_factor$A == "a1" & two_factor$B == "b1") + rep(c(-0.2, 0, 0.2), each = 4)
+two_model <- lm(abundance ~ A * B, data = two_factor)
+unique(model.matrix(two_model))
+```
+
+    ##   (Intercept) Aa1 Bb1 Aa1:Bb1
+    ## 1           1   0   0       0
+    ## 2           1   1   0       0
+    ## 3           1   0   1       0
+    ## 4           1   1   1       1
+
+``` r
+coef(two_model)
+```
+
+    ## (Intercept)         Aa1         Bb1     Aa1:Bb1 
+    ##          20           3          -2           4
+
+Cell means include the corresponding intercept, main effects and
+interaction. Quote the cell names with backticks because they contain
+colons. A main-effect row in `linfct_factors` averages equally over the
+observed cells containing that factor level; a row in
+`linfct_interactions` describes one cell. In this balanced example, the
+marginal A difference is 5, the A difference at `b0` is 3, and the
+difference at `b1` is 7:
+
+``` r
+two_means <- linfct_from_model(two_model)
+two_means$linfct_factors
+```
+
+    ##     (Intercept) Aa1 Bb1 Aa1:Bb1
+    ## Aa0           1 0.0 0.5     0.0
+    ## Aa1           1 1.0 0.5     0.5
+    ## Bb0           1 0.5 0.0     0.0
+    ## Bb1           1 0.5 1.0     0.5
+
+``` r
+two_means$linfct_interactions
+```
+
+    ##         (Intercept) Aa1 Bb1 Aa1:Bb1
+    ## Aa0:Bb0           1   0   0       0
+    ## Aa0:Bb1           1   0   1       0
+    ## Aa1:Bb0           1   1   0       0
+    ## Aa1:Bb1           1   1   1       1
+
+``` r
+two_weights <- linfct_matrix_contrasts(
+  linfct_from_model(two_model, as_list = FALSE),
+  c(
+    A_marginal = "Aa1 - Aa0",
+    A_at_b0 = "`Aa1:Bb0` - `Aa0:Bb0`",
+    A_at_b1 = "`Aa1:Bb1` - `Aa0:Bb1`",
+    A_by_B = "A_at_b1 - A_at_b0"
+  )
+)
+two_weights
+```
+
+    ##            (Intercept) Aa1 Bb1 Aa1:Bb1
+    ## A_marginal           0   1   0     0.5
+    ## A_at_b0              0   1   0     0.0
+    ## A_at_b1              0   1   0     1.0
+    ## A_by_B               0   0   0     1.0
+
+``` r
+drop(two_weights %*% coef(two_model))
+```
+
+    ## A_marginal    A_at_b0    A_at_b1     A_by_B 
+    ##          5          3          7          4
+
+``` r
+stopifnot(all.equal(unname(drop(two_weights %*% coef(two_model))), c(5, 3, 7, 4)))
+```
+
+These helpers assume categorical predictors and the usual
+intercept-based coding. They do not implement general marginal means for
+continuous covariates or arbitrary contrast coding. Missing factor
+combinations can make some rows unestimable; unavailable groups in the
+contrast expressions are reported by a warning at the low-level
+interface, and the facade rejects a group absent from the entire
+dataset.
 
 ## Without moderation
 
@@ -219,44 +394,21 @@ sessionInfo()
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] prolfqua_0.99.12
+    ## [1] prolfqua_0.99.13
     ## 
     ## loaded via a namespace (and not attached):
-    ##   [1] Rdpack_2.6.6           gridExtra_2.3.1        rlang_1.3.0           
-    ##   [4] magrittr_2.0.5         clue_0.3-68            GetoptLong_1.1.1      
-    ##   [7] otel_0.3.0             matrixStats_1.5.0      compiler_4.6.2        
-    ##  [10] mgcv_1.9-4             png_0.1-9              systemfonts_1.3.2     
-    ##  [13] vctrs_0.7.3            stringr_1.6.0          pkgconfig_2.0.3       
-    ##  [16] shape_1.4.6.1          crayon_1.5.3           fastmap_1.2.0         
-    ##  [19] backports_1.5.1        labeling_0.4.3         utf8_1.2.6            
-    ##  [22] rmarkdown_2.32         nloptr_2.2.1           ragg_1.5.2            
-    ##  [25] UpSetR_1.4.1           purrr_1.2.2            xfun_0.62             
-    ##  [28] glmnet_5.2             jomo_2.7-6             logistf_1.26.1        
-    ##  [31] cachem_1.1.0           jsonlite_2.0.0         progress_1.2.3        
-    ##  [34] pan_2.0                broom_1.0.13           parallel_4.6.2        
-    ##  [37] prettyunits_1.2.0      cluster_2.1.8.3        R6_2.6.1              
-    ##  [40] bslib_0.12.0           stringi_1.8.9          RColorBrewer_1.1-3    
-    ##  [43] limma_3.68.5           boot_1.3-32            rpart_4.1.27          
-    ##  [46] jquerylib_0.1.4        Rcpp_1.1.2             iterators_1.0.14      
-    ##  [49] knitr_1.52             IRanges_2.46.0         Matrix_1.7-6          
-    ##  [52] splines_4.6.2          nnet_7.3-21            tidyselect_1.2.1      
-    ##  [55] yaml_2.3.12            doParallel_1.0.17      codetools_0.2-20      
-    ##  [58] lattice_0.23-1         tibble_3.3.1           plyr_1.8.9            
-    ##  [61] withr_3.0.3            S7_0.2.2               evaluate_1.0.5        
-    ##  [64] desc_1.4.3             survival_3.8-12        circlize_0.4.18       
-    ##  [67] pillar_1.11.1          mice_3.19.0            foreach_1.5.2         
-    ##  [70] stats4_4.6.2           reformulas_0.4.4       plotly_4.12.1         
-    ##  [73] generics_0.1.4         S4Vectors_0.50.3       hms_1.1.4             
-    ##  [76] ggplot2_4.0.4          scales_1.4.0           minqa_1.2.8           
-    ##  [79] glue_1.8.1             tools_4.6.2            data.table_1.18.6.1   
-    ##  [82] lme4_2.1-0             forcats_1.0.1          fs_2.1.0              
-    ##  [85] grid_4.6.2             tidyr_1.3.2            rbibutils_2.4.1       
-    ##  [88] colorspace_2.1-4       nlme_3.1-171           formula.tools_1.7.1   
-    ##  [91] cli_3.6.6              textshaping_1.0.5      viridisLite_0.4.3     
-    ##  [94] ComplexHeatmap_2.28.0  dplyr_1.2.1            gtable_0.3.6          
-    ##  [97] sass_0.4.10            digest_0.6.39          operator.tools_1.6.3.1
-    ## [100] BiocGenerics_0.58.1    ggrepel_0.9.8          rjson_0.2.23          
-    ## [103] htmlwidgets_1.6.4      farver_2.1.2           htmltools_0.5.9       
-    ## [106] pkgdown_2.2.1          lifecycle_1.0.5        httr_1.4.9            
-    ## [109] GlobalOptions_0.1.4    mitml_0.4-5            statmod_1.5.2         
-    ## [112] MASS_7.3-66
+    ##  [1] utf8_1.2.6         sass_0.4.10        generics_0.1.4     tidyr_1.3.2       
+    ##  [5] stringi_1.8.9      hms_1.1.4          digest_0.6.39      magrittr_2.0.5    
+    ##  [9] evaluate_1.0.5     grid_4.6.2         RColorBrewer_1.1-3 fastmap_1.2.0     
+    ## [13] jsonlite_2.0.0     ggrepel_0.9.8      progress_1.2.3     limma_3.68.5      
+    ## [17] purrr_1.2.2        scales_1.4.0       textshaping_1.0.5  jquerylib_0.1.4   
+    ## [21] cli_3.6.6          rlang_1.3.0        crayon_1.5.3       withr_3.0.3       
+    ## [25] cachem_1.1.0       yaml_2.3.12        otel_0.3.0         tools_4.6.2       
+    ## [29] dplyr_1.2.1        ggplot2_4.0.4      vctrs_0.7.3        R6_2.6.1          
+    ## [33] lifecycle_1.0.5    stringr_1.6.0      fs_2.1.0           htmlwidgets_1.6.4 
+    ## [37] MASS_7.3-66        ragg_1.5.2         pkgconfig_2.0.3    desc_1.4.3        
+    ## [41] pkgdown_2.2.1      pillar_1.11.1      bslib_0.12.0       gtable_0.3.6      
+    ## [45] glue_1.8.1         Rcpp_1.1.2         statmod_1.5.2      systemfonts_1.3.3 
+    ## [49] xfun_0.62          tibble_3.3.1       tidyselect_1.2.1   knitr_1.52        
+    ## [53] farver_2.1.2       htmltools_0.5.9    labeling_0.4.3     rmarkdown_2.32    
+    ## [57] compiler_4.6.2     prettyunits_1.2.0  S7_0.2.2

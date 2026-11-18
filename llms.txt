@@ -4,7 +4,7 @@
 > [fgcz/prolfqua](https://github.com/fgcz/prolfqua).** It exists only to
 > be pushed to Bioconductor and differs from fgcz/prolfqua only in the
 > version number (Bioconductor numbering) and the R requirement. The
-> package ships eight vignettes; all tutorials, the full documentation
+> package ships nine vignettes; all tutorials, the full documentation
 > (<https://fgcz.github.io/prolfqua/>), releases and issue tracking are
 > at [fgcz/prolfqua](https://github.com/fgcz/prolfqua). Make code
 > changes in fgcz/prolfqua; they are merged into this repository from
@@ -31,27 +31,25 @@ methods](reference/figures/prolfqua_factory.png)
 
 # How to install prolfqua?
 
-Requirements : A Windows\|Linux\|MacOSX platform with R (\>= 4.1)
-installed.
+prolfqua requires R (\>= 4.6). It is part of
+[Bioconductor](https://bioconductor.org/) from release 3.24:
 
-We recommend to install the package using the latest
-[release](https://github.com/fgcz/prolfqua/releases) Download the
-`prolfqua_X.Y.Z.tar.gz` from the [github release
-page](https://github.com/fgcz/prolfqua/releases) into your working
-directory. and then execute:
+``` r
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
+}
+BiocManager::install("prolfqua")
+```
 
-    install.packages("./prolfqua_X.Y.Z.tar.gz",repos = NULL, type="source")
+To install the development version from GitHub:
 
-To install the package without vignettes from github you can execute in
-R.
+``` r
+install.packages("remotes")
+remotes::install_github("fgcz/prolfqua", dependencies = TRUE, build_vignettes = TRUE)
+```
 
-    install.packages('remotes')
-    remotes::install_github('fgcz/prolfqua', dependencies = TRUE)
-
-If you want to build the vignettes on your system:
-
-    install.packages('remotes')
-    remotes::install_github('fgcz/prolfqua', build_vignettes = TRUE, dependencies = TRUE)
+Some methods and plots use packages listed under `Suggests`; prolfqua
+asks to install them when they are needed.
 
 Let us please know about any installation problems or errors when using
 the package: <https://github.com/fgcz/prolfqua/issues>
@@ -60,13 +58,13 @@ the package: <https://github.com/fgcz/prolfqua/issues>
 
 How to build a `LFQData` object from a table with protein or peptide
 quantification results, and a table with sample annotation is described
-in more detail here the: [CreatingConfigurations
-vignette](https://fgcz.github.io/prolfqua/articles/CreatingConfigurations.html)
+in more detail in the [CreatingConfigurations
+vignette](https://fgcz.github.io/prolfqua/articles/CreatingConfigurations.html).
 
 A minimal example for a table with protein abundances is:
 
 ``` r
-#Table with abundances
+# Table with abundances
 df <- data.frame(protein_Id = c("tr|A|HUMAN","tr|B|HUMAN","tr|C|HUMAN","tr|D|HUMAN"),
                  Intensity_A = c(100,10000,10,NA),
                  Intensity_B = c(NA, 9000, 20, 100),
@@ -76,16 +74,14 @@ df <- data.frame(protein_Id = c("tr|A|HUMAN","tr|B|HUMAN","tr|C|HUMAN","tr|D|HUM
 annot <- data.frame(Sample = c("Intensity_A", "Intensity_B", "Intensity_C", "Intensity_D"), Group = c("A","A","B","C"))
 
 # convert into long format
-table_long <- tidyr::pivot_longer(df, starts_with("Intensity_"),names_to = "Sample", values_to = "Intensity")
+table_long <- tidyr::pivot_longer(df, dplyr::starts_with("Intensity_"), names_to = "Sample", values_to = "Intensity")
+table_long <- dplyr::inner_join(annot, table_long, by = "Sample")
 
-table_long <- dplyr::inner_join(annot, table_long)
-
-# create TableAnnotation and AnalysisConfiguration
-
+# create the AnalysisConfiguration
 config <- prolfqua::AnalysisConfiguration$new()
 config$file_name = "Sample"
 config$work_intensity = "Intensity"
-config$hierarchy[["protein_Id"]]    <-  "protein_Id"
+config$hierarchy[["protein_Id"]] <- "protein_Id"
 config$factors[["Group"]] <- "Group"
 
 # Build LFQData object
@@ -97,18 +93,17 @@ lfqdata$hierarchy_counts()
 Once you have created an `LFQData` you can use prolfqua like this.
 
 ``` r
-R.version.string; packageVersion("prolfqua")
+library(prolfqua)
 
 ## here we simulate peptide level data
 startdata <- sim_lfq_data_peptide_config()
 lfqpep <- LFQData$new(startdata$data, startdata$config)
 
-
-## transform intensities
+## transform intensities and aggregate peptides to proteins
 lfqpep <- lfqpep$get_Transformer()$log2()$robscale()$lfq
 lfqpep$rename_response("log_peptide_abundance")
 agr <- lfqpep$get_Aggregator()
-lfqpro <- agr$medpolish()
+lfqpro <- agr$aggregate()
 lfqpro$rename_response("log_protein_abundance")
 
 ## plot Figure 3 panels A-D
@@ -119,7 +114,7 @@ panelB <- agr$plot()$plots[[1]] + ggplot2::labs(tag = "B")
 panelC <- lfqpro$get_Stats()$violin() + ggplot2::labs(tag = "C")
 pl <- lfqpro$get_Plotter()
 panelD <- pl$boxplots()$boxplot[[1]] + ggplot2::labs(tag = "D")
-ggpubr::ggarrange(panelA, panelB, panelC, panelD)
+gridExtra::grid.arrange(panelA, panelB, panelC, panelD)
 ```
 
 ![image](https://github.com/fgcz/prolfqua/assets/1926513/4d5bb64b-6e45-4d00-b029-f08995ac3127)
@@ -127,51 +122,27 @@ ggpubr::ggarrange(panelA, panelB, panelC, panelD)
 image
 
 ``` r
-## specify model
-modelFunction <-
- strategy_lm("log_protein_abundance  ~ group_")
-
-## fit models to lfqpro data
-mod <- build_model(
- lfqpro,
- modelFunction
-)
-
 ## specify contrasts
 Contr <- c("AvsCtrl" = "group_A - group_Ctrl",
-     "BvsCtrl" = "group_B - group_Ctrl",
-     "BvsA" = "group_B - group_A"
-      )
-      
-## determine contrasts and plot
-contrastX <- prolfqua::Contrasts$new(mod, Contr)
-pl <- contrastX$get_Plotter()
-pl$volcano()$FDR
+           "BvsCtrl" = "group_B - group_Ctrl",
+           "BvsA" = "group_B - group_A")
+
+## fit a model per protein and compute the contrasts, here with limma
+fa <- build_contrast_analysis(lfqpro, "~ group_", Contr, method = "limma")
+fa$get_contrasts()
+
+## volcano plot
+fa$get_Plotter()$volcano()$FDR
 ```
 
 ![image](https://github.com/fgcz/prolfqua/assets/1926513/4ae8634b-ce6c-4fa2-8e42-c8bc64a12821)
 
 image
 
-[![SIB in-silico
-talk](https://img.youtube.com/vi/acDiXq2xbOw/1.jpg)](https://www.youtube.com/watch?v=acDiXq2xbOw)
+# Detailed documentation with R code
 
-- Watch the [silico
-  talks](https://www.sib.swiss/in-silico-talks/prolfqua-a-comprehensive-r-package-for-protein-differential-expression-analysis)
-- See our article at the [Journal of Proteome
-  Research](https://pubmed.ncbi.nlm.nih.gov/36939687/)
-- See [Bioconductor 2021 Conference
-  poster](https://fgcz-proteomics.uzh.ch/~wolski/PosterBioconductor.html).
-- Watch the lightning (8 min) talk at
-  [EuroBioc2020](https://www.youtube.com/watch?v=jOXU4X7nV9I&t) on
-  YouTube or [slides](https://f1000research.com/slides/9-1476).
-- Read the pkgdown generate website
-  <https://fgcz.github.io/prolfqua/index.html>
-
-# Detailed documentation with R code:
-
-Document’s explaining how to run an analysis with prolfqua are at
-github.io <https://fgcz.github.io/prolfqua/index.html>.
+Documents explaining how to run an analysis with prolfqua are at
+<https://fgcz.github.io/prolfqua/index.html>.
 
 1.  [Introduction to
     prolfqua](https://fgcz.github.io/prolfqua/articles/prolfqua.html)
@@ -190,45 +161,20 @@ github.io <https://fgcz.github.io/prolfqua/index.html>.
 8.  [QC and sample size
     estimation](https://fgcz.github.io/prolfqua/articles/QualityControlAndSampleSizeEstimation.html)
 
-Example QC and sample size report
+[![SIB in-silico
+talk](https://img.youtube.com/vi/acDiXq2xbOw/1.jpg)](https://www.youtube.com/watch?v=acDiXq2xbOw)
 
-- [QC and sample size
-  Report](https://fgcz.github.io/prolfqua/articles/QualityControlAndSampleSizeEstimation.html)
+- Watch the [in silico
+  talk](https://www.sib.swiss/in-silico-talks/prolfqua-a-comprehensive-r-package-for-protein-differential-expression-analysis)
+- See our article at the [Journal of Proteome
+  Research](https://doi.org/10.1021/acs.jproteome.2c00441)
+- See [Bioconductor 2021 Conference
+  poster](https://fgcz-proteomics.uzh.ch/~wolski/PosterBioconductor.html).
+- Watch the lightning (8 min) talk at
+  [EuroBioc2020](https://www.youtube.com/watch?v=jOXU4X7nV9I&t) on
+  YouTube or [slides](https://f1000research.com/slides/9-1476).
 
-# Related projects
-
-- prolfquabenchmark - a package to document the performance of prolfqua,
-  MSstats, msqrob, and proda. See documentation:
-  \[<https://prolfqua.github.io/prolfquabenchmark/>\]
-- prolfquapp: Generating Dynamic DEA Reports with the prolfqua R Package
-  <https://github.com/prolfqua/prolfquapp>
-- prophosqua - (scripts for the analysis of phospho experiments)
-  <https://github.com/prolfqua/prophosqua>
-
-# How to cite?
-
-Please do reference the [prolfqua article at Journal of Proteome
-Research](https://pubmed.ncbi.nlm.nih.gov/36939687/)
-
-    R> citation('prolfqua')
-    To cite prolfqua in publications use:
-
-      Wolski WE, Nanni P, Grossmann J, d'Errico M, Schlapbach R, Panse C (2023). "prolfqua : A Comprehensive R-Package for Proteomics Differential Expression Analysis." _J. Proteome Res. 2023, 22, 4,
-      1092-1104_. doi:10.1021/acs.jproteome.2c00441 <https://doi.org/10.1021/acs.jproteome.2c00441>.
-
-    A BibTeX entry for LaTeX users is
-
-      @Article{,
-        title = {{prolfqua} : A Comprehensive R-Package for Proteomics Differential Expression Analysis},
-        author = {Witold Eryk Wolski and Paolo Nanni and Jonas Grossmann and Maria d'Errico and Ralph Schlapbach and Christian Panse},
-        journal = {J. Proteome Res. 2023, 22, 4, 1092-1104},
-        year = {2023},
-        month = {March},
-        day = {20},
-        doi = {10.1021/acs.jproteome.2c00441},
-      }
-
-## Motivation
+# Motivation and related packages
 
 The package for **pro**teomics **l**abel **f**ree **qua**ntification
 `prolfqua` (read : prolevka) evolved from a set of scripts and functions
@@ -264,7 +210,7 @@ preprocessing methods implemented in the R packages *dplyr* and
 The use of an annotated table makes integrating new data if provided in
 long formatted tables simple. Hence for Spectronaut or Skyline text
 output, all is needed is a table annotation (see code snipped). Since
-MSStats formatted input is a table in long format *prolefqa* works with
+MSStats formatted input is a table in long format *prolfqua* works with
 MSstats formatted files. For software, which writes the data in a wide
 table format, e.g. Maxquant, we implemented methods which first
 transform the data into a long format.
@@ -290,12 +236,9 @@ The use of R’s formula interface does not limit *prolfqua* to the output
 provided by the R modelling infrastructure. *prolfqua* also implements
 p-value moderations, as in the limma publication or computing
 probabilities of differential regulation, as suggested in the ROPECA
-publication. Moreover, the design decision to use the R formula
-interface allowed us to integrate Bayesian regression models provided by
-the r-package *brms*. Because of that, we can benchmark all those
-methods: linear models, mixed effect models, p-value moderation, ROPECA
-as well as Bayesian regression models within the same framework, which
-enabled us to evaluate the practical relevance of these methods.
+publication. Because of that, we can benchmark linear models, mixed
+effect models, p-value moderation and ROPECA within the same framework,
+which enabled us to evaluate the practical relevance of these methods.
 
 Last but not least *prolfqua* supports the LFQ data analysis workflow,
 e.g. computing coefficients of Variations (CV) for peptide and proteins,
@@ -307,11 +250,19 @@ ANOVA analysis or model selection using the likelihood ratio test for
 thousand of proteins can be performed.
 
 To use `prolfqua` knowledge of the R regression model infrastructure is
-of advantage. Acknowledging, the complexity of the formula interface, we
-provide an MSstats emulator, where the model specification is generated
-based on the annotation file structure.
+of advantage.
 
-# Related resources
+## Related projects
+
+- prolfquabenchmark - a package to document the performance of prolfqua,
+  MSstats, msqrob, and proda. See documentation:
+  <https://prolfqua.github.io/prolfquabenchmark/>
+- prolfquapp: Generating Dynamic DEA Reports with the prolfqua R Package
+  <https://github.com/prolfqua/prolfquapp>
+- prophosqua - (scripts for the analysis of phospho experiments)
+  <https://github.com/prolfqua/prophosqua>
+
+## Related resources
 
 - [proDA](https://www.bioconductor.org/packages/release/bioc/html/proDA.html)
 - [MSstats](https://www.bioconductor.org/packages/release/bioc/html/MSstats.html)
@@ -321,20 +272,7 @@ based on the annotation file structure.
 - [DAPARData](https://bioconductor.org/packages/release/data/experiment/html/DAPARdata.html)
 - [PECA/ROPECA](https://bioconductor.org/packages/release/bioc/html/PECA.html)
 
-# Relevant background information
-
-- [R Companion](https://rcompanion.org/rcompanion/h_01.html)
-- [Extending the Linear Model with
-  R](https://www.maths.bath.ac.uk/~jjf23/ELM/)
-- [Bayesian Data Analysis](https://sites.stat.columbia.edu/gelman/book/)
-- [Bayesian essentials with R - R
-  package](https://CRAN.R-project.org/package=bayess)
-- [Contrasts in R - an example vignette by Rose
-  Maier](https://rstudio-pubs-static.s3.amazonaws.com/65059_586f394d8eb84f84b1baaf56ffb6b47f.html)
-- [Interactions and Contrasts PH525x
-  series](https://genomicsclass.github.io/book/pages/interactions_and_contrasts.html)
-
-# R packages to compute contrasts from linear and other models
+## R packages to compute contrasts from linear and other models
 
 - [marginaleffects](https://marginaleffects.com/) Compute and plot
   predictions, slopes, marginal means, and comparisons (contrasts, risk
@@ -348,39 +286,38 @@ based on the annotation file structure.
 - [multcomp](https://CRAN.R-project.org/package=multcomp) computes
   contrast for linear models and adjusts p-values (multiple comparison)
 
-# Future interesting topics or packages to look at
+## Relevant background information
 
-- [modelsummary](https://modelsummary.com/)
+- [R Companion](https://rcompanion.org/rcompanion/h_01.html)
+- [Extending the Linear Model with
+  R](https://www.maths.bath.ac.uk/~jjf23/ELM/)
+- [Contrasts in R - an example vignette by Rose
+  Maier](https://rstudio-pubs-static.s3.amazonaws.com/65059_586f394d8eb84f84b1baaf56ffb6b47f.html)
+- [Interactions and Contrasts PH525x
+  series](https://genomicsclass.github.io/book/pages/interactions_and_contrasts.html)
 
-- [modelsummary
-  tutorial](https://modelsummary.com/vignettes/get_started.html)
+# How to cite?
 
-- [edgeR tutorial](https://gist.github.com/jdblischak/11384914)
+Please do reference the [prolfqua article at Journal of Proteome
+Research](https://doi.org/10.1021/acs.jproteome.2c00441)
 
-- [another edgeR
-  tutorial](https://web.stanford.edu/class/bios221/labs/rnaseq/lab_4_rnaseq.html)
+    R> citation('prolfqua')
+    To cite prolfqua in publications use:
 
-- <https://fromthebottomoftheheap.net/2021/02/02/random-effects-in-gams/>
+      Wolski WE, Nanni P, Grossmann J, d'Errico M, Schlapbach R, Panse C (2023). "prolfqua : A Comprehensive R-Package for Proteomics Differential Expression Analysis." _J. Proteome Res. 2023, 22, 4,
+      1092-1104_. doi:10.1021/acs.jproteome.2c00441 <https://doi.org/10.1021/acs.jproteome.2c00441>.
 
-# Sample size estimation based on FDR
+    A BibTeX entry for LaTeX users is
 
-- [ssize](https://www.bioconductor.org/packages/release/bioc/html/ssize.html)
-- [ssize.fdr](https://CRAN.R-project.org/package=ssize.fdr)
-  - related article
-    \[<https://journal.r-project.org/archive/2009/RJ-2009-019/RJ-2009-019.pdf>\]
-- [proper](https://bioconductor.org/packages/release/bioc/html/PROPER.html)
-
-# What package name?
-
-What name should we use?
-
-<https://twitter.com/WitoldE/status/1338799648149041156>
-
-- prolfqua - PROteomics Label Free QUAntification package (read
-  prolewka)
-- LFQService - we do proteomics LFQ services at the FGCZ.
-- nalfqua - Not Another Label Free QUAntification package (read nalewka)
-- prodea - proteomics differential expression analysis ?
+      @Article{,
+        title = {{prolfqua} : A Comprehensive R-Package for Proteomics Differential Expression Analysis},
+        author = {Witold Eryk Wolski and Paolo Nanni and Jonas Grossmann and Maria d'Errico and Ralph Schlapbach and Christian Panse},
+        journal = {J. Proteome Res. 2023, 22, 4, 1092-1104},
+        year = {2023},
+        month = {March},
+        day = {20},
+        doi = {10.1021/acs.jproteome.2c00441},
+      }
 
 # Package index
 
@@ -618,6 +555,9 @@ What name should we use?
 - [`df.residual(`*`<rfit_prolfqua>`*`)`](https://fgcz.github.io/prolfqua/reference/df.residual.rfit_prolfqua.md)
   : Residual degrees of freedom for an augmented rfit fit
 
+- [`fdr_sig_level()`](https://fgcz.github.io/prolfqua/reference/fdr_sig_level.md)
+  : Per-test significance level for FDR-controlled sample-size planning
+
 - [`find_package_file()`](https://fgcz.github.io/prolfqua/reference/find_package_file.md)
   : find file stored in package
 
@@ -673,6 +613,9 @@ What name should we use?
 - [`merge_contrasts_results()`](https://fgcz.github.io/prolfqua/reference/merge_contrasts_results.md)
   : Merge contrast results coming from two different model.
 
+- [`nobs(`*`<rfit_prolfqua>`*`)`](https://fgcz.github.io/prolfqua/reference/nobs.rfit_prolfqua.md)
+  : Number of observations in an augmented rfit fit
+
 - [`nr_children_experiment()`](https://fgcz.github.io/prolfqua/reference/nr_children_experiment.md)
   : Max nr_children across samples per hierarchy unit
 
@@ -685,6 +628,23 @@ What name should we use?
 - [`pivot_model_contrasts_to_wide()`](https://fgcz.github.io/prolfqua/reference/pivot_model_contrasts_to_wide.md)
   : pivot model contrasts matrix to wide format produced by
   \`contrasts_linfct\` and ...
+
+- [`power_fdr_prior_n()`](https://fgcz.github.io/prolfqua/reference/power_fdr_prior_n.md)
+  : Plan sample size from a pilot variance prior and a planned effect
+  distribution
+
+- [`print(`*`<ContrastsFacadeBase>`*`)`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md)
+  [`summary(`*`<ContrastsFacadeBase>`*`)`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md)
+  [`print(`*`<summary.ContrastsFacadeBase>`*`)`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md)
+  [`coef(`*`<ContrastsFacadeBase>`*`)`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md)
+  [`vcov(`*`<ContrastsFacadeBase>`*`)`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md)
+  [`confint(`*`<ContrastsFacadeBase>`*`)`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md)
+  [`formula(`*`<ContrastsFacadeBase>`*`)`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md)
+  [`nobs(`*`<ContrastsFacadeBase>`*`)`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md)
+  [`fitted(`*`<ContrastsFacadeBase>`*`)`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md)
+  [`residuals(`*`<ContrastsFacadeBase>`*`)`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md)
+  [`plot(`*`<ContrastsFacadeBase>`*`)`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md)
+  : Inspect a fitted prolfqua analysis
 
 - [`prolfqua_data()`](https://fgcz.github.io/prolfqua/reference/prolfqua_data.md)
   : load data from prolfqua
@@ -758,6 +718,8 @@ What name should we use?
   prolfqua](https://fgcz.github.io/prolfqua/articles/prolfqua.md):
 - [Importing your data:
   AnalysisConfiguration](https://fgcz.github.io/prolfqua/articles/CreatingConfigurations.md):
+- [Transforming and calibrating LFQ
+  data](https://fgcz.github.io/prolfqua/articles/TransformingLFQData.md):
 - [Comparing Two Groups with
   prolfqua](https://fgcz.github.io/prolfqua/articles/Comparing2Groups.md):
 - [All modelling methods at a

@@ -11,8 +11,10 @@ An R6 class generator.
 The filtering and imputation methods in this package assume that missing
 values are Missing Completely At Random (MCAR) or Missing At Random
 (MAR). Abundance-dependent missingness (MNAR), which is common in DDA
-proteomics, is not modelled. Users should be aware that MNAR can bias
-fold-change estimates and inflate false discovery rates.
+proteomics, is not modelled. When low intensities are missing, fold
+changes of down-regulated proteins shrink toward zero; LOD imputation
+(the `_impute` methods) caps estimates at the LOD and does not remove
+this bias. MNAR can also inflate false discovery rates.
 
 ## See also
 
@@ -725,9 +727,6 @@ The objects of this class are cloneable with this method.
 ``` r
 istar <- sim_lfq_data_peptide_config()
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 lfqdata <- LFQData$new(istar$data, istar$config)
 lfqdata$filter_proteins_by_peptide_count()
 #> removing protein_Id with fewer than 2 peptide_Id
@@ -765,6 +764,5 @@ stopifnot("AggregateMedpolish" %in% class(lfqdata$get_Aggregator("medpolish")))
 #> Warning: You did not transform the intensities. medpolish works best with already variance stabilized intensities. Use LFQData$get_Transformer to transform the data: peptide.intensity
 
 tmp <-lfqdata$get_sample(5, seed = 4)
-#> Sampling 5 protein_Id
 stopifnot(nrow(tmp$hierarchy()) == 5)
 ```

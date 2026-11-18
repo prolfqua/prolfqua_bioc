@@ -122,7 +122,9 @@ Other modelling:
 [`moderated_p_deqms_long()`](https://fgcz.github.io/prolfqua/reference/moderated_p_deqms_long.md),
 [`moderated_p_limma()`](https://fgcz.github.io/prolfqua/reference/moderated_p_limma.md),
 [`new_imputed_model()`](https://fgcz.github.io/prolfqua/reference/new_imputed_model.md),
+[`nobs.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/nobs.rfit_prolfqua.md),
 [`pivot_model_contrasts_to_wide()`](https://fgcz.github.io/prolfqua/reference/pivot_model_contrasts_to_wide.md),
+[`prolfqua_analysis_methods`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md),
 [`register_facade()`](https://fgcz.github.io/prolfqua/reference/register_facade.md),
 [`sigma.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/sigma.rfit_prolfqua.md),
 [`sim_build_models_lm()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_lm.md),
@@ -142,11 +144,8 @@ Other modelling:
 data_2Factor <- prolfqua::sim_lfq_data_2factor_config(
  Nprot = 200,
  with_missing = TRUE,
- weight_missing = 2)
+ weight_missing = 1)
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 
 pMerged <- LFQData$new(data_2Factor$data, data_2Factor$config)
 
@@ -178,28 +177,28 @@ formula_condition_and_Batches <-
 modCB <- prolfqua::build_model(
   pMerged,
   formula_condition_and_Batches)
-#> Warning: There were 25 warnings in `dplyr::mutate()`.
+#> Warning: There were 12 warnings in `dplyr::mutate()`.
 #> The first warning was:
 #> ℹ In argument: `linear_model = purrr::map(data, model_strategy$model_fun, pb =
 #>   pb)`.
-#> ℹ In group 33: `protein_Id = "Br6sVH~3679"`.
+#> ℹ In group 49: `protein_Id = "G01Esv~7982"`.
 #> Caused by warning:
 #> ! contrasts can be applied only to factors with 2 or more levels
-#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 24 remaining warnings.
+#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 11 remaining warnings.
 
 formula_condition <-
   prolfqua::strategy_lm("abundance ~ Treatment")
 modC <- prolfqua::build_model(
   pMerged,
   formula_condition)
-#> Warning: There were 19 warnings in `dplyr::mutate()`.
+#> Warning: There were 8 warnings in `dplyr::mutate()`.
 #> The first warning was:
 #> ℹ In argument: `linear_model = purrr::map(data, model_strategy$model_fun, pb =
 #>   pb)`.
-#> ℹ In group 33: `protein_Id = "Br6sVH~3679"`.
+#> ℹ In group 78: `protein_Id = "N1vPxG~0817"`.
 #> Caused by warning:
 #> ! contrasts can be applied only to factors with 2 or more levels
-#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 18 remaining warnings.
+#> ℹ Run `dplyr::last_dplyr_warnings()` to see the 7 remaining warnings.
 
 tmp <- LR_test(modCB$model_df, "modCB", modC$model_df, "modB")
 hist(tmp$likelihood_ratio_test.pValue)

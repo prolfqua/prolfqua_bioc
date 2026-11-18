@@ -9,7 +9,7 @@ Works with raw (untransformed) intensities."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">prolfqua</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.99.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.99.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,6 +24,7 @@ Works with raw (untransformed) intensities."></head><body>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Vignettes</h6></li>
     <li><a class="dropdown-item" href="../articles/CreatingConfigurations.html">Importing your data: AnalysisConfiguration</a></li>
+    <li><a class="dropdown-item" href="../articles/TransformingLFQData.html">Transforming and calibrating LFQ data</a></li>
     <li><a class="dropdown-item" href="../articles/Comparing2Groups.html">Comparing Two Groups with prolfqua</a></li>
     <li><a class="dropdown-item" href="../articles/ModellingMethods.html">All modelling methods at a glance</a></li>
     <li><a class="dropdown-item" href="../articles/TwoFactorDesigns.html">Two-factor designs</a></li>
@@ -100,8 +101,8 @@ Works with raw (untransformed) intensities.</p>
 <p></p><ul><li><p><a href="#method-AggregateTopN-initialize"><code>AggregateTopN$new()</code></a></p></li>
 <li><p><a href="#method-AggregateTopN-aggregate"><code>AggregateTopN$aggregate()</code></a></p></li>
 <li><p><a href="#method-AggregateTopN-clone"><code>AggregateTopN$clone()</code></a></p></li>
-</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="prolfqua" data-topic="AggregatorBase" data-id="plot"><a href="../../prolfqua/html/AggregatorBase.html#method-AggregatorBase-plot"><code>AggregatorBase$plot()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="AggregatorBase" data-id="write_plots"><a href="../../prolfqua/html/AggregatorBase.html#method-AggregatorBase-write_plots"><code>AggregatorBase$write_plots()</code></a></span></li>
+</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="prolfqua" data-topic="AggregatorBase" data-id="plot"><a href="AggregatorBase.html#method-plot"><code>AggregatorBase$plot()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="AggregatorBase" data-id="write_plots"><a href="AggregatorBase.html#method-write_plots"><code>AggregatorBase$write_plots()</code></a></span></li>
 </ul></details></p><hr><a id="method-AggregateTopN-initialize"></a><div class="section">
 <h3 id="aggregatetopn-new-"><code>AggregateTopN$new()</code><a class="anchor" aria-label="anchor" href="#aggregatetopn-new-"></a></h3>
 <p>initialize</p><div class="section">
@@ -162,16 +163,12 @@ Works with raw (untransformed) intensities.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">istar</span> <span class="op">&lt;-</span> <span class="fu">prolfqua</span><span class="fu">::</span><span class="fu"><a href="sim_lfq_data_peptide_config.html">sim_lfq_data_peptide_config</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> creating sampleName from file_name column</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> completing cases</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> completing cases done</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> setup done</span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">istar</span><span class="op">$</span><span class="va">data</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">protein_Id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">protein_Id</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">lfqdata</span> <span class="op">&lt;-</span> <span class="va"><a href="LFQData.html">LFQData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">data</span>, <span class="va">istar</span><span class="op">$</span><span class="va">config</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">agg</span> <span class="op">&lt;-</span> <span class="va">AggregateTopN</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">lfqdata</span>, <span class="st">"protein"</span>, N <span class="op">=</span> <span class="fl">3</span>, func <span class="op">=</span> <span class="st">"sum"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">agg</span><span class="op">$</span><span class="fu">aggregate</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Columns added : srm_meanInt srm_meanIntRank</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> completing cases</span>
 <span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">agg</span><span class="op">$</span><span class="fu">plot</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">p</span><span class="op">$</span><span class="va">plots</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 7 rows containing missing values or values outside the scale range</span>
@@ -183,7 +180,6 @@ Works with raw (untransformed) intensities.</p>
 <span class="r-in"><span><span class="va">agg_mean</span> <span class="op">&lt;-</span> <span class="va">AggregateTopN</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">lfqdata</span>, <span class="st">"protein"</span>, N <span class="op">=</span> <span class="fl">3</span>, func <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">agg_mean</span><span class="op">$</span><span class="fu">aggregate</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Columns added : srm_meanInt srm_meanIntRank</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> completing cases</span>
 <span class="r-in"><span><span class="va">protPlotter</span> <span class="op">&lt;-</span> <span class="va">agg_mean</span><span class="op">$</span><span class="va">lfq_agg</span><span class="op">$</span><span class="fu">get_Plotter</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">protPlotter</span><span class="op">$</span><span class="fu">heatmap</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="AggregateTopN-2.png" alt="" width="700" height="433"></span>
@@ -228,7 +224,6 @@ Works with raw (untransformed) intensities.</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_point()`).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 7 rows containing missing values or values outside the scale range</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_line()`).</span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

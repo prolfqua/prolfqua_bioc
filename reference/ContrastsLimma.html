@@ -13,7 +13,7 @@ Contrasts."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">prolfqua</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.99.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.99.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +28,7 @@ Contrasts."></head><body>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Vignettes</h6></li>
     <li><a class="dropdown-item" href="../articles/CreatingConfigurations.html">Importing your data: AnalysisConfiguration</a></li>
+    <li><a class="dropdown-item" href="../articles/TransformingLFQData.html">Transforming and calibrating LFQ data</a></li>
     <li><a class="dropdown-item" href="../articles/Comparing2Groups.html">Comparing Two Groups with prolfqua</a></li>
     <li><a class="dropdown-item" href="../articles/ModellingMethods.html">All modelling methods at a glance</a></li>
     <li><a class="dropdown-item" href="../articles/TwoFactorDesigns.html">Two-factor designs</a></li>
@@ -144,7 +145,9 @@ Inherits from <code><a href="ContrastsInterface.html">ContrastsInterface</a></co
 <code><a href="moderated_p_deqms_long.html">moderated_p_deqms_long()</a></code>,
 <code><a href="moderated_p_limma.html">moderated_p_limma()</a></code>,
 <code><a href="new_imputed_model.html">new_imputed_model()</a></code>,
+<code><a href="nobs.rfit_prolfqua.html">nobs.rfit_prolfqua()</a></code>,
 <code><a href="pivot_model_contrasts_to_wide.html">pivot_model_contrasts_to_wide()</a></code>,
+<code><a href="prolfqua_analysis_methods.html">prolfqua_analysis_methods</a></code>,
 <code><a href="register_facade.html">register_facade()</a></code>,
 <code><a href="sigma.rfit_prolfqua.html">sigma.rfit_prolfqua()</a></code>,
 <code><a href="sim_build_models_lm.html">sim_build_models_lm()</a></code>,
@@ -206,16 +209,16 @@ DEqMS moderation via <code><a href="ContrastsModeratedDEqMS.html">ContrastsModer
 <li><p><a href="#method-ContrastsLimma-get_linfct"><code>ContrastsLimma$get_linfct()</code></a></p></li>
 <li><p><a href="#method-ContrastsLimma-get_contrasts"><code>ContrastsLimma$get_contrasts()</code></a></p></li>
 <li><p><a href="#method-ContrastsLimma-clone"><code>ContrastsLimma$clone()</code></a></p></li>
-</ul></div><p><details><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="column_description"><a href="../../prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-column_description"><code>ContrastsInterface$column_description()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="contrast_summary_table"><a href="../../prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-contrast_summary_table"><code>ContrastsInterface$contrast_summary_table()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="extra_artifacts"><a href="../../prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-extra_artifacts"><code>ContrastsInterface$extra_artifacts()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="filter_significant"><a href="../../prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-filter_significant"><code>ContrastsInterface$filter_significant()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="get_Plotter"><a href="../../prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_Plotter"><code>ContrastsInterface$get_Plotter()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="get_config"><a href="../../prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_config"><code>ContrastsInterface$get_config()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="get_missing"><a href="../../prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_missing"><code>ContrastsInterface$get_missing()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="get_ora"><a href="../../prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_ora"><code>ContrastsInterface$get_ora()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="get_rank"><a href="../../prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-get_rank"><code>ContrastsInterface$get_rank()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="to_wide"><a href="../../prolfqua/html/ContrastsInterface.html#method-ContrastsInterface-to_wide"><code>ContrastsInterface$to_wide()</code></a></span></li>
+</ul></div><p><details><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="column_description"><a href="ContrastsInterface.html#method-column_description"><code>ContrastsInterface$column_description()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="contrast_summary_table"><a href="ContrastsInterface.html#method-contrast_summary_table"><code>ContrastsInterface$contrast_summary_table()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="extra_artifacts"><a href="ContrastsInterface.html#method-extra_artifacts"><code>ContrastsInterface$extra_artifacts()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="filter_significant"><a href="ContrastsInterface.html#method-filter_significant"><code>ContrastsInterface$filter_significant()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="get_Plotter"><a href="ContrastsInterface.html#method-get_Plotter"><code>ContrastsInterface$get_Plotter()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="get_config"><a href="ContrastsInterface.html#method-get_config"><code>ContrastsInterface$get_config()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="get_missing"><a href="ContrastsInterface.html#method-get_missing"><code>ContrastsInterface$get_missing()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="get_ora"><a href="ContrastsInterface.html#method-get_ora"><code>ContrastsInterface$get_ora()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="get_rank"><a href="ContrastsInterface.html#method-get_rank"><code>ContrastsInterface$get_rank()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="ContrastsInterface" data-id="to_wide"><a href="ContrastsInterface.html#method-to_wide"><code>ContrastsInterface$to_wide()</code></a></span></li>
 </ul></details></p><hr><a id="method-ContrastsLimma-initialize"></a><div class="section">
 <h3 id="contrastslimma-new-"><code>ContrastsLimma$new()</code><a class="anchor" aria-label="anchor" href="#contrastslimma-new-"></a></h3>
 <p>initialize ContrastsLimma</p><div class="section">
@@ -323,9 +326,6 @@ wrapping with <code><a href="ContrastsModeratedDEqMS.html">ContrastsModeratedDEq
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">istar</span> <span class="op">&lt;-</span> <span class="fu"><a href="sim_lfq_data_protein_config.html">sim_lfq_data_protein_config</a></span><span class="op">(</span>Nprot <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> creating sampleName from file_name column</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> completing cases</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> completing cases done</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> setup done</span>
 <span class="r-in"><span><span class="va">lProt</span> <span class="op">&lt;-</span> <span class="va"><a href="LFQData.html">LFQData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">istar</span><span class="op">$</span><span class="va">data</span>, <span class="va">istar</span><span class="op">$</span><span class="va">config</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">lProt</span><span class="op">$</span><span class="fu">rename_response</span><span class="op">(</span><span class="st">"transformedIntensity"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -356,7 +356,6 @@ wrapping with <code><a href="ContrastsModeratedDEqMS.html">ContrastsModeratedDEq
 <span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="build_model.html">build_model</a></span><span class="op">(</span><span class="va">lProt</span>, <span class="va">modelFunction</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">contr_prolfqua</span> <span class="op">&lt;-</span> <span class="va"><a href="Contrasts.html">Contrasts</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">mod</span>, <span class="va">Contr</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">res_prolfqua</span> <span class="op">&lt;-</span> <span class="va">contr_prolfqua</span><span class="op">$</span><span class="fu">get_contrasts</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> contrasts_linfct</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># fold changes should be very similar</span></span></span>
 <span class="r-in"><span><span class="va">merged</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span></span></span>
@@ -386,9 +385,7 @@ wrapping with <code><a href="ContrastsModeratedDEqMS.html">ContrastsModeratedDEq
 <span class="r-in"><span><span class="co"># merge_contrasts_results works</span></span></span>
 <span class="r-in"><span><span class="va">Contr2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dil.b_vs_a"</span> <span class="op">=</span> <span class="st">"group_A - group_Ctrl"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">imp</span> <span class="op">&lt;-</span> <span class="va"><a href="ContrastsLMImputeFacade.html">ContrastsLMImputeFacade</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">lProt</span>, <span class="st">"~ group_"</span>, <span class="va">Contr2</span><span class="op">)</span><span class="op">$</span><span class="va">contrast</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>essentially perfect fit: summary may be unreliable</span>
 <span class="r-in"><span><span class="va">merged_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="merge_contrasts_results.html">merge_contrasts_results</a></span><span class="op">(</span><span class="va">contr_limma</span>, <span class="va">imp</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> contrasts_linfct</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

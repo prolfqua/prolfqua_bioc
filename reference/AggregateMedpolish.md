@@ -36,9 +36,9 @@ Other LFQData:
 
 Inherited methods
 
-- [`AggregatorBase$initialize()`](https://fgcz.github.io/prolfqua/html/AggregatorBase.html#method-AggregatorBase-initialize)
-- [`AggregatorBase$plot()`](https://fgcz.github.io/prolfqua/html/AggregatorBase.html#method-AggregatorBase-plot)
-- [`AggregatorBase$write_plots()`](https://fgcz.github.io/prolfqua/html/AggregatorBase.html#method-AggregatorBase-write_plots)
+- [`AggregatorBase$initialize()`](https://fgcz.github.io/prolfqua/reference/AggregatorBase.html#method-initialize)
+- [`AggregatorBase$plot()`](https://fgcz.github.io/prolfqua/reference/AggregatorBase.html#method-plot)
+- [`AggregatorBase$write_plots()`](https://fgcz.github.io/prolfqua/reference/AggregatorBase.html#method-write_plots)
 
 ------------------------------------------------------------------------
 
@@ -75,19 +75,13 @@ The objects of this class are cloneable with this method.
 ``` r
 istar <- prolfqua::sim_lfq_data_peptide_config()
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 data <- istar$data |> dplyr::filter(protein_Id %in% sample(protein_Id, 100))
 lfqdata <- LFQData$new(data, istar$config)
 lfqTrans <- lfqdata$clone()$get_Transformer()$log2()$robscale()$lfq
 #> Column added : log2_abundance
-#> data is : TRUE
 
 agg <- AggregateMedpolish$new(lfqTrans, "protein")
 agg$aggregate()
-#> starting aggregation
-#> completing cases
 p <- agg$plot()
 p$plots[[1]]
 #> Warning: Removed 7 rows containing missing values or values outside the scale range

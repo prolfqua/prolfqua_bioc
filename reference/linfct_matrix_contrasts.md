@@ -1,6 +1,6 @@
-# linfct_matrix_contrasts
+# Convert named group-mean contrasts to coefficient weights
 
-linfct_matrix_contrasts
+Convert named group-mean contrasts to coefficient weights
 
 ## Usage
 
@@ -21,6 +21,16 @@ linfct_matrix_contrasts(linfct, contrasts, p.message = FALSE)
 - p.message:
 
   print messages default FALSE
+
+## Details
+
+Rows of `linfct` represent group or interaction means and columns
+represent fitted coefficients. Contrast expressions combine these rows,
+so `"group_A - group_Ctrl"` becomes their row difference. Quote
+interaction names containing colons with backticks. Expressions may
+reference earlier named contrasts. A row naming a group unavailable in a
+particular model is dropped with a warning. The returned matrix has one
+row per estimable contrast and coefficient columns in model order.
 
 ## See also
 
@@ -98,7 +108,9 @@ Other modelling:
 [`moderated_p_deqms_long()`](https://fgcz.github.io/prolfqua/reference/moderated_p_deqms_long.md),
 [`moderated_p_limma()`](https://fgcz.github.io/prolfqua/reference/moderated_p_limma.md),
 [`new_imputed_model()`](https://fgcz.github.io/prolfqua/reference/new_imputed_model.md),
+[`nobs.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/nobs.rfit_prolfqua.md),
 [`pivot_model_contrasts_to_wide()`](https://fgcz.github.io/prolfqua/reference/pivot_model_contrasts_to_wide.md),
+[`prolfqua_analysis_methods`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md),
 [`register_facade()`](https://fgcz.github.io/prolfqua/reference/register_facade.md),
 [`sigma.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/sigma.rfit_prolfqua.md),
 [`sim_build_models_lm()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_lm.md),
@@ -117,9 +129,6 @@ Other modelling:
 ``` r
 m <- sim_make_model_lm( "factors")
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 Contr <- c("TreatmentA_vs_B" = "TreatmentA - TreatmentB",
     "BackgroundX_vs_Z" = "BackgroundX - BackgroundZ",
     "IntoflintoA" = "`TreatmentA:BackgroundX` - `TreatmentA:BackgroundZ`",
@@ -136,9 +145,6 @@ stopifnot(sum(x["interactAB",]) == 0 )
 
 m <- sim_make_model_lm( "interaction")
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 linfct <- linfct_from_model(m, as_list = FALSE)
 x <- linfct_matrix_contrasts(linfct, Contr )
 stopifnot(sum(x["interactXZ",]) ==1 )

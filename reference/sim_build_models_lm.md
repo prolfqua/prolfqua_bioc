@@ -90,7 +90,9 @@ Other modelling:
 [`moderated_p_deqms_long()`](https://fgcz.github.io/prolfqua/reference/moderated_p_deqms_long.md),
 [`moderated_p_limma()`](https://fgcz.github.io/prolfqua/reference/moderated_p_limma.md),
 [`new_imputed_model()`](https://fgcz.github.io/prolfqua/reference/new_imputed_model.md),
+[`nobs.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/nobs.rfit_prolfqua.md),
 [`pivot_model_contrasts_to_wide()`](https://fgcz.github.io/prolfqua/reference/pivot_model_contrasts_to_wide.md),
+[`prolfqua_analysis_methods`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md),
 [`register_facade()`](https://fgcz.github.io/prolfqua/reference/register_facade.md),
 [`sigma.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/sigma.rfit_prolfqua.md),
 [`sim_build_models_lmer()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_lmer.md),
@@ -108,15 +110,9 @@ Other modelling:
 ``` r
 modi <- sim_build_models_lm(model = "interaction", weight_missing = 1)
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 stopifnot(dim(modi$model_df) == c(10,9))
 mod2 <- sim_build_models_lm(model = "parallel2", weight_missing = 1)
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 mod2$model_df$linear_model[[1]]
 #> 
 #> Call:
@@ -128,12 +124,6 @@ mod2$model_df$linear_model[[1]]
 #> 
 mod3 <- sim_build_models_lm(model = "parallel3", weight_missing = 1)
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 modf <- sim_build_models_lm(model = "factors", weight_missing = 1)
 #> creating sampleName from file_name column
-#> completing cases
-#> completing cases done
-#> setup done
 ```

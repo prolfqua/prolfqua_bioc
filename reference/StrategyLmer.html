@@ -9,7 +9,7 @@ via lmer and extract contrasts."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">prolfqua</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.99.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.99.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,6 +24,7 @@ via lmer and extract contrasts."></head><body>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Vignettes</h6></li>
     <li><a class="dropdown-item" href="../articles/CreatingConfigurations.html">Importing your data: AnalysisConfiguration</a></li>
+    <li><a class="dropdown-item" href="../articles/TransformingLFQData.html">Transforming and calibrating LFQ data</a></li>
     <li><a class="dropdown-item" href="../articles/Comparing2Groups.html">Comparing Two Groups with prolfqua</a></li>
     <li><a class="dropdown-item" href="../articles/ModellingMethods.html">All modelling methods at a glance</a></li>
     <li><a class="dropdown-item" href="../articles/TwoFactorDesigns.html">Two-factor designs</a></li>
@@ -138,7 +139,9 @@ via <code><a href="https://rdrr.io/pkg/lmerTest/man/lmer.html" class="external-l
 <code><a href="moderated_p_deqms_long.html">moderated_p_deqms_long()</a></code>,
 <code><a href="moderated_p_limma.html">moderated_p_limma()</a></code>,
 <code><a href="new_imputed_model.html">new_imputed_model()</a></code>,
+<code><a href="nobs.rfit_prolfqua.html">nobs.rfit_prolfqua()</a></code>,
 <code><a href="pivot_model_contrasts_to_wide.html">pivot_model_contrasts_to_wide()</a></code>,
+<code><a href="prolfqua_analysis_methods.html">prolfqua_analysis_methods</a></code>,
 <code><a href="register_facade.html">register_facade()</a></code>,
 <code><a href="sigma.rfit_prolfqua.html">sigma.rfit_prolfqua()</a></code>,
 <code><a href="sim_build_models_lm.html">sim_build_models_lm()</a></code>,
@@ -164,10 +167,10 @@ via <code><a href="https://rdrr.io/pkg/lmerTest/man/lmer.html" class="external-l
 <p></p><ul><li><p><a href="#method-StrategyLmer-isSingular"><code>StrategyLmer$isSingular()</code></a></p></li>
 <li><p><a href="#method-StrategyLmer-contrast_fun"><code>StrategyLmer$contrast_fun()</code></a></p></li>
 <li><p><a href="#method-StrategyLmer-clone"><code>StrategyLmer$clone()</code></a></p></li>
-</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="prolfqua" data-topic="StrategyBase" data-id="df_residual"><a href="../../prolfqua/html/StrategyBase.html#method-StrategyBase-df_residual"><code>StrategyBase$df_residual()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="StrategyBase" data-id="initialize"><a href="../../prolfqua/html/StrategyBase.html#method-StrategyBase-initialize"><code>StrategyBase$initialize()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="StrategyBase" data-id="model_fun"><a href="../../prolfqua/html/StrategyBase.html#method-StrategyBase-model_fun"><code>StrategyBase$model_fun()</code></a></span></li>
-  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="StrategyBase" data-id="sigma"><a href="../../prolfqua/html/StrategyBase.html#method-StrategyBase-sigma"><code>StrategyBase$sigma()</code></a></span></li>
+</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="prolfqua" data-topic="StrategyBase" data-id="df_residual"><a href="StrategyBase.html#method-df_residual"><code>StrategyBase$df_residual()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="StrategyBase" data-id="initialize"><a href="StrategyBase.html#method-initialize"><code>StrategyBase$initialize()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="StrategyBase" data-id="model_fun"><a href="StrategyBase.html#method-model_fun"><code>StrategyBase$model_fun()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="prolfqua" data-topic="StrategyBase" data-id="sigma"><a href="StrategyBase.html#method-sigma"><code>StrategyBase$sigma()</code></a></span></li>
 </ul></details></p><hr><a id="method-StrategyLmer-isSingular"></a><div class="section">
 <h3 id="strategylmer-issingular-"><code>StrategyLmer$isSingular()</code><a class="anchor" aria-label="anchor" href="#strategylmer-issingular-"></a></h3>
 <p>Check if model is singular</p><div class="section">
@@ -223,9 +226,6 @@ via <code><a href="https://rdrr.io/pkg/lmerTest/man/lmer.html" class="external-l
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">istar</span> <span class="op">&lt;-</span> <span class="fu">prolfqua</span><span class="fu">::</span><span class="fu"><a href="sim_lfq_data_peptide_config.html">sim_lfq_data_peptide_config</a></span><span class="op">(</span>Nprot <span class="op">=</span> <span class="fl">10</span>, with_missing <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> creating sampleName from file_name column</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> completing cases</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> completing cases done</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> setup done</span>
 <span class="r-in"><span><span class="va">istar</span> <span class="op">&lt;-</span> <span class="fu">prolfqua</span><span class="fu">::</span><span class="va"><a href="LFQData.html">LFQData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">istar</span><span class="op">$</span><span class="va">data</span>, <span class="va">istar</span><span class="op">$</span><span class="va">config</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">istar</span><span class="op">$</span><span class="fu">set_data</span><span class="op">(</span><span class="va">istar</span><span class="op">$</span><span class="fu">data_long</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">protein_Id</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>abundanceC <span class="op">=</span> <span class="va">abundance</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">abundance</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>

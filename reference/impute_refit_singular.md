@@ -63,9 +63,8 @@ impute_refit_singular(
 
   passed to
   [`compute_borrowed_variance`](https://fgcz.github.io/prolfqua/reference/compute_borrowed_variance.md).
-  With "fail", an unborrowable full covariance matrix skips the rescue
-  (the model_df is returned unchanged) instead of crashing, so the
-  affected proteins surface in `get_missing()`.
+  With "fail", full covariance is borrowed from donors sharing the
+  maximal coefficient set, without falling back to sigma borrowing.
 
 ## Value
 
@@ -147,7 +146,9 @@ Other modelling:
 [`moderated_p_deqms_long()`](https://fgcz.github.io/prolfqua/reference/moderated_p_deqms_long.md),
 [`moderated_p_limma()`](https://fgcz.github.io/prolfqua/reference/moderated_p_limma.md),
 [`new_imputed_model()`](https://fgcz.github.io/prolfqua/reference/new_imputed_model.md),
+[`nobs.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/nobs.rfit_prolfqua.md),
 [`pivot_model_contrasts_to_wide()`](https://fgcz.github.io/prolfqua/reference/pivot_model_contrasts_to_wide.md),
+[`prolfqua_analysis_methods`](https://fgcz.github.io/prolfqua/reference/prolfqua_analysis_methods.md),
 [`register_facade()`](https://fgcz.github.io/prolfqua/reference/register_facade.md),
 [`sigma.rfit_prolfqua()`](https://fgcz.github.io/prolfqua/reference/sigma.rfit_prolfqua.md),
 [`sim_build_models_lm()`](https://fgcz.github.io/prolfqua/reference/sim_build_models_lm.md),
