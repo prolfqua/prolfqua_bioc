@@ -1,6 +1,6 @@
 # Changelog
 
-## prolfqua 0.99.13 (Bioconductor)
+## prolfqua 0.99.14 (Bioconductor)
 
 - Corresponds to prolfqua 1.9.4 on GitHub; the changes are listed below.
 - Requires R \>= 4.6.

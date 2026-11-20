@@ -234,7 +234,7 @@ head(confint(analysis))
 #> 6 2kfAGV~3196 group_Ctrl   -0.215     0.0453     8  -0.320   -0.111
 formula(analysis)
 #> medpolish ~ group_
-#> <environment: 0x5dfa4e808158>
+#> <environment: 0x61ac5b63a408>
 head(nobs(analysis))
 #> # A tibble: 6 × 2
 #>   protein_Id   nobs
@@ -347,11 +347,11 @@ sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] prolfqua_0.99.13 BiocStyle_2.40.0
+#> [1] prolfqua_0.99.14 BiocStyle_2.40.0
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] tidyselect_1.2.1       dplyr_1.2.1            farver_2.1.2          
-#>  [4] S7_0.2.2               fastmap_1.2.0          rpart_4.1.27          
+#>  [4] S7_1.0.0               fastmap_1.2.0          rpart_4.1.27          
 #>  [7] digest_0.6.39          lifecycle_1.0.5        Rfit_0.27.0           
 #> [10] survival_3.8-12        statmod_1.5.2          magrittr_2.0.5        
 #> [13] compiler_4.6.2         rlang_1.3.0            sass_0.4.10           
