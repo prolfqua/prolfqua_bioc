@@ -39,7 +39,7 @@ jobs:
         uses: r-lib/actions/check-r-package@v2
 
       - name: Code coverage
-        if: success()
+        if: success() && github.repository == 'fgcz/prolfqua'
         run: covr::codecov(type = "all", token = Sys.getenv('CODECOV_TOKEN'))
         shell: Rscript {0}
 
