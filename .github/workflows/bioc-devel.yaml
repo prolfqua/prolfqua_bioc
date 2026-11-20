@@ -19,6 +19,12 @@ jobs:
       - name: Bioconductor and R versions
         run: Rscript -e 'sessionInfo(); BiocManager::version(); BiocManager::valid()' || true
 
+      - name: Install LaTeX for the PDF manual check (the Bioc build machines have it)
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-recommended \
+            texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra qpdf
+
       - name: Install dependencies, Suggests included
         run: |
           Rscript -e 'BiocManager::install("remotes", ask = FALSE, update = FALSE)'
