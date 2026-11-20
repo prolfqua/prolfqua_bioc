@@ -1,0 +1,41 @@
+# Mirrors the Bioconductor devel nightly build (nebbiolo2: x86_64 Linux, Bioc devel):
+# R CMD build, then R CMD check --no-vignettes on the tarball, then BiocCheck.
+name: Bioc-devel-build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  bioc-devel:
+    runs-on: ubuntu-latest
+    container: bioconductor/bioconductor_docker:devel
+    steps:
+      - uses: actions/checkout@v6.0.3
+
+      - name: Bioconductor and R versions
+        run: Rscript -e 'sessionInfo(); BiocManager::version(); BiocManager::valid()' || true
+
+      - name: Install dependencies, Suggests included
+        run: |
+          Rscript -e 'BiocManager::install("remotes", ask = FALSE, update = FALSE)'
+          Rscript -e 'BiocManager::install(remotes::local_package_deps(dependencies = TRUE), ask = FALSE, update = FALSE)'
+          Rscript -e 'BiocManager::install("BiocCheck", ask = FALSE, update = FALSE)'
+
+      - name: R CMD build
+        run: R CMD build --keep-empty-dirs --no-resave-data .
+
+      - name: R CMD check
+        env:
+          _R_CHECK_FORCE_SUGGESTS_: "false"
+        run: R CMD check --no-vignettes --timings prolfqua_*.tar.gz
+
+      - name: Show test output on failure
+        if: failure()
+        run: cat prolfqua.Rcheck/tests/testthat.Rout* || true
+
+      - name: BiocCheck
+        run: Rscript -e 'BiocCheck::BiocCheck(list.files(pattern = "^prolfqua_.*[.]tar[.]gz$"), `quit-with-status` = TRUE)'
