@@ -174,5 +174,5 @@ The objects of this class are cloneable with this method.
 strat <- StrategyRfit$new("Intensity ~ condition", model_name = "parallel design")
 strat$formula
 #> Intensity ~ condition
-#> <environment: 0x558da116a5e0>
+#> <environment: 0x653cc4a37c48>
 ```
